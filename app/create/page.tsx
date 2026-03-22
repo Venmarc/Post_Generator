@@ -1,44 +1,88 @@
 "use client";
-import { useState, useMemo } from "react";
-import { Layers, Loader2, Sparkles, Download, RefreshCw, Lightbulb, Zap } from "lucide-react";
-import { useTelemetry } from "../../lib/storage";
-import { platformPresets } from "../../lib/presets";
-import { useDraft } from "../../lib/drafts";
 
-export default function CreatePipeline() {
-  const { topic, setTopic, platform, setPlatform, clearDraft, isHydrated: draftReady } = useDraft();
-  const [isGenerating, setIsGenerating] = useState(false);
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { 
+  Zap, 
+  Lightbulb, 
+  Loader2, 
+  RefreshCw, 
+  ArrowRight, 
+  Copy, 
+  Sparkles, 
+  Layers, 
+  Palette, 
+  Cpu,
+  Monitor,
+  CheckCircle2,
+  Search,
+  Flame,
+  Activity,
+  Minus,
+  MessageSquare
+} from 'lucide-react';
+import { useDraft } from '../../lib/drafts';
+import { useTelemetry } from '../../lib/storage';
+import { platformPresets } from '../../lib/presets';
+import { AIModel, Platform, Style, Level } from '../../lib/ai';
+
+export default function CreateWorkspace() {
+  const { topic, setTopic, platform: draftPlatform, setPlatform, clearDraft, isHydrated: draftReady } = useDraft();
+  
+  // Cast platform to valid type or default to linkedin
+  const platform = (draftPlatform?.toLowerCase() as Platform) || 'linkedin';
+
   const [isGeneratingHooks, setIsGeneratingHooks] = useState(false);
+  const [isGeneratingCopy, setIsGeneratingCopy] = useState(false);
+  const [isRendering, setIsRendering] = useState(false);
+  
   const [hooks, setHooks] = useState<string[]>([]);
   const [selectedHook, setSelectedHook] = useState<string | null>(null);
-  const [level, setLevel] = useState<'pro' | 'elite'>('pro');
-  const [style, setStyle] = useState<'bold' | 'story' | 'professional'>('bold');
+  const [generatedCopy, setGeneratedCopy] = useState<string>("");
+  
+  const [textModel, setTextModel] = useState<AIModel>('gemini-3-pro');
+  const [imageModel, setImageModel] = useState<AIModel>('gpt-4o-mini');
+  const [level, setLevel] = useState<Level>('balanced');
+  const [style, setStyle] = useState<Style>('professional');
+  
+  const [layout, setLayout] = useState('composite-hero');
+  const [theme, setTheme] = useState('orbit');
+  const [visualMood, setVisualMood] = useState('cinematic');
+  
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [copyFeedback, setCopyFeedback] = useState(false);
   
   const { trackGeneration, trackExport } = useTelemetry();
+  
+  const hooksRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to hooks when they are generated
+  useEffect(() => {
+    if (hooks.length > 0 && hooksRef.current) {
+      hooksRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [hooks]);
 
   const filteredPresets = useMemo(() => 
-    platformPresets.filter(p => p.platform === platform),
+    platformPresets.filter(p => p.platform.toLowerCase() === platform.toLowerCase()),
   [platform]);
 
-  if (!draftReady) return null; // Prevent hydration mismatch
+  if (!draftReady) return null;
 
   const handleGenerateHooks = async () => {
     if (!topic || isGeneratingHooks) return;
     setIsGeneratingHooks(true);
     setHooks([]);
     setSelectedHook(null);
+    setGeneratedCopy("");
 
     try {
       const response = await fetch("/api/hooks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic }),
+        body: JSON.stringify({ topic, model: textModel }),
       });
       const data = await response.json();
-      if (data.success) {
-        setHooks(data.hooks);
-      }
+      if (data.success) setHooks(data.hooks);
     } catch (error) {
       console.error("Hook generation failed:", error);
     } finally {
@@ -46,12 +90,36 @@ export default function CreatePipeline() {
     }
   };
 
-  const handleGenerate = async () => {
-    if (!topic && !isGenerating) return;
+  const handleGenerateCopy = async () => {
+    if (!selectedHook || isGeneratingCopy) return;
+    setIsGeneratingCopy(true);
     
-    setIsGenerating(true);
-    setGeneratedImage(null);
+    try {
+      const response = await fetch("/api/generate-copy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          topic, 
+          hook: selectedHook, 
+          platform, 
+          style, 
+          level, 
+          model: textModel 
+        }),
+      });
+      const data = await response.json();
+      if (data.success) setGeneratedCopy(data.content);
+    } catch (error) {
+      console.error("Copy generation failed:", error);
+    } finally {
+      setIsGeneratingCopy(false);
+    }
+  };
 
+  const handleRender = async () => {
+    if (!generatedCopy && !isRendering) return;
+    setIsRendering(true);
+    
     try {
       const response = await fetch("/api/render", {
         method: "POST",
@@ -62,324 +130,387 @@ export default function CreatePipeline() {
           style,
           level,
           hook: selectedHook,
-          layout: 'composite-hero',
-          theme: 'orbit',
+          cards: [{ title: selectedHook, body: generatedCopy }],
+          model: imageModel,
+          layout: layout,
+          theme: theme,
+          visualMood: visualMood,
           format: 'portrait'
         }),
       });
-
+      
       const data = await response.json();
-        if (data.success && data.base64Data) {
-          setGeneratedImage(data.base64Data);
-          trackGeneration(topic, platform, data.base64Data);
-          clearDraft(); // Reset for next project
-        } else {
-        console.error("No image returned:", data.error);
+      if (data.success) {
+        setGeneratedImage(data.base64Data);
+        await trackGeneration(topic, platform, data.base64Data);
+        clearDraft();
       }
     } catch (error) {
-      console.error("Generation failed:", error);
+      console.error("Render failed:", error);
     } finally {
-      setIsGenerating(false);
+      setIsRendering(false);
     }
   };
 
-  const handleExport = () => {
-    if (!generatedImage) return;
-    trackExport(topic, platform);
-    
-    // Simulate real download
-    const link = document.createElement('a');
-    link.href = `data:image/png;base64,${generatedImage}`;
-    link.download = `artenova-${Date.now()}.png`;
-    link.click();
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(generatedCopy);
+    setCopyFeedback(true);
+    setTimeout(() => setCopyFeedback(false), 2000);
   };
 
   return (
-    <div className="animate-in fade-in duration-500 slide-in-from-bottom-4 pb-20">
-      <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div className="max-w-7xl mx-auto px-6 py-12 relative">
+      {/* Header Pipeline */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-text-primary mb-2">Content Pipeline</h1>
-          <p className="text-text-secondary/60 text-base">Generate elite hooks and render Gamma-style composites.</p>
+          <h1 className="text-4xl font-bold text-text-primary tracking-tight mb-2">Content Pipeline</h1>
+          <p className="text-text-secondary/60 text-lg">From raw concept to viral artistic output.</p>
         </div>
-        <button 
-          onClick={handleGenerate}
-          disabled={isGenerating || !topic}
-          className="bg-accent disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent/90 text-void px-8 py-3 rounded-full text-sm font-bold transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2"
-        >
-          {isGenerating ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <Sparkles className="w-4 h-4" />
-          )}
-          {isGenerating ? "Rendering..." : "Generate Output"}
-        </button>
+        
+        <div className="flex items-center gap-4">
+           {generatedImage && (
+             <button className="flex items-center gap-2 px-6 py-3 bg-surface border border-border-subtle/50 rounded-xl text-text-primary font-bold hover:border-accent/40 transition-all">
+                Preview Result
+             </button>
+           )}
+           <button 
+             onClick={handleRender}
+             disabled={isRendering || !generatedCopy}
+             className="flex items-center gap-2 px-8 py-3 bg-accent text-void rounded-xl font-extrabold shadow-glow hover:scale-105 active:scale-95 transition-all disabled:opacity-30 disabled:grayscale disabled:scale-100"
+           >
+             {isRendering ? <Loader2 className="w-5 h-5 animate-spin" /> : <Zap className="w-5 h-5" />}
+             RENDER FINAL OUTPUT
+           </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {/* Main Input Card */}
-        <div className="lg:col-span-2 bg-surface rounded-card border border-border-subtle/50 p-10 shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-2 hover:scale-[1.01] group relative overflow-hidden flex flex-col">
-          <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-text-primary/90">Topic & Parameters</h2>
-            <div className="flex items-center gap-2 px-3 py-1 bg-accent/10 rounded-full border border-accent/20">
-              <Zap className="w-3 h-3 text-accent" />
-              <span className="text-[10px] text-accent font-bold uppercase tracking-widest">{platform} Mode</span>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        {/* LEFT: POST ARCHITECT */}
+        <div className="lg:col-span-8 space-y-8">
+          
+          {/* Section 1: Concept & Setup */}
+          <div className="bg-surface rounded-card border border-border-subtle/50 p-8 shadow-card relative overflow-hidden group">
+            <div className="flex items-center justify-between mb-8">
+               <div className="flex items-center gap-3">
+                  <div className="p-2 bg-accent/10 rounded-lg text-accent">
+                     <Cpu className="w-5 h-5" />
+                  </div>
+                  <h2 className="text-xl font-bold text-text-primary/90">Post Architect</h2>
+               </div>
             </div>
-          </div>
-          <textarea 
-            value={topic}
-            onChange={(e) => setTopic(e.target.value)}
-            placeholder={`What are we talking about today on ${platform}?`}
-            className="w-full bg-void/50 border border-border-subtle/50 rounded-2xl p-6 text-text-primary text-xl focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/10 transition-all min-h-[140px] mb-8 resize-none placeholder:text-text-secondary/30"
-          />
 
-          {/* Viral Hook Engine Section */}
-          <div className="mt-auto pt-6 border-t border-border-subtle/20">
-             <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                   <div className="p-2 bg-accent/10 rounded-lg text-accent">
-                      <Lightbulb className="w-5 h-5" />
-                   </div>
-                   <h3 className="font-semibold text-text-primary/80">Viral Hook Engine</h3>
-                </div>
-                <button 
-                  onClick={handleGenerateHooks}
-                  disabled={isGeneratingHooks || !topic}
-                  className="text-xs font-bold text-accent uppercase tracking-widest hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-2"
-                >
-                  {isGeneratingHooks ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
-                  {hooks.length > 0 ? "Re-generate Hooks" : "Generate 5 Hooks"}
-                </button>
-             </div>
-
-             <div className="space-y-3">
-                {isGeneratingHooks && (
-                   <div className="flex flex-col gap-3 animate-pulse">
-                      {[1,2,3].map(i => (
-                         <div key={i} className="h-16 bg-void/30 border border-border-subtle/20 rounded-xl"></div>
-                      ))}
-                   </div>
-                )}
-                
-                {hooks.map((hook, idx) => (
-                   <button 
-                      key={idx}
-                      onClick={() => setSelectedHook(hook)}
-                      className={`w-full text-left p-4 rounded-xl border transition-all duration-200 group flex items-start gap-3 ${
-                         selectedHook === hook 
-                            ? 'bg-accent/10 border-accent shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
-                            : 'bg-void/20 border-border-subtle/30 hover:border-accent/40'
-                      }`}
-                   >
-                      <div className={`mt-1 w-2 h-2 rounded-full shrink-0 transition-colors ${selectedHook === hook ? 'bg-accent animate-pulse' : 'bg-text-secondary/20 group-hover:bg-accent/40'}`}></div>
-                      <span className={`text-sm tracking-tight leading-relaxed ${selectedHook === hook ? 'text-text-primary font-medium' : 'text-text-secondary/70 group-hover:text-text-primary/90'}`}>
-                         {hook}
-                      </span>
-                   </button>
-                ))}
-
-                {!isGeneratingHooks && hooks.length === 0 && (
-                   <div className="py-8 text-center border border-dashed border-border-subtle/20 rounded-xl">
-                      <p className="text-xs text-text-secondary/30 italic">Enter a topic above to generate elite viral hooks.</p>
-                   </div>
-                )}
-             </div>
-          </div>
-        </div>
-
-        {/* Sidebar Controls */}
-        <div className="space-y-8 flex flex-col">
-          {/* Strategy & Style Selection */}
-          <div className="bg-surface rounded-card border border-border-subtle/50 p-8 shadow-card flex-1">
-            <h3 className="text-sm font-semibold text-text-secondary/40 uppercase tracking-widest mb-6 flex items-center gap-2">
-              <Zap className="w-4 h-4" /> Strategy & Style
-            </h3>
-
-            {/* Level Toggle */}
-            <div className="mb-8">
-               <label className="text-[10px] font-bold text-text-secondary uppercase tracking-[2px] block mb-3">Copywriter Level</label>
-               <div className="grid grid-cols-2 gap-2 p-1 bg-void/50 rounded-xl border border-border-subtle/30">
+            {/* Platform Tabs */}
+            <div className="flex gap-2 mb-8">
+               {['linkedin', 'instagram', 'x', 'tiktok'].map((p) => (
                   <button 
-                    onClick={() => setLevel('pro')}
-                    className={`py-2 rounded-lg text-xs font-bold transition-all ${level === 'pro' ? 'bg-accent text-void shadow-glow' : 'text-text-secondary hover:text-white'}`}
+                    key={p}
+                    onClick={() => setPlatform(p as any)}
+                    className={`px-5 py-2 rounded-xl text-[10px] font-black tracking-widest uppercase transition-all border ${
+                       platform === p 
+                          ? 'bg-accent/10 border-accent text-accent' 
+                          : 'bg-void/30 border-border-subtle/20 text-text-secondary hover:text-white'
+                    }`}
                   >
-                    PRO
+                    {p === 'x' ? 'TWITTER' : p}
                   </button>
-                  <button 
-                    onClick={() => setLevel('elite')}
-                    className={`py-2 rounded-lg text-xs font-bold transition-all ${level === 'elite' ? 'bg-accent text-void shadow-glow' : 'text-text-secondary hover:text-white'}`}
+               ))}
+            </div>
+
+            <textarea 
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              placeholder={`Raw topic or idea for ${platform}...`}
+              className="w-full bg-void/50 border border-border-subtle/50 rounded-2xl p-6 text-text-primary text-xl focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/10 transition-all min-h-[160px] resize-none placeholder:text-text-secondary/20 mb-6"
+            />
+
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pb-4 border-b border-border-subtle/20 mb-8">
+               <div className="flex items-center gap-2 bg-void/50 p-1.5 rounded-xl border border-border-subtle/30 w-full sm:w-auto">
+                  <span className="text-[10px] font-black text-text-secondary/40 px-3 uppercase tracking-widest">Model Engine</span>
+                  <select 
+                    value={textModel}
+                    onChange={(e) => setTextModel(e.target.value as AIModel)}
+                    className="bg-transparent text-[10px] font-bold text-text-secondary px-3 py-1 focus:outline-none cursor-pointer hover:text-white"
                   >
-                    ELITE
+                    <option value="gemini-3-pro">Gemini 3 Pro</option>
+                    <option value="gemini-3-flash">Gemini 3 Flash</option>
+                    <option value="gemini-2.5-flash">Gemini 2.5</option>
+                    <option value="gpt-4o">GPT-4o</option>
+                    <option value="gpt-4o-mini">GPT-4o Mini</option>
+                  </select>
+               </div>
+               
+               <div className="flex items-center gap-2 bg-void/50 p-1.5 rounded-xl border border-border-subtle/30 w-full sm:w-auto self-end">
+                 <button 
+                    onClick={handleGenerateHooks}
+                    disabled={isGeneratingHooks || !topic}
+                    className="flex items-center gap-2 px-6 py-2 bg-accent text-void rounded-lg text-[10px] font-black uppercase tracking-widest shadow-glow hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-30"
+                  >
+                    {isGeneratingHooks ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+                    GENERATE HOOKS
                   </button>
                </div>
-               <p className="mt-2 text-[10px] text-text-secondary/40 leading-relaxed italic">
-                 {level === 'elite' ? "Elite: Heavy, contrarian style with concrete examples." : "Pro: Balanced, engaging platform-standard copy."}
-               </p>
             </div>
 
-            {/* Style Selection */}
-            <div className="space-y-3">
-               <label className="text-[10px] font-bold text-text-secondary uppercase tracking-[2px] block mb-3">Post Tone</label>
+            {/* Precision & Style: NOW PART OF ARCHITECT */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               <div>
+                  <label className="text-[9px] font-black text-text-secondary/60 uppercase tracking-[3px] block mb-4">Precision Level</label>
+                  <div className="grid grid-cols-5 gap-1.5 p-1.5 bg-void/50 rounded-xl border border-border-subtle/30">
+                     {[
+                       { id: 'raw', label: 'Raw' },
+                       { id: 'balanced', label: 'Balanced' },
+                       { id: 'polished', label: 'Polished' },
+                       { id: 'elite', label: 'Elite' },
+                       { id: 'viral', label: 'Viral' }
+                     ].map((l) => (
+                       <button 
+                         key={l.id}
+                         onClick={() => setLevel(l.id as Level)}
+                         className={`py-2 rounded-lg text-[9px] font-black tracking-widest transition-all ${level === l.id ? 'bg-accent text-void shadow-glow' : 'text-text-secondary hover:text-white'}`}
+                       >
+                         {l.label}
+                       </button>
+                     ))}
+                  </div>
+               </div>
+
+               <div>
+                  <label className="text-[9px] font-black text-text-secondary/60 uppercase tracking-[3px] block mb-4">Writing Style</label>
+                  <div className="grid grid-cols-2 gap-2">
+                     {[
+                       { id: 'professional', label: 'Professional', icon: <Monitor className="w-3 h-3" /> },
+                       { id: 'bold', label: 'Bold', icon: <Zap className="w-3 h-3" /> },
+                       { id: 'story', label: 'Story', icon: <Layers className="w-3 h-3" /> },
+                       { id: 'curiosity', label: 'Curiosity', icon: <Search className="w-3 h-3" /> },
+                       { id: 'sarcastic', label: 'Sarcastic', icon: <Flame className="w-3 h-3" /> },
+                       { id: 'motivational', label: 'Hype', icon: <Activity className="w-3 h-3" /> },
+                       { id: 'minimal', label: 'Minimal', icon: <Minus className="w-3 h-3" /> },
+                       { id: 'conversational', label: 'Relatable', icon: <MessageSquare className="w-3 h-3" /> }
+                     ].map((s) => (
+                       <button
+                         key={s.id}
+                         onClick={() => setStyle(s.id as any)}
+                         className={`flex items-center gap-3 px-4 py-3 rounded-xl border transition-all ${
+                           style === s.id 
+                             ? 'bg-accent/5 border-accent text-white shadow-[inset_0_0_15px_rgba(16,185,129,0.03)]' 
+                             : 'bg-void/10 border-border-subtle/20 text-text-secondary hover:border-accent/40'
+                         }`}
+                       >
+                         <div className={`p-1.5 rounded-lg transition-colors ${style === s.id ? 'bg-accent text-void' : 'bg-void text-accent/30'}`}>
+                           {s.icon}
+                         </div>
+                         <span className="text-[9px] font-black uppercase tracking-tight">{s.label}</span>
+                       </button>
+                     ))}
+                  </div>
+               </div>
+            </div>
+          </div>
+
+          {/* Section 2: Viral Angles */}
+          {hooks.length > 0 && (
+            <div ref={hooksRef} className="bg-surface rounded-card border border-border-subtle/50 p-8 shadow-card animate-in fade-in slide-in-from-bottom-4 duration-500">
+               <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-sm font-bold text-text-secondary uppercase tracking-widest flex items-center gap-2">
+                    <Zap className="w-4 h-4" /> Pick Your Hook
+                  </h3>
+                  <span className="text-[10px] text-text-secondary/40 italic">Select one to continue</span>
+               </div>
+               
+               <div className="grid grid-cols-1 gap-3 mb-8">
+                  {hooks.map((hook, idx) => (
+                    <button 
+                       key={idx}
+                       onClick={() => setSelectedHook(hook)}
+                       className={`w-full text-left p-5 rounded-2xl border transition-all duration-300 group ${
+                          selectedHook === hook 
+                             ? 'bg-accent/5 border-accent shadow-[0_0_20px_rgba(16,185,129,0.05)]' 
+                             : 'bg-void/20 border-border-subtle/30 hover:border-accent/30'
+                       }`}
+                    >
+                       <div className="flex items-start gap-4">
+                          <div className={`mt-1.5 shrink-0 w-3 h-3 rounded-full border-2 transition-all ${
+                             selectedHook === hook ? 'bg-accent border-accent scale-110 shadow-glow' : 'border-text-secondary/20'
+                          }`}></div>
+                          <p className={`text-sm leading-relaxed transition-colors ${
+                             selectedHook === hook ? 'text-text-primary font-medium' : 'text-text-secondary/60 group-hover:text-text-primary/80'
+                          }`}>
+                            {hook}
+                          </p>
+                       </div>
+                    </button>
+                  ))}
+               </div>
+
+               {selectedHook && !generatedCopy && (
+                 <div className="flex justify-center bg-void/30 p-8 rounded-2xl border border-dashed border-border-subtle/30">
+                    <button 
+                      onClick={handleGenerateCopy}
+                      disabled={isGeneratingCopy}
+                      className="flex items-center gap-3 px-8 py-4 bg-accent text-void rounded-xl font-black text-sm shadow-glow hover:scale-105 active:scale-95 transition-all"
+                    >
+                      {isGeneratingCopy ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
+                      GENERATE FULL WRITE-UP
+                    </button>
+                 </div>
+               )}
+            </div>
+          )}
+
+          {/* Section 3: Final Copy */}
+          {generatedCopy && (
+             <div className="bg-surface rounded-card border border-border-subtle/50 p-8 shadow-card animate-in fade-in zoom-in-95 duration-500">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-sm font-bold text-text-secondary uppercase tracking-widest flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-accent" /> Generated Copy
+                  </h3>
+                  <div className="flex gap-2">
+                     <button 
+                       onClick={copyToClipboard}
+                       className="p-2 hover:bg-accent/10 rounded-lg text-text-secondary transition-all relative group"
+                     >
+                        <Copy className={`w-4 h-4 ${copyFeedback ? 'text-accent' : ''}`} />
+                        {copyFeedback && <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-[10px] bg-accent text-void px-2 py-1 rounded font-bold">Copied!</span>}
+                     </button>
+                  </div>
+                </div>
+                
+                <div className="bg-void/60 rounded-2xl p-8 border border-border-subtle/40">
+                  <pre className="text-text-primary/90 text-base leading-loose whitespace-pre-wrap font-sans italic opacity-90">
+                    {generatedCopy}
+                  </pre>
+                </div>
+                
+                <div className="mt-8 pt-8 border-t border-border-subtle/20 flex flex-col sm:flex-row items-center justify-between gap-6">
+                   <div className="flex items-center gap-3 text-text-secondary/40">
+                      <Zap className="w-4 h-4" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Post is ready for rendering</span>
+                   </div>
+                   <button 
+                      onClick={() => setGeneratedCopy("")}
+                      className="text-[10px] font-bold text-text-secondary/40 hover:text-accent transition-colors flex items-center gap-2 uppercase tracking-tighter"
+                    >
+                      <RefreshCw className="w-3 h-3" /> Re-generate Copy
+                    </button>
+                </div>
+             </div>
+          )}
+
+        </div>
+
+        {/* RIGHT: ARTISTIC DIRECTION */}
+        <div className="lg:col-span-4 space-y-8">
+          
+          <div className="bg-surface rounded-card border border-border-subtle/50 p-8 shadow-card">
+            <div className="flex items-center justify-between mb-10">
+               <div className="flex items-center gap-3">
+                  <div className="p-2 bg-accent/10 rounded-lg text-accent">
+                     <Palette className="w-5 h-5" />
+                  </div>
+                  <h2 className="text-lg font-bold text-text-primary/80">Art Direction</h2>
+               </div>
+            </div>
+
+            {/* Image Model */}
+            <div className="mb-10">
+               <label className="text-[10px] font-bold text-text-secondary uppercase tracking-[2px] block mb-4">Rendering Engine</label>
+               <div className="flex items-center gap-2 bg-void/50 p-1 rounded-xl border border-border-subtle/30 overflow-hidden">
+                  <select 
+                    value={imageModel}
+                    onChange={(e) => setImageModel(e.target.value as AIModel)}
+                    className="w-full bg-transparent text-[10px] font-bold text-text-secondary px-4 py-2.5 focus:outline-none cursor-pointer"
+                  >
+                    <option value="gpt-4o-mini">GPT-4o Mini</option>
+                    <option value="gpt-4o">GPT-4o</option>
+                    <option value="gemini-3-flash">Gemini 3 Flash</option>
+                  </select>
+               </div>
+            </div>
+
+            {/* Visual Persona / Mood */}
+            <div className="space-y-3 mb-10">
+               <label className="text-[10px] font-bold text-text-secondary uppercase tracking-[2px] block mb-4">Visual Look</label>
                {[
-                 { id: 'bold', label: 'Bold & Aggressive', icon: <Zap className="w-3 h-3" /> },
-                 { id: 'story', label: 'Raw Storytelling', icon: <Sparkles className="w-3 h-3" /> },
-                 { id: 'professional', label: 'Elite Authority', icon: <Layers className="w-3 h-3" /> }
-               ].map((s) => (
+                 { id: 'cinematic', label: 'Cinematic High-Key', icon: <Layers className="w-3 h-3" /> },
+                 { id: 'tech', label: 'Futuristic Tech', icon: <Monitor className="w-3 h-3" /> },
+                 { id: 'abstract', label: 'Minimal Abstract', icon: <Palette className="w-3 h-3" /> },
+                 { id: 'raw', label: 'Gritty Raw', icon: <Zap className="w-3 h-3" /> }
+               ].map((v) => (
                  <button
-                   key={s.id}
-                   onClick={() => setStyle(s.id as any)}
-                   className={`w-full flex items-center gap-3 p-4 rounded-xl border text-left transition-all ${
-                     style === s.id 
-                       ? 'bg-accent/10 border-accent text-white' 
-                       : 'bg-void/30 border-border-subtle/20 text-text-secondary hover:border-accent/30'
+                   key={v.id}
+                   onClick={() => setVisualMood(v.id)}
+                   className={`w-full flex items-center gap-4 p-4 rounded-xl border text-left transition-all ${
+                     visualMood === v.id 
+                       ? 'bg-accent/5 border-accent text-white shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
+                       : 'bg-void/10 border-border-subtle/20 text-text-secondary hover:border-accent/40'
                    }`}
                  >
-                   <div className={`p-2 rounded-lg ${style === s.id ? 'bg-accent text-void' : 'bg-void text-accent/50'}`}>
-                     {s.icon}
+                   <div className={`p-2 rounded-lg transition-colors ${visualMood === v.id ? 'bg-accent text-void' : 'bg-void text-accent/30'}`}>
+                     {v.icon}
                    </div>
-                   <span className="text-xs font-semibold">{s.label}</span>
+                   <span className="text-[10px] font-bold uppercase tracking-tight">{v.label}</span>
                  </button>
                ))}
             </div>
-          </div>
 
-          <div className="bg-surface rounded-card border border-border-subtle/50 p-8 shadow-card">
-            <h3 className="text-sm font-semibold text-text-secondary/40 uppercase tracking-widest mb-4 flex items-center gap-2">
-              <Lightbulb className="w-4 h-4" /> Quick Presets
-            </h3>
-            <div className="grid grid-cols-1 gap-3">
-              {filteredPresets.map((preset, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setTopic(preset.topic)}
-                  className="text-left p-4 rounded-xl bg-void/50 border border-border-subtle/30 hover:border-accent/50 hover:bg-accent/5 transition-all group"
-                >
-                  <p className="text-[10px] font-bold text-accent mb-1 uppercase tracking-wider">{preset.label}</p>
-                  <p className="text-xs text-text-secondary group-hover:text-text-primary transition-colors line-clamp-1">{preset.topic}</p>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Engine Settings Card */}
-        <div className="bg-surface rounded-card border border-border-subtle/50 p-10 shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-2 hover:scale-[1.01] flex flex-col">
-          <h2 className="text-xl font-semibold mb-6 text-text-primary/90">Engine Settings</h2>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <span className="text-text-secondary/40 text-[10px] font-bold uppercase tracking-widest px-1">Selected Platform</span>
-              <div className="grid grid-cols-2 gap-2">
-                {(["LinkedIn", "Instagram", "Twitter", "TikTok"] as const).map((p) => (
-                  <button 
-                    key={p}
-                    onClick={() => setPlatform(p)}
-                    className={`h-11 rounded-xl text-xs font-bold transition-all border ${platform === p ? 'bg-accent/10 border-accent/40 text-accent' : 'bg-void border-border-subtle/50 text-text-secondary/60 hover:border-accent/20'}`}
+            {/* Visual Options */}
+            <div className="space-y-6 pt-8 border-t border-border-subtle/20">
+               <div className="flex flex-col gap-2">
+                  <span className="text-[9px] font-black text-text-secondary/40 uppercase tracking-widest">Layout Mode</span>
+                  <select 
+                    value={layout} 
+                    onChange={(e) => setLayout(e.target.value)}
+                    className="w-full bg-void/50 border border-border-subtle/30 rounded-lg px-3 py-2 text-[10px] font-bold text-accent focus:outline-none"
                   >
-                    {p}
-                  </button>
-                ))}
-              </div>
+                    <option value="composite-hero">Composite Hero</option>
+                    <option value="grid-minimal">Grid Minimal</option>
+                    <option value="split-story">Split Story</option>
+                  </select>
+               </div>
+               <div className="flex flex-col gap-2">
+                  <span className="text-[9px] font-black text-text-secondary/40 uppercase tracking-widest">Theme Visuals</span>
+                  <select 
+                    value={theme} 
+                    onChange={(e) => setTheme(e.target.value)}
+                    className="w-full bg-void/50 border border-border-subtle/30 rounded-lg px-3 py-2 text-[10px] font-bold text-accent focus:outline-none"
+                  >
+                    <option value="orbit">Orbit Dark</option>
+                    <option value="emerald">Emerald Neon</option>
+                    <option value="glass">Glassmorphism</option>
+                  </select>
+               </div>
             </div>
-            
-            <SettingItem label="Output Level" value="Elite" isAccent />
-            <SettingItem label="Layout Mode" value="Composite Hero" />
-            <SettingItem label="Theme Visuals" value="Orbit" />
           </div>
-          
-          <div className="mt-auto pt-10">
-            <div className="bg-accent/5 border border-accent/10 rounded-2xl p-5 flex items-center justify-between">
-              <div>
-                <p className="text-[10px] font-bold text-accent uppercase tracking-widest mb-1">Status</p>
-                <p className="text-sm font-semibold text-text-primary">Engine Ready</p>
-              </div>
-              <RefreshCw className="w-5 h-5 text-accent opacity-40" />
-            </div>
-          </div>
+
         </div>
 
-        {/* Generated Output / Preview Section */}
-        <div className="lg:col-span-3 bg-surface/40 rounded-3xl border border-accent/15 shadow-card p-10 min-h-[600px] flex flex-col items-center justify-center relative overflow-hidden text-center mt-4">
-          <div className="absolute inset-0 bg-linear-to-br from-purple-950/10 via-transparent to-accent/10 pointer-events-none" />
-          
-          <div className="relative z-10 w-full max-w-4xl mx-auto">
-            {!generatedImage && !isGenerating ? (
-              <div className="max-w-lg mx-auto">
-                <h2 className="text-2xl font-bold text-text-primary mb-4">Preview: Gamma-Style Composite</h2>
-                <p className="text-text-secondary/60 text-base mb-10">
-                  Select a draft or enter a topic to start. The final 1080px asset will render here.
-                </p>
-                
-                <div className="relative w-64 md:w-72 mx-auto aspect-9/16 rounded-2xl overflow-hidden border border-accent/20 shadow-[0_0_50px_rgba(16,185,129,0.1)] group-hover:scale-[1.02] transition-transform duration-500 opacity-40 grayscale">
-                  <div className="absolute inset-0 bg-linear-to-br from-purple-900/40 to-accent/20" />
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent_70%)]" />
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                    <Layers className="w-12 h-12 text-accent/30" />
-                  </div>
-                </div>
-              </div>
-            ) : isGenerating ? (
-              <div className="flex flex-col items-center">
-                <div className="w-64 md:w-72 aspect-9/16 bg-void/40 rounded-2xl border border-accent/10 flex flex-col items-center justify-center animate-pulse relative overflow-hidden">
-                   <div className="absolute inset-0 bg-linear-to-br from-accent/5 to-transparent" />
-                   <Loader2 className="w-10 h-10 text-accent/20 animate-spin mb-4" />
-                   <p className="text-accent/40 font-bold uppercase tracking-widest text-[10px]">Processing Layout...</p>
-                </div>
-                <p className="mt-8 text-text-secondary/60 text-sm">Orchestrating pixels & composite cards...</p>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center animate-in zoom-in-95 duration-500">
-                <div className="relative group">
-                  <img 
-                    src={`data:image/png;base64,${generatedImage}`} 
-                    alt="Generated Composite" 
-                    className="w-full max-w-md mx-auto rounded-3xl shadow-[0_0_100px_rgba(16,185,129,0.2)] border border-accent/20"
-                  />
-                  <div className="absolute top-6 right-6 flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
-                    <button 
-                      onClick={handleExport}
-                      className="bg-void/80 backdrop-blur-md p-4 rounded-2xl border border-white/10 hover:bg-accent hover:text-void transition-all cursor-pointer shadow-2xl"
-                    >
-                      <Download size={20} />
-                    </button>
-                    <button onClick={handleGenerate} className="bg-void/80 backdrop-blur-md p-4 rounded-2xl border border-white/10 hover:bg-accent hover:text-void transition-all cursor-pointer shadow-2xl">
-                      <RefreshCw size={20} />
-                    </button>
-                  </div>
-                </div>
-                <div className="mt-10 flex items-center gap-8">
-                   <div className="text-left">
-                     <p className="text-accent text-[10px] font-bold uppercase tracking-widest mb-1">Status</p>
-                     <p className="text-sm font-semibold text-text-primary">Render Success</p>
-                   </div>
-                   <div className="w-px h-8 bg-border-subtle/50"></div>
-                   <div className="text-left">
-                     <p className="text-text-secondary/40 text-[10px] font-bold uppercase tracking-widest mb-1">Platform</p>
-                     <p className="text-sm font-semibold text-text-primary">{platform}</p>
-                   </div>
-                </div>
-              </div>
-            )}
-          </div>
-          
-          {!generatedImage && !isGenerating && (
-            <div className="absolute bottom-10 left-0 w-full flex justify-center gap-2 px-10">
-              <div className="flex items-center gap-2 bg-void/40 backdrop-blur-sm border border-accent/10 rounded-full px-4 py-2 grayscale opacity-50">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
-                <span className="text-[10px] text-accent font-bold uppercase tracking-widest">Awaiting Generator Task</span>
-              </div>
-            </div>
-          )}
-        </div>
       </div>
-    </div>
-  );
-}
+      
+      {/* Scroll Indicator or Status */}
+      <div className="mt-12 flex justify-center">
+         <div className="flex items-center gap-6 px-8 py-3 bg-surface/50 rounded-full border border-border-subtle/30 backdrop-blur-md">
+            <div className="flex items-center gap-2">
+               <div className={`w-2 h-2 rounded-full ${isGeneratingHooks || isGeneratingCopy || isRendering ? 'bg-accent animate-pulse' : 'bg-accent'}`}></div>
+               <span className="text-[10px] font-bold text-text-secondary uppercase tracking-widest">
+                  {isGeneratingHooks ? "Drafting Viral Hooks..." : isGeneratingCopy ? "Architecting Full Copy..." : isRendering ? "Rendering High-Fidelity Output..." : "Engine Ready"}
+               </span>
+            </div>
+         </div>
+      </div>
 
-function SettingItem({ label, value, isAccent = false }: { label: string, value: string, isAccent?: boolean }) {
-  return (
-    <div className="h-14 bg-void border border-border-subtle/50 rounded-xl flex items-center justify-between px-5 transition-all hover:bg-surface-hover hover:border-accent/20">
-      <span className="text-text-secondary/60 text-xs font-medium">{label}</span>
-      <span className={`text-xs font-bold ${isAccent ? 'text-accent' : 'text-text-primary'}`}>{value}</span>
+      {/* Preview Area */}
+      {generatedImage && (
+        <div className="mt-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+           <div className="bg-surface rounded-card border border-border-subtle/50 p-1 bg-[url('/grain.png')] bg-repeat">
+             <img 
+               src={`data:image/png;base64,${generatedImage}`} 
+               alt="Generated Post" 
+               className="w-full rounded-2xl shadow-2xl"
+             />
+           </div>
+        </div>
+      )}
     </div>
   );
 }

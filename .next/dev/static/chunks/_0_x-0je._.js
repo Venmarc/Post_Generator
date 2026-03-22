@@ -484,30 +484,24 @@ function CreatePipeline() {
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "flex items-center gap-2 px-3 py-1 bg-accent/10 rounded-full border border-accent/20",
+                                        className: "flex bg-void/50 p-1 rounded-full border border-border-subtle/30 backdrop-blur-sm",
                                         children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__["Zap"], {
-                                                className: "w-3 h-3 text-accent"
-                                            }, void 0, false, {
+                                            'LinkedIn',
+                                            'Instagram',
+                                            'Twitter',
+                                            'TikTok'
+                                        ].map((p)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                onClick: ()=>setPlatform(p),
+                                                className: `px-3 py-1 rounded-full text-[10px] font-extrabold transition-all ${platform === p ? 'bg-accent text-void shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'text-text-secondary/40 hover:text-white'}`,
+                                                children: p.toUpperCase()
+                                            }, p, false, {
                                                 fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 125,
-                                                columnNumber: 15
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "text-[10px] text-accent font-bold uppercase tracking-widest",
-                                                children: [
-                                                    platform,
-                                                    " Mode"
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 126,
-                                                columnNumber: 15
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
+                                                lineNumber: 127,
+                                                columnNumber: 20
+                                            }, this))
+                                    }, void 0, false, {
                                         fileName: "[project]/app/create/page.tsx",
-                                        lineNumber: 124,
+                                        lineNumber: 125,
                                         columnNumber: 13
                                     }, this)
                                 ]
@@ -523,7 +517,7 @@ function CreatePipeline() {
                                 className: "w-full bg-void/50 border border-border-subtle/50 rounded-2xl p-6 text-text-primary text-xl focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/10 transition-all min-h-[140px] mb-8 resize-none placeholder:text-text-secondary/30"
                             }, void 0, false, {
                                 fileName: "[project]/app/create/page.tsx",
-                                lineNumber: 129,
+                                lineNumber: 141,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -541,12 +535,12 @@ function CreatePipeline() {
                                                             className: "w-5 h-5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/create/page.tsx",
-                                                            lineNumber: 141,
+                                                            lineNumber: 153,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/create/page.tsx",
-                                                        lineNumber: 140,
+                                                        lineNumber: 152,
                                                         columnNumber: 20
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -554,13 +548,13 @@ function CreatePipeline() {
                                                         children: "Viral Hook Engine"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/create/page.tsx",
-                                                        lineNumber: 143,
+                                                        lineNumber: 155,
                                                         columnNumber: 20
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 139,
+                                                lineNumber: 151,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -572,26 +566,26 @@ function CreatePipeline() {
                                                         className: "w-3 h-3 animate-spin"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/create/page.tsx",
-                                                        lineNumber: 150,
+                                                        lineNumber: 162,
                                                         columnNumber: 40
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$refresh$2d$cw$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__RefreshCw$3e$__["RefreshCw"], {
                                                         className: "w-3 h-3"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/create/page.tsx",
-                                                        lineNumber: 150,
+                                                        lineNumber: 162,
                                                         columnNumber: 87
                                                     }, this),
                                                     hooks.length > 0 ? "Re-generate Hooks" : "Generate 5 Hooks"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 145,
+                                                lineNumber: 157,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/create/page.tsx",
-                                        lineNumber: 138,
+                                        lineNumber: 150,
                                         columnNumber: 14
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -607,12 +601,12 @@ function CreatePipeline() {
                                                         className: "h-16 bg-void/30 border border-border-subtle/20 rounded-xl"
                                                     }, i, false, {
                                                         fileName: "[project]/app/create/page.tsx",
-                                                        lineNumber: 159,
+                                                        lineNumber: 171,
                                                         columnNumber: 26
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 157,
+                                                lineNumber: 169,
                                                 columnNumber: 20
                                             }, this),
                                             hooks.map((hook, idx)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -623,7 +617,7 @@ function CreatePipeline() {
                                                             className: `mt-1 w-2 h-2 rounded-full shrink-0 transition-colors ${selectedHook === hook ? 'bg-accent animate-pulse' : 'bg-text-secondary/20 group-hover:bg-accent/40'}`
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/create/page.tsx",
-                                                            lineNumber: 174,
+                                                            lineNumber: 186,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -631,13 +625,13 @@ function CreatePipeline() {
                                                             children: hook
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/create/page.tsx",
-                                                            lineNumber: 175,
+                                                            lineNumber: 187,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, idx, true, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 165,
+                                                    lineNumber: 177,
                                                     columnNumber: 20
                                                 }, this)),
                                             !isGeneratingHooks && hooks.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -647,24 +641,24 @@ function CreatePipeline() {
                                                     children: "Enter a topic above to generate elite viral hooks."
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 183,
+                                                    lineNumber: 195,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 182,
+                                                lineNumber: 194,
                                                 columnNumber: 20
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/create/page.tsx",
-                                        lineNumber: 155,
+                                        lineNumber: 167,
                                         columnNumber: 14
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/create/page.tsx",
-                                lineNumber: 137,
+                                lineNumber: 149,
                                 columnNumber: 11
                             }, this)
                         ]
@@ -686,14 +680,14 @@ function CreatePipeline() {
                                                 className: "w-4 h-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 195,
+                                                lineNumber: 207,
                                                 columnNumber: 15
                                             }, this),
                                             " Strategy & Style"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/create/page.tsx",
-                                        lineNumber: 194,
+                                        lineNumber: 206,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -704,7 +698,7 @@ function CreatePipeline() {
                                                 children: "Copywriter Level"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 200,
+                                                lineNumber: 212,
                                                 columnNumber: 16
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -716,7 +710,7 @@ function CreatePipeline() {
                                                         children: "PRO"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/create/page.tsx",
-                                                        lineNumber: 202,
+                                                        lineNumber: 214,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -725,13 +719,13 @@ function CreatePipeline() {
                                                         children: "ELITE"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/create/page.tsx",
-                                                        lineNumber: 208,
+                                                        lineNumber: 220,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 201,
+                                                lineNumber: 213,
                                                 columnNumber: 16
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -739,13 +733,13 @@ function CreatePipeline() {
                                                 children: level === 'elite' ? "Elite: Heavy, contrarian style with concrete examples." : "Pro: Balanced, engaging platform-standard copy."
                                             }, void 0, false, {
                                                 fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 215,
+                                                lineNumber: 227,
                                                 columnNumber: 16
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/create/page.tsx",
-                                        lineNumber: 199,
+                                        lineNumber: 211,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -756,7 +750,7 @@ function CreatePipeline() {
                                                 children: "Post Tone"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 222,
+                                                lineNumber: 234,
                                                 columnNumber: 16
                                             }, this),
                                             [
@@ -767,7 +761,7 @@ function CreatePipeline() {
                                                         className: "w-3 h-3"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/create/page.tsx",
-                                                        lineNumber: 224,
+                                                        lineNumber: 236,
                                                         columnNumber: 66
                                                     }, this)
                                                 },
@@ -778,7 +772,7 @@ function CreatePipeline() {
                                                         className: "w-3 h-3"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/create/page.tsx",
-                                                        lineNumber: 225,
+                                                        lineNumber: 237,
                                                         columnNumber: 66
                                                     }, this)
                                                 },
@@ -789,7 +783,7 @@ function CreatePipeline() {
                                                         className: "w-3 h-3"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/create/page.tsx",
-                                                        lineNumber: 226,
+                                                        lineNumber: 238,
                                                         columnNumber: 72
                                                     }, this)
                                                 }
@@ -802,7 +796,7 @@ function CreatePipeline() {
                                                             children: s.icon
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/create/page.tsx",
-                                                            lineNumber: 237,
+                                                            lineNumber: 249,
                                                             columnNumber: 20
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -810,25 +804,25 @@ function CreatePipeline() {
                                                             children: s.label
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/create/page.tsx",
-                                                            lineNumber: 240,
+                                                            lineNumber: 252,
                                                             columnNumber: 20
                                                         }, this)
                                                     ]
                                                 }, s.id, true, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 228,
+                                                    lineNumber: 240,
                                                     columnNumber: 18
                                                 }, this))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/create/page.tsx",
-                                        lineNumber: 221,
+                                        lineNumber: 233,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/create/page.tsx",
-                                lineNumber: 193,
+                                lineNumber: 205,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -841,14 +835,14 @@ function CreatePipeline() {
                                                 className: "w-4 h-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 248,
+                                                lineNumber: 260,
                                                 columnNumber: 15
                                             }, this),
                                             " Quick Presets"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/create/page.tsx",
-                                        lineNumber: 247,
+                                        lineNumber: 259,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -862,7 +856,7 @@ function CreatePipeline() {
                                                         children: preset.label
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/create/page.tsx",
-                                                        lineNumber: 257,
+                                                        lineNumber: 269,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -870,30 +864,30 @@ function CreatePipeline() {
                                                         children: preset.topic
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/create/page.tsx",
-                                                        lineNumber: 258,
+                                                        lineNumber: 270,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, idx, true, {
                                                 fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 252,
+                                                lineNumber: 264,
                                                 columnNumber: 17
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/app/create/page.tsx",
-                                        lineNumber: 250,
+                                        lineNumber: 262,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/create/page.tsx",
-                                lineNumber: 246,
+                                lineNumber: 258,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/create/page.tsx",
-                        lineNumber: 191,
+                        lineNumber: 203,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -904,7 +898,7 @@ function CreatePipeline() {
                                 children: "Engine Settings"
                             }, void 0, false, {
                                 fileName: "[project]/app/create/page.tsx",
-                                lineNumber: 267,
+                                lineNumber: 279,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -918,7 +912,7 @@ function CreatePipeline() {
                                                 children: "Selected Platform"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 270,
+                                                lineNumber: 282,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -934,18 +928,18 @@ function CreatePipeline() {
                                                         children: p
                                                     }, p, false, {
                                                         fileName: "[project]/app/create/page.tsx",
-                                                        lineNumber: 273,
+                                                        lineNumber: 285,
                                                         columnNumber: 19
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/create/page.tsx",
-                                                lineNumber: 271,
+                                                lineNumber: 283,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/create/page.tsx",
-                                        lineNumber: 269,
+                                        lineNumber: 281,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SettingItem, {
@@ -954,7 +948,7 @@ function CreatePipeline() {
                                         isAccent: true
                                     }, void 0, false, {
                                         fileName: "[project]/app/create/page.tsx",
-                                        lineNumber: 284,
+                                        lineNumber: 296,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SettingItem, {
@@ -962,7 +956,7 @@ function CreatePipeline() {
                                         value: "Composite Hero"
                                     }, void 0, false, {
                                         fileName: "[project]/app/create/page.tsx",
-                                        lineNumber: 285,
+                                        lineNumber: 297,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SettingItem, {
@@ -970,13 +964,13 @@ function CreatePipeline() {
                                         value: "Orbit"
                                     }, void 0, false, {
                                         fileName: "[project]/app/create/page.tsx",
-                                        lineNumber: 286,
+                                        lineNumber: 298,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/create/page.tsx",
-                                lineNumber: 268,
+                                lineNumber: 280,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -991,7 +985,7 @@ function CreatePipeline() {
                                                     children: "Status"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 292,
+                                                    lineNumber: 304,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -999,37 +993,37 @@ function CreatePipeline() {
                                                     children: "Engine Ready"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 293,
+                                                    lineNumber: 305,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/create/page.tsx",
-                                            lineNumber: 291,
+                                            lineNumber: 303,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$refresh$2d$cw$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__RefreshCw$3e$__["RefreshCw"], {
                                             className: "w-5 h-5 text-accent opacity-40"
                                         }, void 0, false, {
                                             fileName: "[project]/app/create/page.tsx",
-                                            lineNumber: 295,
+                                            lineNumber: 307,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/create/page.tsx",
-                                    lineNumber: 290,
+                                    lineNumber: 302,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/create/page.tsx",
-                                lineNumber: 289,
+                                lineNumber: 301,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/create/page.tsx",
-                        lineNumber: 266,
+                        lineNumber: 278,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1039,7 +1033,7 @@ function CreatePipeline() {
                                 className: "absolute inset-0 bg-linear-to-br from-purple-950/10 via-transparent to-accent/10 pointer-events-none"
                             }, void 0, false, {
                                 fileName: "[project]/app/create/page.tsx",
-                                lineNumber: 302,
+                                lineNumber: 314,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1052,7 +1046,7 @@ function CreatePipeline() {
                                             children: "Preview: Gamma-Style Composite"
                                         }, void 0, false, {
                                             fileName: "[project]/app/create/page.tsx",
-                                            lineNumber: 307,
+                                            lineNumber: 319,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1060,7 +1054,7 @@ function CreatePipeline() {
                                             children: "Select a draft or enter a topic to start. The final 1080px asset will render here."
                                         }, void 0, false, {
                                             fileName: "[project]/app/create/page.tsx",
-                                            lineNumber: 308,
+                                            lineNumber: 320,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1070,14 +1064,14 @@ function CreatePipeline() {
                                                     className: "absolute inset-0 bg-linear-to-br from-purple-900/40 to-accent/20"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 313,
+                                                    lineNumber: 325,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent_70%)]"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 314,
+                                                    lineNumber: 326,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1086,24 +1080,24 @@ function CreatePipeline() {
                                                         className: "w-12 h-12 text-accent/30"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/create/page.tsx",
-                                                        lineNumber: 316,
+                                                        lineNumber: 328,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 315,
+                                                    lineNumber: 327,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/create/page.tsx",
-                                            lineNumber: 312,
+                                            lineNumber: 324,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/create/page.tsx",
-                                    lineNumber: 306,
+                                    lineNumber: 318,
                                     columnNumber: 15
                                 }, this) : isGenerating ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "flex flex-col items-center",
@@ -1115,14 +1109,14 @@ function CreatePipeline() {
                                                     className: "absolute inset-0 bg-linear-to-br from-accent/5 to-transparent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 323,
+                                                    lineNumber: 335,
                                                     columnNumber: 20
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
                                                     className: "w-10 h-10 text-accent/20 animate-spin mb-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 324,
+                                                    lineNumber: 336,
                                                     columnNumber: 20
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1130,13 +1124,13 @@ function CreatePipeline() {
                                                     children: "Processing Layout..."
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 325,
+                                                    lineNumber: 337,
                                                     columnNumber: 20
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/create/page.tsx",
-                                            lineNumber: 322,
+                                            lineNumber: 334,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1144,13 +1138,13 @@ function CreatePipeline() {
                                             children: "Orchestrating pixels & composite cards..."
                                         }, void 0, false, {
                                             fileName: "[project]/app/create/page.tsx",
-                                            lineNumber: 327,
+                                            lineNumber: 339,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/create/page.tsx",
-                                    lineNumber: 321,
+                                    lineNumber: 333,
                                     columnNumber: 15
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "flex flex-col items-center animate-in zoom-in-95 duration-500",
@@ -1164,7 +1158,7 @@ function CreatePipeline() {
                                                     className: "w-full max-w-md mx-auto rounded-3xl shadow-[0_0_100px_rgba(16,185,129,0.2)] border border-accent/20"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 332,
+                                                    lineNumber: 344,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1177,12 +1171,12 @@ function CreatePipeline() {
                                                                 size: 20
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/create/page.tsx",
-                                                                lineNumber: 342,
+                                                                lineNumber: 354,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/create/page.tsx",
-                                                            lineNumber: 338,
+                                                            lineNumber: 350,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1192,24 +1186,24 @@ function CreatePipeline() {
                                                                 size: 20
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/create/page.tsx",
-                                                                lineNumber: 345,
+                                                                lineNumber: 357,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/create/page.tsx",
-                                                            lineNumber: 344,
+                                                            lineNumber: 356,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 337,
+                                                    lineNumber: 349,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/create/page.tsx",
-                                            lineNumber: 331,
+                                            lineNumber: 343,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1223,7 +1217,7 @@ function CreatePipeline() {
                                                             children: "Status"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/create/page.tsx",
-                                                            lineNumber: 351,
+                                                            lineNumber: 363,
                                                             columnNumber: 22
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1231,20 +1225,20 @@ function CreatePipeline() {
                                                             children: "Render Success"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/create/page.tsx",
-                                                            lineNumber: 352,
+                                                            lineNumber: 364,
                                                             columnNumber: 22
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 350,
+                                                    lineNumber: 362,
                                                     columnNumber: 20
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "w-px h-8 bg-border-subtle/50"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 354,
+                                                    lineNumber: 366,
                                                     columnNumber: 20
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1255,7 +1249,7 @@ function CreatePipeline() {
                                                             children: "Platform"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/create/page.tsx",
-                                                            lineNumber: 356,
+                                                            lineNumber: 368,
                                                             columnNumber: 22
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1263,30 +1257,30 @@ function CreatePipeline() {
                                                             children: platform
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/create/page.tsx",
-                                                            lineNumber: 357,
+                                                            lineNumber: 369,
                                                             columnNumber: 22
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/create/page.tsx",
-                                                    lineNumber: 355,
+                                                    lineNumber: 367,
                                                     columnNumber: 20
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/create/page.tsx",
-                                            lineNumber: 349,
+                                            lineNumber: 361,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/create/page.tsx",
-                                    lineNumber: 330,
+                                    lineNumber: 342,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/create/page.tsx",
-                                lineNumber: 304,
+                                lineNumber: 316,
                                 columnNumber: 11
                             }, this),
                             !generatedImage && !isGenerating && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1298,7 +1292,7 @@ function CreatePipeline() {
                                             className: "w-1.5 h-1.5 rounded-full bg-accent animate-pulse"
                                         }, void 0, false, {
                                             fileName: "[project]/app/create/page.tsx",
-                                            lineNumber: 367,
+                                            lineNumber: 379,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1306,24 +1300,24 @@ function CreatePipeline() {
                                             children: "Awaiting Generator Task"
                                         }, void 0, false, {
                                             fileName: "[project]/app/create/page.tsx",
-                                            lineNumber: 368,
+                                            lineNumber: 380,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/create/page.tsx",
-                                    lineNumber: 366,
+                                    lineNumber: 378,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/create/page.tsx",
-                                lineNumber: 365,
+                                lineNumber: 377,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/create/page.tsx",
-                        lineNumber: 301,
+                        lineNumber: 313,
                         columnNumber: 9
                     }, this)
                 ]
@@ -1355,7 +1349,7 @@ function SettingItem({ label, value, isAccent = false }) {
                 children: label
             }, void 0, false, {
                 fileName: "[project]/app/create/page.tsx",
-                lineNumber: 381,
+                lineNumber: 393,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1363,13 +1357,13 @@ function SettingItem({ label, value, isAccent = false }) {
                 children: value
             }, void 0, false, {
                 fileName: "[project]/app/create/page.tsx",
-                lineNumber: 382,
+                lineNumber: 394,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/create/page.tsx",
-        lineNumber: 380,
+        lineNumber: 392,
         columnNumber: 5
     }, this);
 }
