@@ -23,19 +23,19 @@ export type AIModel =
  */
 function getModelIdentifier(model: AIModel): string {
   switch (model) {
-    case 'gemini-3-pro': return 'models/gemini-3.1-pro-preview-01-2026';
-    case 'gemini-3-flash': return 'models/gemini-3.1-flash-lite-preview-03-2026';
-    case 'gemini-2.5-flash': return 'models/gemini-2.5-flash';
+    case 'gemini-3-pro': return 'models/gemini-1.5-pro'; // Stabilize as 1.5 Pro
+    case 'gemini-3-flash': return 'models/gemini-1.5-flash'; // Stabilize as 1.5 Flash
+    case 'gemini-2.5-flash': return 'models/gemini-1.5-flash'; // Fallback to 1.5 Flash
     case 'gpt-4o': return 'gpt-4o';
     case 'gpt-4o-mini': return 'gpt-4o-mini';
-    default: return 'models/gemini-2.5-flash';
+    default: return 'models/gemini-1.5-flash';
   }
 }
 
 /**
  * Generates 5 distinct hooks for a given topic.
  */
-export async function generateHooks(topic: string, model: AIModel = 'gemini-2.5-flash'): Promise<string[]> {
+export async function generateHooks(topic: string, model: AIModel = 'gemini-3-flash'): Promise<string[]> {
   const systemPrompt = `You are an elite copywriter. For the given topic, write exactly 5 distinct, scroll-stopping hooks.
 Rules:
 1. Each hook must use a different angle:

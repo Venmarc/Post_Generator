@@ -506,20 +506,20 @@ const genAI = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2
  */ function getModelIdentifier(model) {
     switch(model){
         case 'gemini-3-pro':
-            return 'models/gemini-3.1-pro-preview-01-2026';
+            return 'models/gemini-1.5-pro'; // Stabilize as 1.5 Pro
         case 'gemini-3-flash':
-            return 'models/gemini-3.1-flash-lite-preview-03-2026';
+            return 'models/gemini-1.5-flash'; // Stabilize as 1.5 Flash
         case 'gemini-2.5-flash':
-            return 'models/gemini-2.5-flash';
+            return 'models/gemini-1.5-flash'; // Fallback to 1.5 Flash
         case 'gpt-4o':
             return 'gpt-4o';
         case 'gpt-4o-mini':
             return 'gpt-4o-mini';
         default:
-            return 'models/gemini-2.5-flash';
+            return 'models/gemini-1.5-flash';
     }
 }
-async function generateHooks(topic, model = 'gemini-2.5-flash') {
+async function generateHooks(topic, model = 'gemini-3-flash') {
     const systemPrompt = `You are an elite copywriter. For the given topic, write exactly 5 distinct, scroll-stopping hooks.
 Rules:
 1. Each hook must use a different angle:
@@ -722,14 +722,15 @@ var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
 async function POST(req) {
     try {
         const body = await req.json();
-        const { topic, platform, style, level, hook, ...options } = body;
+        const { topic, platform, style, level, hook, model, ...options } = body;
         // 1. Generate Elite Copywriting via AI
         const aiText = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["generatePostContent"])({
             topic,
             platform: platform || 'linkedin',
-            style: style || 'bold',
-            level: level || 'pro',
-            hook: hook || topic
+            style: style || 'professional',
+            level: level || 'balanced',
+            hook: hook || topic,
+            model: model || 'gemini-3-pro'
         });
         // 2. Prepare Render Options
         const renderOptions = {

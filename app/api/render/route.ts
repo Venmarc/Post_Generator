@@ -5,15 +5,16 @@ import { generatePostContent } from '../../../lib/ai';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { topic, platform, style, level, hook, ...options } = body;
+    const { topic, platform, style, level, hook, model, ...options } = body;
 
     // 1. Generate Elite Copywriting via AI
     const aiText = await generatePostContent({
       topic,
       platform: platform || 'linkedin',
-      style: style || 'bold',
-      level: level || 'pro',
-      hook: hook || topic
+      style: style || 'professional',
+      level: level || 'balanced',
+      hook: hook || topic,
+      model: model || 'gemini-3-pro'
     });
 
     // 2. Prepare Render Options

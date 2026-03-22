@@ -18,7 +18,8 @@ import {
   Flame,
   Activity,
   Minus,
-  MessageSquare
+  MessageSquare,
+  ChevronDown
 } from 'lucide-react';
 import { useDraft } from '../../lib/drafts';
 import { useTelemetry } from '../../lib/storage';
@@ -158,6 +159,77 @@ export default function CreateWorkspace() {
     setTimeout(() => setCopyFeedback(false), 2000);
   };
 
+  // Reusable Dropdown Component
+  const CustomSelect = ({ 
+    label, 
+    value, 
+    options, 
+    onChange, 
+    columns = 1 
+  }: { 
+    label?: string, 
+    value: string, 
+    options: { id: string, label: string, icon?: React.ReactNode }[], 
+    onChange: (id: any) => void,
+    columns?: number
+  }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // Close when clicking outside
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+          setIsOpen(false);
+        }
+      };
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const selectedOption = options.find(o => o.id === value);
+
+    return (
+      <div className="relative group/dropdown" ref={dropdownRef}>
+        {label && <label className="text-[9px] font-black text-text-secondary/60 uppercase tracking-[3px] block mb-3">{label}</label>}
+        <button 
+          onClick={() => setIsOpen(!isOpen)}
+          className={`w-full flex items-center justify-between px-4 py-3 bg-void/40 border rounded-xl transition-all duration-300 ${isOpen ? 'border-accent shadow-glow bg-void/60' : 'border-border-subtle/30 hover:border-accent/40'}`}
+        >
+          <div className="flex items-center gap-3">
+             {selectedOption?.icon && <div className="text-accent">{selectedOption.icon}</div>}
+             <span className="text-[10px] font-black uppercase tracking-widest text-text-primary/90">{selectedOption?.label || value}</span>
+          </div>
+          <ChevronDown className={`w-3 h-3 text-text-secondary/40 transition-transform duration-300 ${isOpen ? 'rotate-180 text-accent' : ''}`} />
+        </button>
+
+        {isOpen && (
+          <div className={`absolute z-50 mt-2 p-2 bg-surface/95 border border-accent/20 rounded-2xl shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-200 min-w-full ${columns === 2 ? 'w-80' : 'w-full'}`}>
+            <div className={`grid gap-1 ${columns === 2 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+               {options.map((opt) => (
+                 <button
+                   key={opt.id}
+                   onClick={() => {
+                     onChange(opt.id);
+                     setIsOpen(false);
+                   }}
+                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-left ${
+                     value === opt.id 
+                       ? 'bg-accent/10 text-accent font-black border border-accent/20' 
+                       : 'text-text-secondary hover:bg-void/40 hover:text-white'
+                   }`}
+                 >
+                   {opt.icon && <div className={`p-1 rounded transition-colors ${value === opt.id ? 'text-accent' : 'text-text-secondary/40'}`}>{opt.icon}</div>}
+                   <span className="text-[9px] font-black uppercase tracking-tight">{opt.label}</span>
+                 </button>
+               ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 relative">
       {/* Header Pipeline */}
@@ -225,19 +297,18 @@ export default function CreateWorkspace() {
             />
 
             <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pb-4 border-b border-border-subtle/20 mb-8">
-               <div className="flex items-center gap-2 bg-void/50 p-1.5 rounded-xl border border-border-subtle/30 w-full sm:w-auto">
-                  <span className="text-[10px] font-black text-text-secondary/40 px-3 uppercase tracking-widest">Model Engine</span>
-                  <select 
+               <div className="w-full sm:w-auto min-w-[180px]">
+                  <CustomSelect 
                     value={textModel}
-                    onChange={(e) => setTextModel(e.target.value as AIModel)}
-                    className="bg-transparent text-[10px] font-bold text-text-secondary px-3 py-1 focus:outline-none cursor-pointer hover:text-white"
-                  >
-                    <option value="gemini-3-pro">Gemini 3 Pro</option>
-                    <option value="gemini-3-flash">Gemini 3 Flash</option>
-                    <option value="gemini-2.5-flash">Gemini 2.5</option>
-                    <option value="gpt-4o">GPT-4o</option>
-                    <option value="gpt-4o-mini">GPT-4o Mini</option>
-                  </select>
+                    onChange={setTextModel}
+                    options={[
+                      { id: 'gemini-3-pro', label: 'Gemini 3 Pro', icon: <Cpu className="w-3 h-3" /> },
+                      { id: 'gemini-3-flash', label: 'Gemini 3 Flash', icon: <Cpu className="w-3 h-3" /> },
+                      { id: 'gemini-2.5-flash', label: 'Gemini 2.5', icon: <Cpu className="w-3 h-3" /> },
+                      { id: 'gpt-4o', label: 'GPT-4o', icon: <Cpu className="w-3 h-3" /> },
+                      { id: 'gpt-4o-mini', label: 'GPT-4o Mini', icon: <Cpu className="w-3 h-3" /> }
+                    ]}
+                  />
                </div>
                
                <div className="flex items-center gap-2 bg-void/50 p-1.5 rounded-xl border border-border-subtle/30 w-full sm:w-auto self-end">
@@ -253,58 +324,36 @@ export default function CreateWorkspace() {
             </div>
 
             {/* Precision & Style: NOW PART OF ARCHITECT */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               <div>
-                  <label className="text-[9px] font-black text-text-secondary/60 uppercase tracking-[3px] block mb-4">Precision Level</label>
-                  <div className="grid grid-cols-5 gap-1.5 p-1.5 bg-void/50 rounded-xl border border-border-subtle/30">
-                     {[
-                       { id: 'raw', label: 'Raw' },
-                       { id: 'balanced', label: 'Balanced' },
-                       { id: 'polished', label: 'Polished' },
-                       { id: 'elite', label: 'Elite' },
-                       { id: 'viral', label: 'Viral' }
-                     ].map((l) => (
-                       <button 
-                         key={l.id}
-                         onClick={() => setLevel(l.id as Level)}
-                         className={`py-2 rounded-lg text-[9px] font-black tracking-widest transition-all ${level === l.id ? 'bg-accent text-void shadow-glow' : 'text-text-secondary hover:text-white'}`}
-                       >
-                         {l.label}
-                       </button>
-                     ))}
-                  </div>
-               </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <CustomSelect 
+                 label="Precision Level"
+                 value={level}
+                 onChange={setLevel}
+                 options={[
+                   { id: 'raw', label: 'Raw / Fast' },
+                   { id: 'balanced', label: 'Balanced' },
+                   { id: 'polished', label: 'Polished' },
+                   { id: 'elite', label: 'Elite / Razor' },
+                   { id: 'viral', label: 'Viral Candidate' }
+                 ]}
+               />
 
-               <div>
-                  <label className="text-[9px] font-black text-text-secondary/60 uppercase tracking-[3px] block mb-4">Writing Style</label>
-                  <div className="grid grid-cols-2 gap-2">
-                     {[
-                       { id: 'professional', label: 'Professional', icon: <Monitor className="w-3 h-3" /> },
-                       { id: 'bold', label: 'Bold', icon: <Zap className="w-3 h-3" /> },
-                       { id: 'story', label: 'Story', icon: <Layers className="w-3 h-3" /> },
-                       { id: 'curiosity', label: 'Curiosity', icon: <Search className="w-3 h-3" /> },
-                       { id: 'sarcastic', label: 'Sarcastic', icon: <Flame className="w-3 h-3" /> },
-                       { id: 'motivational', label: 'Hype', icon: <Activity className="w-3 h-3" /> },
-                       { id: 'minimal', label: 'Minimal', icon: <Minus className="w-3 h-3" /> },
-                       { id: 'conversational', label: 'Relatable', icon: <MessageSquare className="w-3 h-3" /> }
-                     ].map((s) => (
-                       <button
-                         key={s.id}
-                         onClick={() => setStyle(s.id as any)}
-                         className={`flex items-center gap-3 px-4 py-3 rounded-xl border transition-all ${
-                           style === s.id 
-                             ? 'bg-accent/5 border-accent text-white shadow-[inset_0_0_15px_rgba(16,185,129,0.03)]' 
-                             : 'bg-void/10 border-border-subtle/20 text-text-secondary hover:border-accent/40'
-                         }`}
-                       >
-                         <div className={`p-1.5 rounded-lg transition-colors ${style === s.id ? 'bg-accent text-void' : 'bg-void text-accent/30'}`}>
-                           {s.icon}
-                         </div>
-                         <span className="text-[9px] font-black uppercase tracking-tight">{s.label}</span>
-                       </button>
-                     ))}
-                  </div>
-               </div>
+               <CustomSelect 
+                 label="Writing Style"
+                 value={style}
+                 onChange={setStyle}
+                 columns={2}
+                 options={[
+                   { id: 'professional', label: 'Professional', icon: <Monitor className="w-3 h-3" /> },
+                   { id: 'bold', label: 'Bold', icon: <Zap className="w-3 h-3" /> },
+                   { id: 'story', label: 'Story', icon: <Layers className="w-3 h-3" /> },
+                   { id: 'curiosity', label: 'Curiosity', icon: <Search className="w-3 h-3" /> },
+                   { id: 'sarcastic', label: 'Sarcastic', icon: <Flame className="w-3 h-3" /> },
+                   { id: 'motivational', label: 'Hype / Motivation', icon: <Activity className="w-3 h-3" /> },
+                   { id: 'minimal', label: 'Minimal', icon: <Minus className="w-3 h-3" /> },
+                   { id: 'conversational', label: 'Relatable', icon: <MessageSquare className="w-3 h-3" /> }
+                 ]}
+               />
             </div>
           </div>
 
@@ -412,20 +461,17 @@ export default function CreateWorkspace() {
                </div>
             </div>
 
-            {/* Image Model */}
             <div className="mb-10">
-               <label className="text-[10px] font-bold text-text-secondary uppercase tracking-[2px] block mb-4">Rendering Engine</label>
-               <div className="flex items-center gap-2 bg-void/50 p-1 rounded-xl border border-border-subtle/30 overflow-hidden">
-                  <select 
-                    value={imageModel}
-                    onChange={(e) => setImageModel(e.target.value as AIModel)}
-                    className="w-full bg-transparent text-[10px] font-bold text-text-secondary px-4 py-2.5 focus:outline-none cursor-pointer"
-                  >
-                    <option value="gpt-4o-mini">GPT-4o Mini</option>
-                    <option value="gpt-4o">GPT-4o</option>
-                    <option value="gemini-3-flash">Gemini 3 Flash</option>
-                  </select>
-               </div>
+               <CustomSelect 
+                 label="Rendering Engine"
+                 value={imageModel}
+                 onChange={setImageModel}
+                 options={[
+                   { id: 'gpt-4o-mini', label: 'GPT-4o Mini', icon: <Cpu className="w-3 h-3" /> },
+                   { id: 'gpt-4o', label: 'GPT-4o', icon: <Cpu className="w-3 h-3" /> },
+                   { id: 'gemini-3-flash', label: 'Gemini 3 Flash', icon: <Cpu className="w-3 h-3" /> }
+                 ]}
+               />
             </div>
 
             {/* Visual Persona / Mood */}
@@ -454,32 +500,27 @@ export default function CreateWorkspace() {
                ))}
             </div>
 
-            {/* Visual Options */}
             <div className="space-y-6 pt-8 border-t border-border-subtle/20">
-               <div className="flex flex-col gap-2">
-                  <span className="text-[9px] font-black text-text-secondary/40 uppercase tracking-widest">Layout Mode</span>
-                  <select 
-                    value={layout} 
-                    onChange={(e) => setLayout(e.target.value)}
-                    className="w-full bg-void/50 border border-border-subtle/30 rounded-lg px-3 py-2 text-[10px] font-bold text-accent focus:outline-none"
-                  >
-                    <option value="composite-hero">Composite Hero</option>
-                    <option value="grid-minimal">Grid Minimal</option>
-                    <option value="split-story">Split Story</option>
-                  </select>
-               </div>
-               <div className="flex flex-col gap-2">
-                  <span className="text-[9px] font-black text-text-secondary/40 uppercase tracking-widest">Theme Visuals</span>
-                  <select 
-                    value={theme} 
-                    onChange={(e) => setTheme(e.target.value)}
-                    className="w-full bg-void/50 border border-border-subtle/30 rounded-lg px-3 py-2 text-[10px] font-bold text-accent focus:outline-none"
-                  >
-                    <option value="orbit">Orbit Dark</option>
-                    <option value="emerald">Emerald Neon</option>
-                    <option value="glass">Glassmorphism</option>
-                  </select>
-               </div>
+               <CustomSelect 
+                 label="Layout Mode"
+                 value={layout}
+                 onChange={setLayout}
+                 options={[
+                   { id: 'composite-hero', label: 'Composite Hero' },
+                   { id: 'grid-minimal', label: 'Grid Minimal' },
+                   { id: 'split-story', label: 'Split Story' }
+                 ]}
+               />
+               <CustomSelect 
+                 label="Theme Visuals"
+                 value={theme}
+                 onChange={setTheme}
+                 options={[
+                   { id: 'orbit', label: 'Orbit Dark' },
+                   { id: 'emerald', label: 'Emerald Neon' },
+                   { id: 'glass', label: 'Glassmorphism' }
+                 ]}
+               />
             </div>
           </div>
 
