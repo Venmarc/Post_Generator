@@ -6,7 +6,10 @@ async function run() {
   const result = await generatePost({
     topic: "Why most developers fail at building products",
     platform: "x",
-    style: "bold"
+    style: "bold",
+    level: "pro",
+    hook: "Your coding prowess is your product's biggest enemy.",
+    provider: "gemini"
   });
 
   console.log("\n--- FINAL POST ---");
