@@ -40,6 +40,7 @@ export default function CreatePipeline() {
         if (data.success && data.base64Data) {
           setGeneratedImage(data.base64Data);
           trackGeneration(topic, platform, data.base64Data);
+          clearDraft(); // Reset for next project
         } else {
         console.error("No image returned:", data.error);
       }
