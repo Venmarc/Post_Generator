@@ -77,7 +77,7 @@ export default function DashboardShell() {
               <Bell className="w-5 h-5" />
               <span className="absolute top-0 right-0 w-2 h-2 bg-primary rounded-full"></span>
             </button>
-            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-primary to-blue-500 cursor-pointer border border-border/50 hover:shadow-hover-glow transition-all"></div>
+            <div className="w-9 h-9 rounded-full bg-linear-to-tr from-primary to-blue-500 cursor-pointer border border-border/50 hover:shadow-hover-glow transition-all"></div>
           </div>
         </header>
 
@@ -101,7 +101,7 @@ export default function DashboardShell() {
               
               {/* Main Input / Prompt Card (Spans 8 cols) */}
               <div className="lg:col-span-8 bg-card border border-border rounded-3xl p-8 shadow-card-inner relative overflow-hidden group hover:border-primary/30 transition-all duration-300">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <h2 className="text-xl font-medium mb-6 text-white/90">Input your topic here</h2>
                 <div className="w-full h-40 border border-dashed border-border/60 rounded-2xl flex items-center justify-center text-foreground/40 bg-background/30 group-hover:bg-background/50 transition-colors cursor-pointer">
                   Topic, parameters, and constraints...
@@ -125,7 +125,7 @@ export default function DashboardShell() {
               </div>
 
               {/* Generated Hooks Preview (Spans 12 cols, wide) */}
-              <div className="lg:col-span-12 bg-card border border-border rounded-[2rem] p-8 shadow-card-inner mt-4">
+              <div className="lg:col-span-12 bg-card border border-border rounded-4xl p-8 shadow-card-inner mt-4">
                 <div className="flex items-center justify-between mb-8">
                   <h2 className="text-xl font-medium text-white/90">Generated hooks preview</h2>
                   <span className="text-xs font-medium px-3 py-1 bg-primary/20 text-primary rounded-full border border-primary/30">

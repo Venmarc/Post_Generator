@@ -184,6 +184,7 @@
     --radius-xl: .75rem;
     --radius-2xl: 1rem;
     --radius-3xl: 32px;
+    --radius-4xl: 2rem;
     --blur-md: 12px;
     --default-transition-duration: .15s;
     --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
@@ -890,6 +891,10 @@
     border-radius: var(--radius-3xl);
   }
 
+  .rounded-4xl {
+    border-radius: var(--radius-4xl);
+  }
+
   .rounded-\[2\.5rem\] {
     border-radius: 2.5rem;
   }
@@ -1118,6 +1123,34 @@
 
   .bg-void {
     background-color: var(--color-void);
+  }
+
+  .bg-linear-to-r {
+    --tw-gradient-position: to right;
+  }
+
+  @supports (background-image: linear-gradient(in lab, red, red)) {
+    .bg-linear-to-r {
+      --tw-gradient-position: to right in oklab;
+    }
+  }
+
+  .bg-linear-to-r {
+    background-image: linear-gradient(var(--tw-gradient-stops));
+  }
+
+  .bg-linear-to-tr {
+    --tw-gradient-position: to top right;
+  }
+
+  @supports (background-image: linear-gradient(in lab, red, red)) {
+    .bg-linear-to-tr {
+      --tw-gradient-position: to top right in oklab;
+    }
+  }
+
+  .bg-linear-to-tr {
+    background-image: linear-gradient(var(--tw-gradient-stops));
   }
 
   .bg-gradient-to-r {
