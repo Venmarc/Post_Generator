@@ -51,6 +51,7 @@ export default function CreateWorkspace() {
   
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [copyFeedback, setCopyFeedback] = useState(false);
+  const [unsplashKey, setUnsplashKey] = useState("");
   
   const { trackGeneration, trackExport } = useTelemetry();
   
@@ -506,9 +507,13 @@ export default function CreateWorkspace() {
                  value={layout}
                  onChange={setLayout}
                  options={[
-                   { id: 'composite-hero', label: 'Composite Hero' },
-                   { id: 'grid-minimal', label: 'Grid Minimal' },
-                   { id: 'split-story', label: 'Split Story' }
+                   { id: 'single-hero', label: 'Single Hero' },
+                   { id: 'stacked-vertical', label: 'Stacked Vertical' },
+                   { id: 'floating-collage', label: 'Floating Collage' },
+                   { id: 'diagonal-flow', label: 'Diagonal Flow' },
+                   { id: 'grid-breaks', label: 'Grid with Breaks' },
+                   { id: 'presentation-spread', label: 'Presentation Spread' },
+                   { id: 'quote-focus', label: 'Quote Focus' }
                  ]}
                />
                <CustomSelect 
@@ -516,11 +521,29 @@ export default function CreateWorkspace() {
                  value={theme}
                  onChange={setTheme}
                  options={[
-                   { id: 'orbit', label: 'Orbit Dark' },
-                   { id: 'emerald', label: 'Emerald Neon' },
-                   { id: 'glass', label: 'Glassmorphism' }
+                   { id: 'void-cyber', label: 'Void Cyber' },
+                   { id: 'cosmic-nebula', label: 'Cosmic Nebula' },
+                   { id: 'pastel-dream', label: 'Pastel Dream' },
+                   { id: 'botanical-modern', label: 'Botanical Abstract' },
+                   { id: 'neon-pulse', label: 'Neon Pulse' },
+                   { id: 'minimal-mono', label: 'Minimal Monochrome' },
+                   { id: 'warm-sunset', label: 'Warm Sunset' },
+                   { id: 'cold-steel', label: 'Cold Steel' },
+                   { id: 'grainy-film', label: 'Grainy Film' }
                  ]}
                />
+
+               <div className="pt-4">
+                  <label className="text-[9px] font-black text-text-secondary/60 uppercase tracking-[3px] block mb-3">Unsplash Access Key</label>
+                  <input 
+                    type="password"
+                    value={unsplashKey}
+                    onChange={(e) => setUnsplashKey(e.target.value)}
+                    placeholder="Enter key for HD assets..."
+                    className="w-full bg-void/40 border border-border-subtle/30 rounded-xl px-4 py-3 text-[10px] font-bold text-text-primary focus:outline-none focus:border-accent/40 transition-all"
+                  />
+                  <p className="mt-2 text-[8px] text-text-secondary/40 italic">Enables high-fidelity stock image enrichment</p>
+               </div>
             </div>
           </div>
 

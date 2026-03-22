@@ -137,6 +137,78 @@ const themes = {
         text: '#0f172a',
         shadow: '0 30px 60px rgba(0,0,0,0.1)',
         radius: '20px'
+    },
+    'void-cyber': {
+        bg: '#050505',
+        cardBg: 'rgba(15, 15, 20, 0.9)',
+        accent: '#10b981',
+        text: '#ffffff',
+        shadow: '0 0 40px rgba(16, 185, 129, 0.1)',
+        radius: '8px'
+    },
+    'cosmic-nebula': {
+        bg: 'linear-gradient(135deg, #0f0c29, #302b63, #24243e)',
+        cardBg: 'rgba(255, 255, 255, 0.05)',
+        accent: '#f472b6',
+        text: '#ffffff',
+        shadow: '0 20px 50px rgba(244, 114, 182, 0.2)',
+        radius: '30px'
+    },
+    'pastel-dream': {
+        bg: 'linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%)',
+        cardBg: 'rgba(255, 255, 255, 0.4)',
+        accent: '#fbcfe8',
+        text: '#4a5568',
+        shadow: '0 10px 30px rgba(0,0,0,0.05)',
+        radius: '40px'
+    },
+    'botanical-modern': {
+        bg: '#f0f4f0',
+        cardBg: '#ffffff',
+        accent: '#059669',
+        text: '#064e3b',
+        shadow: '0 10px 30px rgba(5, 150, 105, 0.05)',
+        radius: '16px'
+    },
+    'neon-pulse': {
+        bg: '#000000',
+        cardBg: 'rgba(10, 10, 10, 0.95)',
+        accent: '#00ffcc',
+        text: '#ffffff',
+        shadow: '0 0 30px rgba(0, 255, 204, 0.4)',
+        radius: '4px'
+    },
+    'minimal-mono': {
+        bg: '#ffffff',
+        cardBg: '#f8fafc',
+        accent: '#000000',
+        text: '#000000',
+        shadow: 'none',
+        radius: '0px'
+    },
+    'warm-sunset': {
+        bg: 'linear-gradient(to bottom, #ff9a9e 0%, #fecfef 99%, #fecfef 100%)',
+        cardBg: 'rgba(255, 255, 255, 0.8)',
+        accent: '#f87171',
+        text: '#7c2d12',
+        shadow: '0 20px 40px rgba(248, 113, 113, 0.2)',
+        radius: '24px'
+    },
+    'cold-steel': {
+        bg: '#2c3e50',
+        cardBg: 'rgba(255, 255, 255, 0.1)',
+        accent: '#94a3b8',
+        text: '#f1f5f9',
+        shadow: '0 20px 50px rgba(0,0,0,0.5)',
+        radius: '2px'
+    },
+    'grainy-film': {
+        bg: '#1a1a1a',
+        cardBg: '#262626',
+        accent: '#d1d5db',
+        text: '#e5e7eb',
+        shadow: '0 2px 4px rgba(0,0,0,0.5)',
+        radius: '12px'
     }
 };
 }),
