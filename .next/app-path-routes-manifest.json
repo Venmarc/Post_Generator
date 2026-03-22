@@ -1,6 +1,7 @@
 {
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
+  "/api/render/route": "/api/render",
   "/create/page": "/create",
   "/page": "/"
 }

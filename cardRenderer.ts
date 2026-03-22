@@ -1,5 +1,5 @@
-import puppeteer from 'puppeteer';
-import { themes } from './themes.js';
+import { getBrowser } from './lib/browser';
+import { themes } from './themes';
 
 export interface CardObject {
   title: string;
@@ -27,10 +27,7 @@ export async function renderCard(options: RenderOptions): Promise<Buffer | Buffe
     height = Math.max(1350, 400 + (cards.length * 400));
   }
 
-  const browser = await puppeteer.launch({ 
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
-  });
+  const browser = await getBrowser();
 
   try {
     const page = await browser.newPage();

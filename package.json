@@ -23,6 +23,8 @@
   "homepage": "https://github.com/Venmarc/Post_Generator#readme",
   "dependencies": {
     "@google/genai": "^1.46.0",
+    "@sparticuz/chromium": "^143.0.4",
+    "@supabase/supabase-js": "^2.99.3",
     "@tailwindcss/postcss": "^4.2.2",
     "clsx": "^2.1.1",
     "dotenv": "^17.3.1",
@@ -30,6 +32,7 @@
     "next": "^16.2.1",
     "openai": "^6.32.0",
     "puppeteer": "^24.40.0",
+    "puppeteer-core": "^24.40.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "tailwind-merge": "^3.5.0"

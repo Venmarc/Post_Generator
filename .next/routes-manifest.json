@@ -42,6 +42,12 @@
       "namedRegex": "^/_not\\-found(?:/)?$"
     },
     {
+      "page": "/api/render",
+      "regex": "^/api/render(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/render(?:/)?$"
+    },
+    {
       "page": "/create",
       "regex": "^/create(?:/)?$",
       "routeKeys": {},
