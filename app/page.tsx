@@ -116,7 +116,7 @@ export default function DashboardOverview() {
                        </div>
                        <Link 
                          href={`/create?topic=${encodeURIComponent(item.topic)}`}
-                         className="p-2 opacity-0 group-hover:opacity-100 bg-accent/10 hover:bg-accent text-accent hover:text-void rounded-lg transition-all flex-shrink-0"
+                         className="p-2 opacity-0 group-hover:opacity-100 bg-accent/10 hover:bg-accent text-accent hover:text-void rounded-lg transition-all shrink-0"
                        >
                          <ArrowUpRight className="w-4 h-4" />
                        </Link>
