@@ -36,9 +36,6 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "Design Card Layout Templates",
-    "Recreate Telemetry App Shell",
-    "app-shell-preview"
+    "node_modules"
   ]
 }
