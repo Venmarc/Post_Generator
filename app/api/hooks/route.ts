@@ -9,7 +9,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Topic is required' }, { status: 400 });
     }
 
-    const hooks = await generateHooks(topic, provider || 'gemini');
+    const hooks = await generateHooks(topic, provider || 'gemini-3-pro');
 
     return NextResponse.json({ success: true, hooks });
   } catch (error: any) {

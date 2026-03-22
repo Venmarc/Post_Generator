@@ -13,10 +13,10 @@ export async function POST(req: NextRequest) {
     const content = await generatePostContent({
       topic,
       platform: platform || 'linkedin',
-      style: style || 'bold',
-      level: level || 'pro',
+      style: style || 'professional',
+      level: level || 'balanced',
       hook,
-      model: model || 'gemini-2.5-flash'
+      model: model || 'gemini-3-pro'
     });
 
     return NextResponse.json({ success: true, content });

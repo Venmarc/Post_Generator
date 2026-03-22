@@ -409,10 +409,10 @@ async function POST(req) {
         const content = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["generatePostContent"])({
             topic,
             platform: platform || 'linkedin',
-            style: style || 'bold',
-            level: level || 'pro',
+            style: style || 'professional',
+            level: level || 'balanced',
             hook,
-            model: model || 'gemini-2.5-flash'
+            model: model || 'gemini-3-pro'
         });
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
