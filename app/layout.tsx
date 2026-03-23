@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 
 import AppShell from './components/AppShell';
+import { createClient } from '@/lib/supabase/server';
+import SessionProvider from '@/components/SessionProvider';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -11,11 +13,14 @@ export const metadata: Metadata = {
   description: 'AI-powered generation engine and asset dashboard',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body 
@@ -38,7 +43,14 @@ export default function RootLayout({
           {/* Layer 3: Faint cosmic blur */}
           <div className="absolute inset-0 bg-linear-to-br from-purple-950/8 via-transparent to-accent/8 blur-3xl" />
         </div>
-        <AppShell>{children}</AppShell>
+        
+        <SessionProvider>
+          {user ? (
+            <AppShell user={user}>{children}</AppShell>
+          ) : (
+            children
+          )}
+        </SessionProvider>
       </body>
     </html>
   );

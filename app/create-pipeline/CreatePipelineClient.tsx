@@ -32,7 +32,9 @@ import { platformPresets } from '@/lib/presets';
 import { AIModel, Platform, Style, Level } from '@/lib/ai';
 import { TEST_LINKED_POST } from '@/lib/test-data';
 
-export default function CreateWorkspace() {
+import { User } from "@supabase/supabase-js";
+
+export default function CreatePipelineClient({ user }: { user: User }) {
   const { topic, setTopic, platform: draftPlatform, setPlatform, clearDraft, isHydrated: draftReady } = useDraft();
   
   const platform = (draftPlatform?.toLowerCase() as Platform) || 'linkedin';
@@ -656,16 +658,6 @@ export default function CreateWorkspace() {
         )}
       </div>
 
-      {/* Background Aesthetic */}
-      <div className="fixed inset-0 pointer-events-none -z-10">
-         <div className="absolute inset-0 bg-void"></div>
-         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-accent/5 rounded-full blur-[120px]"></div>
-         <div className="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] bg-accent/5 rounded-full blur-[100px]"></div>
-         <div 
-           className="absolute inset-0 opacity-[0.03] mix-blend-soft-light pointer-events-none"
-           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
-         ></div>
-      </div>
     </div>
   );
 }

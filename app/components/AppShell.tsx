@@ -14,7 +14,16 @@ import {
   Menu
 } from "lucide-react";
 
-export default function AppShell({ children }: { children: React.ReactNode }) {
+import { User } from "@supabase/supabase-js";
+import UserNav from "@/components/UserNav";
+
+export default function AppShell({ 
+  children,
+  user
+}: { 
+  children: React.ReactNode,
+  user: User
+}) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -27,10 +36,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <div className="w-14 h-14 rounded-2xl bg-accent/20 flex items-center justify-center border border-accent/30 overflow-hidden shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:scale-105">
             <Layers className="text-accent w-7 h-7" />
           </div>
-
+ 
           <nav className="flex flex-col space-y-8 mt-10">
-            <SidebarIcon icon={<Home className="w-7 h-7" />} href="/" active={pathname === "/"} />
-            <SidebarIcon icon={<PenTool className="w-7 h-7" />} href="/create" active={pathname === "/create"} />
+            <SidebarIcon icon={<Home className="w-7 h-7" />} href="/dashboard" active={pathname === "/dashboard"} />
+            <SidebarIcon icon={<PenTool className="w-7 h-7" />} href="/create-pipeline" active={pathname === "/create-pipeline"} />
             <SidebarIcon icon={<BarChart2 className="w-7 h-7" />} href="/analytics" active={pathname === "/analytics"} />
           </nav>
         </div>
@@ -51,8 +60,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </button>
 
           <div className="hidden md:flex space-x-10 h-full items-center">
-            <Tab label="Dashboard" href="/" isActive={pathname === "/"} />
-            <Tab label="Create Pipeline" href="/create" isActive={pathname === "/create"} />
+            <Tab label="Dashboard" href="/dashboard" isActive={pathname === "/dashboard"} />
+            <Tab label="Create Pipeline" href="/create-pipeline" isActive={pathname === "/create-pipeline"} />
           </div>
 
           <div className="flex items-center space-x-6">
@@ -68,7 +77,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               <Bell className="w-5 h-5" />
               <span className="absolute top-0 right-0 w-2 h-2 bg-accent rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]"></span>
             </button>
-            <div className="w-10 h-10 rounded-full bg-linear-to-tr from-accent to-accent-dark cursor-pointer border border-border-subtle/50 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all"></div>
+            <UserNav email={user.email} />
           </div>
         </header>
 
