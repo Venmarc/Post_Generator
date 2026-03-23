@@ -870,9 +870,15 @@ function buildSystemPrompt(platform, style, hook, level) {
             break;
     }
     if (level === 'elite' || level === 'viral') {
-        prompt += `- MANDATORY: Include at least 2 concrete, highly specific, real-world examples in your post.\n`;
-        prompt += `- MANDATORY: Replace any abstract statements with observable physical behavior.\n`;
-        prompt += `- MANDATORY: End the post with a strong, definitive, non-question closing line.\n`;
+        prompt += `\n--- ELITE CONSTRAINTS ENGINE (V4.0) ---\n`;
+        prompt += `- RULE 1 (Real-World Examples): Include exactly 2 concrete, highly specific, visceral real-world examples (e.g., "skimming page 14 of a 20-page proposal" or "claiming you're on the way while still in bed").\n`;
+        prompt += `- RULE 2 (Behavioral Observations): Replace ALL abstract feelings (anxious, nervous, guilt) with observable physical behaviors (eyes darting, heart thumping, shoulders tightening, jaw clenching, flinching slightly). Describe the nervous system response.\n`;
+        prompt += `- RULE 3 (Absolute Closing): End with a definitive, hard-hitting absolute statement. NO questions. No "What do you think?". Close like a hammer.\n`;
+        if (level === 'viral') {
+            prompt += `- APEX VIRALITY: Amplify psychological friction. Focus on internal "muscle memory" and the slow decay of self-integrity. Trade nuance for high-stakes emotional triggers.\n`;
+        }
+        prompt += `BENCHMARK QUALITY: Your level 4/5 output must match the visceral, behavioral intensity of this reference: "Your eyes dart around the room. Your heart thumps. You are what you repeatedly accept from yourself."\n`;
+        prompt += `--- END ENGINE ---\n\n`;
     }
     prompt += `- BANNED PHRASES: "features, not solutions", "technical debt is a tax", "we all know that feeling", "in today's world".\n`;
     prompt += `- NO POETIC FLUFF: Do NOT romanticize. Be grounded and heavy.\n`;

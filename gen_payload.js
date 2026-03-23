@@ -1,154 +1,4 @@
-import "dotenv/config";
-import OpenAI from 'openai';
-import { GoogleGenAI } from '@google/genai';
-
-// Initialize AI clients
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || "",
-});
-
-const genAI = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY || "",
-});
-
-export type AIModel = 
-  | 'gemini-3-pro' 
-  | 'gemini-3-flash' 
-  | 'gemini-2.5-flash' 
-  | 'gpt-4o' 
-  | 'gpt-4o-mini';
-
-/**
- * Maps a friendly model ID to the canonical SDK identifier.
- * Based on available models: gemini-2.5-pro, gemini-2.5-flash, gemini-2.0-flash
- */
-function getModelIdentifier(model: AIModel): string {
-  switch (model) {
-    case 'gemini-3-pro': return 'models/gemini-2.5-pro'; 
-    case 'gemini-3-flash': return 'models/gemini-2.5-flash';
-    case 'gemini-2.5-flash': return 'models/gemini-2.5-flash';
-    case 'gpt-4o': return 'gpt-4o';
-    case 'gpt-4o-mini': return 'gpt-4o-mini';
-    default: return 'models/gemini-2.0-flash';
-  }
-}
-
-/**
- * Generates 5 distinct hooks for a given topic.
- */
-export async function generateHooks(topic: string, model: AIModel = 'gemini-3-flash'): Promise<string[]> {
-  const systemPrompt = `You are an elite copywriter. For the given topic, write exactly 5 distinct, scroll-stopping hooks.
-Rules:
-1. Each hook must use a different angle:
-  - Contrarian (Challenge a common belief)
-  - Curiosity gap (Make them need the answer)
-  - Bold claim (State something definitive and jarring)
-  - Pain point (Highlight an unrecognized friction)
-  - Unexpected insight (A rare, non-obvious observation)
-2. Maximum 12 words per hook. Keep them punchy.
-3. NO CLICHÉS. Ensure high mental friction.
-4. Output MUST be ONLY a raw JSON array of 5 strings. Just the array. 
-Example: ["Hook 1", "Hook 2", "Hook 3", "Hook 4", "Hook 5"]`;
-
-  const userPrompt = `Topic: ${topic}`;
-  let content = "";
-  const modelId = getModelIdentifier(model);
-
-  if (modelId.startsWith('models/')) {
-    try {
-      const response = await genAI.models.generateContent({
-        model: modelId,
-        contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
-        config: {
-          systemInstruction: systemPrompt,
-          temperature: 0.8,
-        }
-      });
-      content = response.text?.trim() || '[]';
-    } catch (error) {
-      console.error(`Gemini API FAILURE (${modelId}):`, error);
-      // Minimal fallback to OpenAI if Gemini fails entirely
-      content = await generateWithOpenAI('gpt-4o-mini', systemPrompt, userPrompt);
-    }
-  } else {
-    content = await generateWithOpenAI(modelId as any, systemPrompt, userPrompt);
-  }
-
-  try {
-    const cleaned = content.replace(/```json/g, '').replace(/```/g, '').trim();
-    return JSON.parse(cleaned);
-  } catch (e) {
-    console.error("Failed to parse hooks JSON:", content);
-    return [topic]; 
-  }
-}
-
-export type Platform = 'x' | 'instagram' | 'linkedin' | 'tiktok';
-export type Style = 
-  | 'professional' 
-  | 'bold' 
-  | 'story' 
-  | 'curiosity' 
-  | 'sarcastic' 
-  | 'motivational' 
-  | 'minimal' 
-  | 'conversational';
-export type Level = 'raw' | 'balanced' | 'polished' | 'elite' | 'viral';
-
-export interface PostInput {
-  topic: string;
-  platform: Platform;
-  style: Style;
-  level: Level;
-  hook: string;
-  model: AIModel; 
-}
-
-/**
- * Generates platform-optimized content based on topic, platform, style, and the selected hook.
- */
-export async function generatePostContent(input: PostInput): Promise<string> {
-  const { topic, platform, style, hook, level, model } = input;
-  
-  const systemPrompt = buildSystemPrompt(platform, style, hook, level);
-  const userPrompt = `Topic: ${topic}`;
-  const modelId = getModelIdentifier(model);
-
-  if (modelId.startsWith('models/')) {
-    try {
-      const response = await genAI.models.generateContent({
-        model: modelId,
-        contents: [
-          { role: 'user', parts: [{ text: userPrompt }] }
-        ],
-        config: {
-          systemInstruction: systemPrompt,
-          temperature: 0.8,
-        }
-      });
-      return response.text?.trim() || '';
-    } catch (error) {
-      console.error(`Gemini API FAILURE (${modelId}):`, error);
-      return generateWithOpenAI('gpt-4o-mini', systemPrompt, userPrompt);
-    }
-  } else {
-    return generateWithOpenAI(modelId as any, systemPrompt, userPrompt);
-  }
-}
-
-async function generateWithOpenAI(modelId: string, systemPrompt: string, userPrompt: string): Promise<string> {
-  const response = await openai.chat.completions.create({
-    model: modelId,
-    messages: [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: userPrompt },
-    ],
-    temperature: 0.8,
-  });
-  return (response.choices[0]?.message?.content || '').trim();
-}
-
-function buildSystemPrompt(platform: Platform, style: Style, hook: string, level: Level): string {
+function buildSystemPrompt(platform, style, hook, level) {
   let prompt = `You are a brutal, elite social media copywriter. You will write a single post about the user's provided topic.\n\n`;
   
   prompt += `CRITICAL UPGRADES (Non-negotiable):\n`;
@@ -257,3 +107,21 @@ function buildSystemPrompt(platform: Platform, style: Style, hook: string, level
 
   return prompt;
 }
+
+const sys = buildSystemPrompt('linkedin', 'bold', "Small lies don't just deceive others; they rewire *you*.", 'viral');
+const user = `Topic: The impact of small lies`;
+
+const payload = {
+  contents: [{
+    role: "user",
+    parts: [{ text: user }]
+  }],
+  system_instruction: {
+    parts: [{ text: sys }]
+  },
+  generationConfig: {
+    temperature: 0.8
+  }
+};
+
+console.log(JSON.stringify(payload));
