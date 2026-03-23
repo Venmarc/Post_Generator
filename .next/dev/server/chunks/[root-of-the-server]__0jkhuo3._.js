@@ -186,20 +186,21 @@ const genAI = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2
 });
 /**
  * Maps a friendly model ID to the canonical SDK identifier.
+ * Based on available models: gemini-2.5-pro, gemini-2.5-flash, gemini-2.0-flash
  */ function getModelIdentifier(model) {
     switch(model){
         case 'gemini-3-pro':
-            return 'models/gemini-1.5-pro'; // Stabilize as 1.5 Pro
+            return 'models/gemini-2.5-pro';
         case 'gemini-3-flash':
-            return 'models/gemini-1.5-flash'; // Stabilize as 1.5 Flash
+            return 'models/gemini-2.5-flash';
         case 'gemini-2.5-flash':
-            return 'models/gemini-1.5-flash'; // Fallback to 1.5 Flash
+            return 'models/gemini-2.5-flash';
         case 'gpt-4o':
             return 'gpt-4o';
         case 'gpt-4o-mini':
             return 'gpt-4o-mini';
         default:
-            return 'models/gemini-1.5-flash';
+            return 'models/gemini-2.0-flash';
     }
 }
 async function generateHooks(topic, model = 'gemini-3-flash') {

@@ -36,11 +36,13 @@ export async function POST(req: NextRequest) {
     // Add a small delay for any extra font/image settling if needed
     // await new Promise(r => setTimeout(r, 500));
 
+    const screenshotsMs = Date.now();
     const screenshot = await page.screenshot({ 
       type: 'png',
       fullPage: false,
       encoding: 'base64'
     });
+    const screenshotTook = Date.now() - screenshotsMs;
 
     await browser.close();
 
@@ -50,7 +52,13 @@ export async function POST(req: NextRequest) {
       pexels: photo ? {
         photographer: photo.photographer,
         url: photo.url
-      } : null
+      } : null,
+      milestones: [
+        `Pexels: Found background for "${query}" (${photo ? 'Success' : 'Fallback'})`,
+        `Gamma: HTML Template generated (${copy.length} chars)`,
+        `Puppeteer: Browser viewport 1080x1920 initialized`,
+        `Render: Screenshot captured in ${screenshotTook}ms`
+      ]
     });
 
   } catch (error: any) {

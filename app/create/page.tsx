@@ -23,7 +23,8 @@ import {
   Beaker,
   Download,
   RotateCcw,
-  Star
+  Star,
+  Info
 } from 'lucide-react';
 import { useDraft } from '@/lib/drafts';
 import { useTelemetry } from '@/lib/storage';
@@ -60,6 +61,18 @@ export default function CreateWorkspace() {
   const hooksRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  
+  // Phase 5: Generation Logging
+  const [renderLogs, setRenderLogs] = useState<{msg: string, type: 'info' | 'system' | 'network' | 'error', timestamp: string}[]>([]);
+  const [showLogs, setShowLogs] = useState(false);
+  
+  const addLog = (msg: string, type: 'info' | 'system' | 'network' | 'error' = 'info') => {
+    setRenderLogs(prev => [...prev, {
+      msg,
+      type,
+      timestamp: new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })
+    }]);
+  };
 
   useEffect(() => {
     if (hooks.length > 0 && hooksRef.current) {
@@ -122,6 +135,24 @@ export default function CreateWorkspace() {
     setIsRendering(true);
     setShowSuccess(false);
     
+    // Phase 5: Initialize logs
+    setRenderLogs([]);
+    setShowLogs(true);
+    addLog("Initializing composite pipeline...", "system");
+    addLog(`Target: ${platform.toUpperCase()} (${layout})`, "info");
+    addLog(`Visual Mood: ${visualMood} / Theme: ${theme}`, "info");
+    addLog(`Payload: ${generatedCopy.substring(0, 50)}...`, "network");
+    
+    const startTime = Date.now();
+    addLog("POST /api/generate-composite [INITIATED]", "network");
+
+    const heartbeat = setInterval(() => {
+      const elapsed = Math.round((Date.now() - startTime) / 1000);
+      if (elapsed % 5 === 0 && elapsed > 0) {
+        addLog(`Awaiting server response... (${elapsed}s elapsed)`, "system");
+      }
+    }, 1000);
+    
     try {
       const response = await fetch("/api/generate-composite", {
         method: "POST",
@@ -135,7 +166,13 @@ export default function CreateWorkspace() {
       });
       
       const data = await response.json();
+      clearInterval(heartbeat);
+
       if (data.success) {
+        if (data.milestones) {
+          data.milestones.forEach((m: string) => addLog(m, "system"));
+        }
+        addLog(`SUCCESS: Asset generated in ${Math.round((Date.now() - startTime)/1000)}s`, "info");
         setGeneratedImage(data.image);
         await trackGeneration(topic, platform, data.image);
         setShowSuccess(true);
@@ -144,9 +181,12 @@ export default function CreateWorkspace() {
           previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 300);
       } else {
+        addLog(`ERROR: ${data.error}`, "error");
         alert("Rendering failed: " + data.error);
       }
     } catch (error: any) {
+      clearInterval(heartbeat);
+      addLog(`FATAL ERROR: ${error.message}`, "error");
       console.error("Render failed:", error);
       alert("Render failed: " + error.message);
     } finally {
@@ -308,21 +348,57 @@ export default function CreateWorkspace() {
                  </button>
               </div>
 
-              <div className="flex gap-2 mb-8">
-                 {['linkedin', 'instagram', 'x', 'tiktok'].map((p) => (
-                    <button 
-                      key={p}
-                      onClick={() => setPlatform(p as any)}
-                      className={`px-5 py-2 rounded-xl text-[10px] font-black tracking-widest uppercase transition-all border ${
-                         platform === p 
-                            ? 'bg-accent/10 border-accent text-accent' 
-                            : 'bg-void/30 border-border-subtle/20 text-text-secondary hover:text-white'
-                      }`}
-                    >
-                      {p === 'x' ? 'TWITTER' : p}
-                    </button>
-                 ))}
-              </div>
+              <div className="flex items-center justify-between mb-8">
+                  <div className="flex gap-2">
+                     {['linkedin', 'instagram', 'x', 'tiktok'].map((p) => (
+                        <button 
+                          key={p}
+                          onClick={() => setPlatform(p as any)}
+                          className={`px-5 py-2 rounded-xl text-[10px] font-black tracking-widest uppercase transition-all border ${
+                             platform === p 
+                                ? 'bg-accent/10 border-accent text-accent' 
+                                : 'bg-void/30 border-border-subtle/20 text-text-secondary hover:text-white'
+                          }`}
+                        >
+                          {p === 'x' ? 'TWITTER' : p}
+                        </button>
+                     ))}
+                  </div>
+                  <button 
+                    onClick={() => setShowLogs(!showLogs)}
+                    className={`p-2 rounded-full transition-all ${showLogs ? 'bg-accent text-void shadow-glow' : 'bg-void/40 text-text-secondary hover:text-accent border border-border-subtle/20'}`}
+                    title="Generation Logs"
+                  >
+                    <Info className="w-4 h-4" />
+                  </button>
+               </div>
+
+               {showLogs && (
+                 <div className="mb-8 rounded-2xl bg-[#0a0a0c] border border-border-subtle/30 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="px-4 py-2 border-b border-border-subtle/20 bg-void/50 flex items-center justify-between">
+                       <span className="text-[9px] font-bold text-text-secondary uppercase tracking-[0.2em]">Diagnostic Console</span>
+                       <button onClick={() => setRenderLogs([])} className="text-[10px] text-text-secondary hover:text-white transition-colors">Clear</button>
+                    </div>
+                    <div className="p-4 max-h-[200px] overflow-y-auto space-y-1.5 font-mono text-[11px] leading-relaxed">
+                       {renderLogs.length === 0 ? (
+                         <div className="py-4 text-center text-text-secondary/30 italic">No logs yet. Initiate generation to see real-time diagnostics.</div>
+                       ) : (
+                         renderLogs.map((log, i) => (
+                           <div key={i} className="flex gap-3">
+                              <span className="text-text-secondary/40 shrink-0">[{log.timestamp}]</span>
+                              <span className={
+                                log.type === 'error' ? 'text-red-400' : 
+                                log.type === 'network' ? 'text-blue-400' : 
+                                log.type === 'system' ? 'text-accent/60' : 'text-text-primary/70'
+                              }>
+                                {log.msg}
+                              </span>
+                           </div>
+                         ))
+                       )}
+                    </div>
+                 </div>
+               )}
 
               <textarea 
                 value={topic}

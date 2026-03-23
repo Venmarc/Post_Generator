@@ -393,11 +393,13 @@ async function POST(req) {
         });
         // Add a small delay for any extra font/image settling if needed
         // await new Promise(r => setTimeout(r, 500));
+        const screenshotsMs = Date.now();
         const screenshot = await page.screenshot({
             type: 'png',
             fullPage: false,
             encoding: 'base64'
         });
+        const screenshotTook = Date.now() - screenshotsMs;
         await browser.close();
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
@@ -405,7 +407,13 @@ async function POST(req) {
             pexels: photo ? {
                 photographer: photo.photographer,
                 url: photo.url
-            } : null
+            } : null,
+            milestones: [
+                `Pexels: Found background for "${query}" (${photo ? 'Success' : 'Fallback'})`,
+                `Gamma: HTML Template generated (${copy.length} chars)`,
+                `Puppeteer: Browser viewport 1080x1920 initialized`,
+                `Render: Screenshot captured in ${screenshotTook}ms`
+            ]
         });
     } catch (error) {
         console.error('Composite generation error:', error);

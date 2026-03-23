@@ -1,6 +1,7 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/api/generate-composite/route": "app/api/generate-composite/route.js",
+  "/api/generate-copy/route": "app/api/generate-copy/route.js",
   "/api/hooks/route": "app/api/hooks/route.js",
   "/api/render/route": "app/api/render/route.js",
   "/create-pipeline/page": "app/create-pipeline/page.js",
