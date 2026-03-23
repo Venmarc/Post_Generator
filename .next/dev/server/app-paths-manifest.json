@@ -4,5 +4,6 @@
   "/api/hooks/route": "app/api/hooks/route.js",
   "/api/render/route": "app/api/render/route.js",
   "/create-pipeline/page": "app/create-pipeline/page.js",
-  "/create/page": "app/create/page.js"
+  "/create/page": "app/create/page.js",
+  "/page": "app/page.js"
 }
