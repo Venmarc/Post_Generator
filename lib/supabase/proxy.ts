@@ -43,6 +43,13 @@ export async function updateSession(request: NextRequest) {
 
     const { pathname } = request.nextUrl
 
+    // Legacy redirect: /create -> /create-pipeline
+    if (pathname === '/create') {
+      const url = request.nextUrl.clone()
+      url.pathname = '/create-pipeline'
+      return NextResponse.redirect(url)
+    }
+
     // Protected routes: /dashboard, /create-pipeline, /analytics, /settings
     const isProtectedRoute = 
       pathname.startsWith('/dashboard') || 
