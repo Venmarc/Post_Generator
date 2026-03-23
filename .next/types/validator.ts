@@ -65,6 +65,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/api/generate-composite/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/generate-composite">> = Specific
+  const handler = {} as typeof import("../../app/api/generate-composite/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/api/generate-copy/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/generate-copy">> = Specific
@@ -78,6 +87,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/hooks">> = Specific
   const handler = {} as typeof import("../../app/api/hooks/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/pexels/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/pexels">> = Specific
+  const handler = {} as typeof import("../../app/api/pexels/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

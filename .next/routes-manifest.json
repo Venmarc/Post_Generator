@@ -42,6 +42,12 @@
       "namedRegex": "^/_not\\-found(?:/)?$"
     },
     {
+      "page": "/api/generate-composite",
+      "regex": "^/api/generate\\-composite(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/generate\\-composite(?:/)?$"
+    },
+    {
       "page": "/api/generate-copy",
       "regex": "^/api/generate\\-copy(?:/)?$",
       "routeKeys": {},
@@ -52,6 +58,12 @@
       "regex": "^/api/hooks(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/api/hooks(?:/)?$"
+    },
+    {
+      "page": "/api/pexels",
+      "regex": "^/api/pexels(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/pexels(?:/)?$"
     },
     {
       "page": "/api/render",
