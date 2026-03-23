@@ -90,8 +90,8 @@ export default function AppShell({
 
       {/* MOBILE BOTTOM NAV */}
       <div className="md:hidden fixed bottom-0 left-0 w-full h-[70px] bg-surface border-t border-border flex z-50 px-6 justify-between items-center pb-safe">
-        <MobileNavIcon icon={<Home />} href="/" active={pathname === "/"} />
-        <MobileNavIcon icon={<PenTool />} href="/create" active={pathname === "/create"} />
+        <MobileNavIcon icon={<Home />} href="/dashboard" active={pathname === "/dashboard"} />
+        <MobileNavIcon icon={<PenTool />} href="/create-pipeline" active={pathname === "/create-pipeline"} />
         <MobileNavIcon icon={<BarChart2 />} href="/analytics" active={pathname === "/analytics"} />
         <MobileNavIcon icon={<Settings />} href="/settings" active={pathname === "/settings"} />
       </div>

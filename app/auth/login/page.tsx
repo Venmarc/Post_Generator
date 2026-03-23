@@ -73,7 +73,8 @@ export default function LoginPage() {
   }
 
   return (
-    <Card className="border-border-subtle/50 bg-surface/50 backdrop-blur-xl shadow-2xl">
+    <Card className="border-white/10 bg-surface/60 backdrop-blur-2xl shadow-[0_32px_64px_-15px_rgba(0,0,0,0.5)] border-t-white/20 relative overflow-hidden group">
+      <div className="absolute inset-0 bg-linear-to-b from-white/5 to-transparent pointer-events-none" />
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl text-center">Welcome back</CardTitle>
         <CardDescription className="text-center">
