@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { searchPexels, buildPexelsQuery } from '../../../lib/pexels';
+import { searchPexels, buildPexelsQuery } from '@/lib/pexels';
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getBrowser } from '../../../lib/browser';
-import { generateGammaHTML } from '../../../components/GammaRenderer';
-import { searchPexels, buildPexelsQuery } from '../../../lib/pexels';
+import { getBrowser } from '@/lib/browser';
+import { generateGammaHTML } from '@/components/GammaRenderer';
+import { searchPexels, buildPexelsQuery } from '@/lib/pexels';
 
 export async function POST(req: NextRequest) {
   try {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { renderCard, RenderOptions } from '../../../cardRenderer';
-import { generatePostContent } from '../../../lib/ai';
+import { renderCard, RenderOptions } from '@/legacy-v1/cardRenderer';
+import { generatePostContent } from '@/lib/ai';
 
 export async function POST(req: NextRequest) {
   try {

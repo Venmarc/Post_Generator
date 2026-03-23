@@ -1,7 +1,7 @@
 "use client";
 
 import { Layers, Activity, Users, ArrowUpRight, CheckCircle2, Clock, Loader2 } from "lucide-react";
-import { useTelemetry } from "../lib/storage";
+import { useTelemetry } from "@/lib/storage";
 import Link from "next/link";
 
 export default function DashboardOverview() {

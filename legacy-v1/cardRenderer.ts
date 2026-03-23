@@ -1,4 +1,4 @@
-import { getBrowser } from './lib/browser';
+import { getBrowser } from '../lib/browser';
 import { themes, visualMoods } from './themes';
 
 export interface CardObject {

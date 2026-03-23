@@ -1,4 +1,4 @@
-import { generateHooks } from './lib/ai';
+import { generateHooks } from '../lib/ai';
 import * as dotenv from 'dotenv';
 dotenv.config();
 

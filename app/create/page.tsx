@@ -25,11 +25,11 @@ import {
   RotateCcw,
   Star
 } from 'lucide-react';
-import { useDraft } from '../../lib/drafts';
-import { useTelemetry } from '../../lib/storage';
-import { platformPresets } from '../../lib/presets';
-import { AIModel, Platform, Style, Level } from '../../lib/ai';
-import { TEST_LINKED_POST } from '../../lib/test-data';
+import { useDraft } from '@/lib/drafts';
+import { useTelemetry } from '@/lib/storage';
+import { platformPresets } from '@/lib/presets';
+import { AIModel, Platform, Style, Level } from '@/lib/ai';
+import { TEST_LINKED_POST } from '@/lib/test-data';
 
 export default function CreateWorkspace() {
   const { topic, setTopic, platform: draftPlatform, setPlatform, clearDraft, isHydrated: draftReady } = useDraft();
