@@ -129,3 +129,59 @@ export const themes: Record<string, ThemeConfig> = {
     radius: '12px'
   }
 };
+
+export interface MoodConfig {
+  bodyStyle: string;
+  cardStyle: string;
+  overlay?: string;
+}
+
+export const visualMoods: Record<string, MoodConfig> = {
+  'clean-void': {
+    bodyStyle: 'background: #050505; color: #ffffff;',
+    cardStyle: 'background: rgba(15, 15, 20, 0.9); border: 1px solid rgba(255,255,255,0.05);'
+  },
+  'neon-edge': {
+    bodyStyle: 'background: #000000; color: #ffffff;',
+    cardStyle: 'background: rgba(10, 10, 10, 0.95); border: 1px solid var(--accent); box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.3);'
+  },
+  'cosmic-depth': {
+    bodyStyle: 'background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); color: #ffffff;',
+    cardStyle: 'background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);',
+    overlay: '<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:url(https://www.transparenttextures.com/patterns/stardust.png);opacity:0.3;pointer-events:none;"></div>'
+  },
+  'pastel-haze': {
+    bodyStyle: 'background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%); color: #1e293b;',
+    cardStyle: 'background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.5);'
+  },
+  'warm-film': {
+    bodyStyle: 'background: #1a1a1a; color: #fef3c7;',
+    cardStyle: 'background: rgba(45, 26, 26, 0.8); border: 1px solid rgba(251, 191, 36, 0.2); box-shadow: 0 0 40px rgba(251, 191, 36, 0.1);',
+    overlay: '<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:url(https://www.transparenttextures.com/patterns/film-grain.png);opacity:0.1;pointer-events:none;"></div>'
+  },
+  'metallic': {
+    bodyStyle: 'background: linear-gradient(180deg, #2c3e50 0%, #000000 100%); color: #e2e8f0;',
+    cardStyle: 'background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.2);'
+  },
+  'organic': {
+    bodyStyle: 'background: #f0f4f0; color: #064e3b;',
+    cardStyle: 'background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(5, 150, 105, 0.2);'
+  },
+  'monochrome': {
+    bodyStyle: 'background: #ffffff; color: #000000;',
+    cardStyle: 'background: #000000; color: #ffffff; border-radius: 0;'
+  },
+  'glassmorphic': {
+    bodyStyle: 'background: linear-gradient(45deg, #ee9ca7 0%, #ffdde1 100%); color: #ffffff;',
+    cardStyle: 'background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);'
+  },
+  'noise': {
+    bodyStyle: 'background: #0a0a0a; color: #ffffff;',
+    cardStyle: 'background: #1a1a1a; border: 1px solid #333;',
+    overlay: '<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:url(https://www.transparenttextures.com/patterns/carbon-fibre.png);opacity:0.2;pointer-events:none;"></div>'
+  },
+  'radial': {
+    bodyStyle: 'background: radial-gradient(circle, var(--accent) 0%, #000 70%); color: #ffffff;',
+    cardStyle: 'background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);'
+  }
+};

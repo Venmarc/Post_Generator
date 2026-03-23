@@ -42,6 +42,18 @@
       "namedRegex": "^/_not\\-found(?:/)?$"
     },
     {
+      "page": "/api/generate-copy",
+      "regex": "^/api/generate\\-copy(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/generate\\-copy(?:/)?$"
+    },
+    {
+      "page": "/api/hooks",
+      "regex": "^/api/hooks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/hooks(?:/)?$"
+    },
+    {
       "page": "/api/render",
       "regex": "^/api/render(?:/)?$",
       "routeKeys": {},

@@ -19,12 +19,16 @@ import {
   Activity,
   Minus,
   MessageSquare,
-  ChevronDown
+  ChevronDown,
+  Beaker,
+  Download,
+  RotateCcw
 } from 'lucide-react';
 import { useDraft } from '../../lib/drafts';
 import { useTelemetry } from '../../lib/storage';
 import { platformPresets } from '../../lib/presets';
 import { AIModel, Platform, Style, Level } from '../../lib/ai';
+import { TEST_LINKED_POST } from '../../lib/test-data';
 
 export default function CreateWorkspace() {
   const { topic, setTopic, platform: draftPlatform, setPlatform, clearDraft, isHydrated: draftReady } = useDraft();
@@ -41,7 +45,7 @@ export default function CreateWorkspace() {
   const [generatedCopy, setGeneratedCopy] = useState<string>("");
   
   const [textModel, setTextModel] = useState<AIModel>('gemini-3-pro');
-  const [imageModel, setImageModel] = useState<AIModel>('gpt-4o-mini');
+  const [imageModel, setImageModel] = useState<AIModel>('gemini-3-flash');
   const [level, setLevel] = useState<Level>('balanced');
   const [style, setStyle] = useState<Style>('professional');
   
@@ -51,11 +55,13 @@ export default function CreateWorkspace() {
   
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [copyFeedback, setCopyFeedback] = useState(false);
-  const [unsplashKey, setUnsplashKey] = useState("");
+  const [pexelsKey, setPexelsKey] = useState("");
   
   const { trackGeneration, trackExport } = useTelemetry();
   
   const hooksRef = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   // Auto-scroll to hooks when they are generated
   useEffect(() => {
@@ -121,6 +127,7 @@ export default function CreateWorkspace() {
   const handleRender = async () => {
     if (!generatedCopy && !isRendering) return;
     setIsRendering(true);
+    setShowSuccess(false);
     
     try {
       const response = await fetch("/api/render", {
@@ -137,6 +144,7 @@ export default function CreateWorkspace() {
           layout: layout,
           theme: theme,
           visualMood: visualMood,
+          pexelsKey: pexelsKey,
           format: 'portrait'
         }),
       });
@@ -146,12 +154,43 @@ export default function CreateWorkspace() {
         setGeneratedImage(data.base64Data);
         await trackGeneration(topic, platform, data.base64Data);
         clearDraft();
+        setShowSuccess(true);
+        
+        // Smooth scroll to preview
+        setTimeout(() => {
+          previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
       }
     } catch (error) {
       console.error("Render failed:", error);
     } finally {
       setIsRendering(false);
     }
+  };
+
+  const handleLoadTestData = () => {
+    setTopic("Technical Leadership vs. Management");
+    setPlatform("linkedin");
+    setSelectedHook("The subtle art of technical leadership isn't just about code complexity.");
+    setGeneratedCopy(TEST_LINKED_POST);
+  };
+
+  const handleClearPipeline = () => {
+    setTopic("");
+    setHooks([]);
+    setSelectedHook(null);
+    setGeneratedCopy("");
+    setGeneratedImage(null);
+    setShowSuccess(false);
+    clearDraft();
+  };
+
+  const handleDownloadImage = () => {
+    if (!generatedImage) return;
+    const link = document.createElement("a");
+    link.href = `data:image/png;base64,${generatedImage}`;
+    link.download = `social-post-${Date.now()}.png`;
+    link.click();
   };
 
   const copyToClipboard = () => {
@@ -170,7 +209,7 @@ export default function CreateWorkspace() {
   }: { 
     label?: string, 
     value: string, 
-    options: { id: string, label: string, icon?: React.ReactNode }[], 
+    options: { id: string, label: string, icon?: React.ReactNode, desc?: string }[], 
     onChange: (id: any) => void,
     columns?: number
   }) => {
@@ -205,7 +244,7 @@ export default function CreateWorkspace() {
         </button>
 
         {isOpen && (
-          <div className={`absolute z-50 mt-2 p-2 bg-surface/95 border border-accent/20 rounded-2xl shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-200 min-w-full ${columns === 2 ? 'w-80' : 'w-full'}`}>
+          <div className={`absolute z-100 mt-2 p-2 bg-surface/95 border border-accent/20 rounded-2xl shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-200 min-w-full ${columns === 2 ? 'w-80' : 'w-full'}`}>
             <div className={`grid gap-1 ${columns === 2 ? 'grid-cols-2' : 'grid-cols-1'}`}>
                {options.map((opt) => (
                  <button
@@ -220,9 +259,12 @@ export default function CreateWorkspace() {
                        : 'text-text-secondary hover:bg-void/40 hover:text-white'
                    }`}
                  >
-                   {opt.icon && <div className={`p-1 rounded transition-colors ${value === opt.id ? 'text-accent' : 'text-text-secondary/40'}`}>{opt.icon}</div>}
-                   <span className="text-[9px] font-black uppercase tracking-tight">{opt.label}</span>
-                 </button>
+                    {opt.icon && <div className={`p-1 rounded transition-colors ${value === opt.id ? 'text-accent' : 'text-text-secondary/40'}`}>{opt.icon}</div>}
+                    <div className="flex flex-col text-left">
+                      <span className="text-[9px] font-black uppercase tracking-tight">{opt.label}</span>
+                      {opt.desc && <span className="text-[7px] opacity-40 lowercase leading-tight">{opt.desc}</span>}
+                    </div>
+                  </button>
                ))}
             </div>
           </div>
@@ -242,9 +284,15 @@ export default function CreateWorkspace() {
         
         <div className="flex items-center gap-4">
            {generatedImage && (
-             <button className="flex items-center gap-2 px-6 py-3 bg-surface border border-border-subtle/50 rounded-xl text-text-primary font-bold hover:border-accent/40 transition-all">
-                Preview Result
-             </button>
+             <div className="flex items-center gap-2">
+                <button 
+                  onClick={handleDownloadImage}
+                  className="flex items-center gap-2 px-6 py-3 bg-surface border border-border-subtle/50 rounded-xl text-accent font-bold hover:border-accent/40 hover:bg-accent/5 transition-all shadow-glow"
+                >
+                   <Download className="w-4 h-4" />
+                   Download Asset
+                </button>
+             </div>
            )}
            <button 
              onClick={handleRender}
@@ -263,13 +311,31 @@ export default function CreateWorkspace() {
         <div className="lg:col-span-8 space-y-8">
           
           {/* Section 1: Concept & Setup */}
-          <div className="bg-surface rounded-card border border-border-subtle/50 p-8 shadow-card relative overflow-hidden group">
+          <div className="bg-surface rounded-card border border-border-subtle/50 p-8 shadow-card relative group z-20">
             <div className="flex items-center justify-between mb-8">
                <div className="flex items-center gap-3">
                   <div className="p-2 bg-accent/10 rounded-lg text-accent">
                      <Cpu className="w-5 h-5" />
                   </div>
                   <h2 className="text-xl font-bold text-text-primary/90">Post Architect</h2>
+               </div>
+               <div className="flex items-center gap-2">
+                 <button 
+                   onClick={handleClearPipeline}
+                   className="flex items-center gap-2 px-3 py-1.5 bg-void/40 border border-border-subtle/30 rounded-lg text-[9px] font-black text-text-secondary hover:text-red-400 hover:border-red-400/40 transition-all uppercase tracking-widest"
+                   title="Clear All Data"
+                 >
+                   <RotateCcw className="w-3 h-3" />
+                   Clear Flow
+                 </button>
+                 <button 
+                   onClick={handleLoadTestData}
+                   className="flex items-center gap-2 px-3 py-1.5 bg-void/40 border border-border-subtle/30 rounded-lg text-[9px] font-black text-text-secondary hover:text-accent hover:border-accent/40 transition-all uppercase tracking-widest"
+                   title="Load Developer Test Data"
+                 >
+                   <Beaker className="w-3 h-3" />
+                   Load Test
+                 </button>
                </div>
             </div>
 
@@ -450,9 +516,9 @@ export default function CreateWorkspace() {
         </div>
 
         {/* RIGHT: ARTISTIC DIRECTION */}
-        <div className="lg:col-span-4 space-y-8">
+        <div className="lg:col-span-4 space-y-8 relative z-10">
           
-          <div className="bg-surface rounded-card border border-border-subtle/50 p-8 shadow-card">
+          <div className="bg-surface rounded-card border border-border-subtle/50 p-8 shadow-card relative z-30">
             <div className="flex items-center justify-between mb-10">
                <div className="flex items-center gap-3">
                   <div className="p-2 bg-accent/10 rounded-lg text-accent">
@@ -464,7 +530,7 @@ export default function CreateWorkspace() {
 
             <div className="mb-10">
                <CustomSelect 
-                 label="Rendering Engine"
+                 label="Engine Settings"
                  value={imageModel}
                  onChange={setImageModel}
                  options={[
@@ -475,31 +541,36 @@ export default function CreateWorkspace() {
                />
             </div>
 
-            {/* Visual Persona / Mood */}
-            <div className="space-y-3 mb-10">
-               <label className="text-[10px] font-bold text-text-secondary uppercase tracking-[2px] block mb-4">Visual Look</label>
-               {[
-                 { id: 'cinematic', label: 'Cinematic High-Key', icon: <Layers className="w-3 h-3" /> },
-                 { id: 'tech', label: 'Futuristic Tech', icon: <Monitor className="w-3 h-3" /> },
-                 { id: 'abstract', label: 'Minimal Abstract', icon: <Palette className="w-3 h-3" /> },
-                 { id: 'raw', label: 'Gritty Raw', icon: <Zap className="w-3 h-3" /> }
-               ].map((v) => (
-                 <button
-                   key={v.id}
-                   onClick={() => setVisualMood(v.id)}
-                   className={`w-full flex items-center gap-4 p-4 rounded-xl border text-left transition-all ${
-                     visualMood === v.id 
-                       ? 'bg-accent/5 border-accent text-white shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
-                       : 'bg-void/10 border-border-subtle/20 text-text-secondary hover:border-accent/40'
-                   }`}
-                 >
-                   <div className={`p-2 rounded-lg transition-colors ${visualMood === v.id ? 'bg-accent text-void' : 'bg-void text-accent/30'}`}>
-                     {v.icon}
-                   </div>
-                   <span className="text-[10px] font-bold uppercase tracking-tight">{v.label}</span>
-                 </button>
-               ))}
-            </div>
+             <div className="mb-10">
+                <CustomSelect 
+                  label="Artistic Visual Vibe"
+                  value={visualMood}
+                  onChange={setVisualMood}
+                  columns={2}
+                  options={[
+                    { id: "clean-void", label: "Clean Void", icon: <Layers className="w-3 h-3" />, desc: "Minimal dark contrast" },
+                    { id: "neon-edge", label: "Neon Edge Glow", icon: <Zap className="w-3 h-3" />, desc: "Vibrant neon outlines" },
+                    { id: "cosmic-depth", label: "Cosmic Depth", icon: <Palette className="w-3 h-3" />, desc: "Nebula space gradients" },
+                    { id: "pastel-haze", label: "Pastel Haze", icon: <Palette className="w-3 h-3" />, desc: "Soft blurred gradients" },
+                    { id: "warm-film", label: "Warm Film Grain", icon: <Flame className="w-3 h-3" />, desc: "Sunset analog grain" },
+                    { id: "metallic", label: "Metallic Industrial", icon: <Cpu className="w-3 h-3" />, desc: "Cool steel sharp lines" },
+                    { id: "organic", label: "Organic Botanical", icon: <Activity className="w-3 h-3" />, desc: "Abstract leaf patterns" },
+                    { id: "monochrome", label: "Monochrome Burst", icon: <Palette className="w-3 h-3" />, desc: "Grayscale + accent color" },
+                    { id: "glassmorphic", label: "Glassmorphic Overlay", icon: <Monitor className="w-3 h-3" />, desc: "Frosted glass effects" },
+                    { id: "noise", label: "Subtle Noise Texture", icon: <Minus className="w-3 h-3" />, desc: "Faint analog texture" },
+                    { id: "radial", label: "Radial Energy Pulse", icon: <Zap className="w-3 h-3" />, desc: "Central radiant burst" },
+                    { id: "custom", label: "Custom Prompt", icon: <Sparkles className="w-3 h-3" />, desc: "User description" }
+                  ]}
+                />
+                {visualMood === 'custom' && (
+                  <div className="mt-4 animate-in fade-in slide-in-from-top-2">
+                    <textarea 
+                      placeholder="Describe your custom visual look..."
+                      className="w-full h-24 bg-void/40 border border-border-subtle/30 rounded-xl px-4 py-3 text-[10px] font-bold text-text-primary focus:outline-none focus:border-accent/40 transition-all resize-none shadow-inner"
+                    />
+                  </div>
+                )}
+             </div>
 
             <div className="space-y-6 pt-8 border-t border-border-subtle/20">
                <CustomSelect 
@@ -533,17 +604,6 @@ export default function CreateWorkspace() {
                  ]}
                />
 
-               <div className="pt-4">
-                  <label className="text-[9px] font-black text-text-secondary/60 uppercase tracking-[3px] block mb-3">Unsplash Access Key</label>
-                  <input 
-                    type="password"
-                    value={unsplashKey}
-                    onChange={(e) => setUnsplashKey(e.target.value)}
-                    placeholder="Enter key for HD assets..."
-                    className="w-full bg-void/40 border border-border-subtle/30 rounded-xl px-4 py-3 text-[10px] font-bold text-text-primary focus:outline-none focus:border-accent/40 transition-all"
-                  />
-                  <p className="mt-2 text-[8px] text-text-secondary/40 italic">Enables high-fidelity stock image enrichment</p>
-               </div>
             </div>
           </div>
 
@@ -565,12 +625,18 @@ export default function CreateWorkspace() {
 
       {/* Preview Area */}
       {generatedImage && (
-        <div className="mt-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
-           <div className="bg-surface rounded-card border border-border-subtle/50 p-1 bg-[url('/grain.png')] bg-repeat">
+        <div ref={previewRef} className="mt-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+           {showSuccess && (
+             <div className="mb-6 flex items-center justify-center gap-3 py-4 bg-accent/10 border border-accent/20 rounded-2xl animate-in zoom-in-95">
+                <CheckCircle2 className="w-5 h-5 text-accent" />
+                <span className="text-sm font-bold text-accent uppercase tracking-widest">Masterpiece Rendered Successfully</span>
+             </div>
+           )}
+           <div className="bg-surface rounded-card border border-border-subtle/50 p-1 bg-[url('/grain.png')] bg-repeat shadow-2xl overflow-hidden">
              <img 
                src={`data:image/png;base64,${generatedImage}`} 
                alt="Generated Post" 
-               className="w-full rounded-2xl shadow-2xl"
+               className="w-full rounded-2xl"
              />
            </div>
         </div>

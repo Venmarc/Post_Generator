@@ -396,7 +396,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2e$ts__$5b$app$2d$
 ;
 async function POST(req) {
     try {
-        const { topic, provider } = await req.json();
+        const { topic, model } = await req.json();
         if (!topic) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: 'Topic is required'
@@ -404,7 +404,7 @@ async function POST(req) {
                 status: 400
             });
         }
-        const hooks = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["generateHooks"])(topic, provider || 'gemini-3-pro');
+        const hooks = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["generateHooks"])(topic, model || 'gemini-3-pro');
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
             hooks

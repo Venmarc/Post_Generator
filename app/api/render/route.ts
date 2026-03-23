@@ -5,17 +5,19 @@ import { generatePostContent } from '../../../lib/ai';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { topic, platform, style, level, hook, model, ...options } = body;
+    const { topic, platform, style, level, hook, model, visualMood, pexelsKey, ...options } = body;
 
-    // 1. Generate Elite Copywriting via AI
-    const aiText = await generatePostContent({
-      topic,
-      platform: platform || 'linkedin',
-      style: style || 'professional',
-      level: level || 'balanced',
-      hook: hook || topic,
-      model: model || 'gemini-3-pro'
-    });
+    let aiText = '';
+    if (!options.cards || options.cards.length === 0) {
+      aiText = await generatePostContent({
+        topic,
+        platform: platform || 'linkedin',
+        style: style || 'professional',
+        level: level || 'balanced',
+        hook: hook || topic,
+        model: model || 'gemini-3-pro'
+      });
+    }
 
     // 2. Prepare Render Options
     const renderOptions: RenderOptions = {
@@ -25,6 +27,8 @@ export async function POST(req: NextRequest) {
       layout: options.layout || 'composite-hero',
       theme: options.theme || 'orbit',
       format: options.format || 'portrait',
+      visualMood: visualMood || 'clean-void',
+      pexelsKey: pexelsKey || process.env.PEXELS_API_KEY || "",
       backgroundImage: options.backgroundImage
     };
 

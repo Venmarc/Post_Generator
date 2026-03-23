@@ -1,6 +1,8 @@
 {
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
+  "/api/generate-copy/route": "/api/generate-copy",
+  "/api/hooks/route": "/api/hooks",
   "/api/render/route": "/api/render",
   "/create/page": "/create",
   "/page": "/"

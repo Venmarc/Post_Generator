@@ -87,7 +87,9 @@ __turbopack_async_result__();
 
 __turbopack_context__.s([
     "themes",
-    ()=>themes
+    ()=>themes,
+    "visualMoods",
+    ()=>visualMoods
 ]);
 const themes = {
     gleam: {
@@ -211,6 +213,55 @@ const themes = {
         radius: '12px'
     }
 };
+const visualMoods = {
+    'clean-void': {
+        bodyStyle: 'background: #050505; color: #ffffff;',
+        cardStyle: 'background: rgba(15, 15, 20, 0.9); border: 1px solid rgba(255,255,255,0.05);'
+    },
+    'neon-edge': {
+        bodyStyle: 'background: #000000; color: #ffffff;',
+        cardStyle: 'background: rgba(10, 10, 10, 0.95); border: 1px solid var(--accent); box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.3);'
+    },
+    'cosmic-depth': {
+        bodyStyle: 'background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%); color: #ffffff;',
+        cardStyle: 'background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);',
+        overlay: '<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:url(https://www.transparenttextures.com/patterns/stardust.png);opacity:0.3;pointer-events:none;"></div>'
+    },
+    'pastel-haze': {
+        bodyStyle: 'background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%); color: #1e293b;',
+        cardStyle: 'background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.5);'
+    },
+    'warm-film': {
+        bodyStyle: 'background: #1a1a1a; color: #fef3c7;',
+        cardStyle: 'background: rgba(45, 26, 26, 0.8); border: 1px solid rgba(251, 191, 36, 0.2); box-shadow: 0 0 40px rgba(251, 191, 36, 0.1);',
+        overlay: '<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:url(https://www.transparenttextures.com/patterns/film-grain.png);opacity:0.1;pointer-events:none;"></div>'
+    },
+    'metallic': {
+        bodyStyle: 'background: linear-gradient(180deg, #2c3e50 0%, #000000 100%); color: #e2e8f0;',
+        cardStyle: 'background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.2);'
+    },
+    'organic': {
+        bodyStyle: 'background: #f0f4f0; color: #064e3b;',
+        cardStyle: 'background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(5, 150, 105, 0.2);'
+    },
+    'monochrome': {
+        bodyStyle: 'background: #ffffff; color: #000000;',
+        cardStyle: 'background: #000000; color: #ffffff; border-radius: 0;'
+    },
+    'glassmorphic': {
+        bodyStyle: 'background: linear-gradient(45deg, #ee9ca7 0%, #ffdde1 100%); color: #ffffff;',
+        cardStyle: 'background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);'
+    },
+    'noise': {
+        bodyStyle: 'background: #0a0a0a; color: #ffffff;',
+        cardStyle: 'background: #1a1a1a; border: 1px solid #333;',
+        overlay: '<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:url(https://www.transparenttextures.com/patterns/carbon-fibre.png);opacity:0.2;pointer-events:none;"></div>'
+    },
+    'radial': {
+        bodyStyle: 'background: radial-gradient(circle, var(--accent) 0%, #000 70%); color: #ffffff;',
+        cardStyle: 'background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);'
+    }
+};
 }),
 "[project]/cardRenderer.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
@@ -230,13 +281,31 @@ var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
 ;
 ;
 async function renderCard(options) {
-    const { cards, layout, theme, format, backgroundImage } = options;
+    const { cards, layout, theme, visualMood, format, backgroundImage, pexelsKey } = options;
     const activeTheme = __TURBOPACK__imported__module__$5b$project$5d2f$themes$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["themes"][theme] || __TURBOPACK__imported__module__$5b$project$5d2f$themes$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["themes"]['gleam'];
-    const width = 1080;
-    // Dynamic height for tall composite pages
-    let height = format === 'portrait' ? 1350 : 1080;
-    if (format === 'tall' || layout.startsWith('composite')) {
+    const activeMood = __TURBOPACK__imported__module__$5b$project$5d2f$themes$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["visualMoods"][visualMood] || __TURBOPACK__imported__module__$5b$project$5d2f$themes$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["visualMoods"]['clean-void'];
+    const width = format === 'wide' ? 1920 : 1080;
+    let height = format === 'portrait' ? 1350 : format === 'wide' ? 1080 : 1080;
+    if (format === 'tall' || layout.startsWith('composite') || layout.includes('flow')) {
         height = Math.max(1350, 400 + cards.length * 400);
+    }
+    // Pexels fallback logic
+    let finalBg = backgroundImage;
+    if (!finalBg && pexelsKey) {
+        try {
+            const query = `${theme} ${visualMood} abstract background`;
+            const pexelRes = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1`, {
+                headers: {
+                    Authorization: pexelsKey
+                }
+            });
+            const pexelData = await pexelRes.json();
+            if (pexelData.photos?.[0]?.src?.large2x) {
+                finalBg = pexelData.photos[0].src.large2x;
+            }
+        } catch (e) {
+            console.error("Pexels fetch failed:", e);
+        }
     }
     const browser = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$browser$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["getBrowser"])();
     try {
@@ -245,12 +314,13 @@ async function renderCard(options) {
             width,
             height
         });
+        const htmlGenerator = (cardsData)=>generateCompositeHTML(cardsData, activeTheme, activeMood, layout, height, finalBg);
         if (layout === 'carousel') {
             const buffers = [];
             for (const card of cards){
-                const html = generateCompositeHTML([
+                const html = htmlGenerator([
                     card
-                ], activeTheme, layout, height, backgroundImage);
+                ]);
                 await page.setContent(html, {
                     waitUntil: 'domcontentloaded'
                 });
@@ -262,8 +332,7 @@ async function renderCard(options) {
             }
             return buffers;
         } else {
-            // composite layouts or single
-            const html = generateCompositeHTML(cards, activeTheme, layout, height, backgroundImage);
+            const html = htmlGenerator(cards);
             await page.setContent(html, {
                 waitUntil: 'domcontentloaded'
             });
@@ -277,15 +346,14 @@ async function renderCard(options) {
         await browser.close();
     }
 }
-function generateCompositeHTML(cards, theme, layout, totalHeight, bgImage) {
-    // Custom Background string
-    const pageBg = bgImage ? `background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url('${bgImage}') no-repeat center center; background-size: cover;` : `background: ${theme.bg};`;
+function generateCompositeHTML(cards, theme, mood, layout, totalHeight, bgImage) {
+    const pageBg = bgImage ? `background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.9)), url('${bgImage}') no-repeat center center; background-size: cover;` : mood.bodyStyle;
     let cardsHtml = '';
-    if (layout === 'composite-vertical') {
+    if (layout === 'composite-vertical' || layout === 'stacked-vertical') {
         cardsHtml = `
       <div class="composite-vertical-container">
         ${cards.map((c, i)=>`
-          <div class="card-block">
+          <div class="card-block" style="${mood.cardStyle}">
             ${c.imageUrl ? `<img src="${c.imageUrl}" class="card-img" />` : ''}
             <div class="card-text">
               <div class="card-title"><span class="card-number">${i + 1}.</span> ${c.title}</div>
@@ -295,14 +363,13 @@ function generateCompositeHTML(cards, theme, layout, totalHeight, bgImage) {
         `).join('')}
       </div>
     `;
-    } else if (layout === 'composite-hero') {
-        // Generate predefined floating/tilted card positions for up to 5 cards (Gamma style artistic composite)
+    } else if (layout === 'composite-hero' || layout === 'floating-collage') {
         const positions = [
             'top: 15%; left: 10%; transform: rotate(-2deg); width: 80%; z-index: 10;',
-            'top: 45%; left: 5%; transform: translateX(5%) rotate(1deg); width: 60%; z-index: 9;',
-            'top: 55%; right: 5%; transform: translateX(-5%) rotate(-1deg); width: 60%; z-index: 8;',
-            'top: 75%; left: 10%; transform: rotate(2deg); width: 80%; z-index: 7;',
-            'top: 85%; right: 10%; transform: rotate(-1deg); width: 70%; z-index: 6;'
+            'top: 40%; left: 5%; transform: rotate(1deg); width: 60%; z-index: 9;',
+            'top: 50%; right: 5%; transform: rotate(-1deg); width: 60%; z-index: 8;',
+            'top: 70%; left: 15%; transform: rotate(2deg); width: 70%; z-index: 7;',
+            'top: 80%; right: 10%; transform: rotate(-2deg); width: 65%; z-index: 6;'
         ];
         cardsHtml = `
       <div class="composite-hero-container">
@@ -310,7 +377,7 @@ function generateCompositeHTML(cards, theme, layout, totalHeight, bgImage) {
             const posStyle = positions[i % positions.length];
             const isMainTitle = i === 0;
             return `
-            <div class="card-hero-block" style="${posStyle}">
+            <div class="card-hero-block" style="${posStyle} ${mood.cardStyle}">
               ${c.imageUrl ? `<img src="${c.imageUrl}" class="card-img" />` : ''}
               <div class="card-text">
                 <div class="card-title" style="font-size: ${isMainTitle ? '64px' : '48px'}">
@@ -321,6 +388,46 @@ function generateCompositeHTML(cards, theme, layout, totalHeight, bgImage) {
             </div>
           `;
         }).join('')}
+      </div>
+    `;
+    } else if (layout === 'diagonal-flow') {
+        cardsHtml = `
+      <div class="diagonal-container">
+        ${cards.map((c, i)=>`
+          <div class="card-block diagonal-card" style="margin-left: ${i * 60}px; transform: rotate(${i % 2 === 0 ? '-1deg' : '1deg'}); ${mood.cardStyle}">
+            <div class="card-title"><span class="card-number">${i + 1}.</span> ${c.title}</div>
+            <div class="card-body">${c.body}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    } else if (layout === 'grid-breaks') {
+        cardsHtml = `
+      <div class="grid-container">
+        ${cards.map((c, i)=>`
+          <div class="card-block grid-card" style="margin-top: ${i % 2 === 0 ? '0' : '40px'}; ${mood.cardStyle}">
+            <div class="card-title">${c.title}</div>
+            <div class="card-body">${c.body}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    } else if (layout === 'quote-focus') {
+        const mainCard = cards[0];
+        const orbits = cards.slice(1);
+        cardsHtml = `
+      <div class="quote-focus-container">
+        <div class="card-block quote-main" style="${mood.cardStyle}">
+          <div class="card-title" style="font-size: 80px;">"${mainCard?.title}"</div>
+          <div class="card-body" style="font-size: 50px;">${mainCard?.body}</div>
+        </div>
+        <div class="orbit-container">
+          ${orbits.map((c, i)=>`
+            <div class="card-block orbit-card" style="transform: scale(0.6); ${mood.cardStyle}">
+               <div class="card-title" style="font-size: 24px;">${c.title}</div>
+            </div>
+          `).join('')}
+        </div>
       </div>
     `;
     }
@@ -420,9 +527,53 @@ function generateCompositeHTML(cards, theme, layout, totalHeight, bgImage) {
           opacity: 0.9;
           white-space: pre-wrap;
         }
+
+        /* New Layouts */
+        .diagonal-container {
+          display: flex;
+          flex-direction: column;
+          gap: 40px;
+          width: 100%;
+          padding-left: 50px;
+        }
+        .diagonal-card {
+          width: 85%;
+          box-shadow: 20px 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .grid-container {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 40px;
+          width: 100%;
+        }
+        .grid-card {
+           padding: 40px;
+        }
+
+        .quote-focus-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          gap: 100px;
+        }
+        .quote-main {
+           width: 100%;
+           text-align: center;
+           border-left: 15px solid var(--accent);
+        }
+        .orbit-container {
+           display: flex;
+           gap: 20px;
+           justify-content: center;
+           flex-wrap: wrap;
+        }
       </style>
     </head>
-    <body>
+    <body style="${mood.bodyStyle}">
+      ${mood.overlay || ''}
       ${cardsHtml}
     </body>
     </html>
@@ -794,16 +945,18 @@ var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
 async function POST(req) {
     try {
         const body = await req.json();
-        const { topic, platform, style, level, hook, model, ...options } = body;
-        // 1. Generate Elite Copywriting via AI
-        const aiText = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["generatePostContent"])({
-            topic,
-            platform: platform || 'linkedin',
-            style: style || 'professional',
-            level: level || 'balanced',
-            hook: hook || topic,
-            model: model || 'gemini-3-pro'
-        });
+        const { topic, platform, style, level, hook, model, visualMood, pexelsKey, ...options } = body;
+        let aiText = '';
+        if (!options.cards || options.cards.length === 0) {
+            aiText = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["generatePostContent"])({
+                topic,
+                platform: platform || 'linkedin',
+                style: style || 'professional',
+                level: level || 'balanced',
+                hook: hook || topic,
+                model: model || 'gemini-3-pro'
+            });
+        }
         // 2. Prepare Render Options
         const renderOptions = {
             cards: options.cards || [
@@ -815,6 +968,8 @@ async function POST(req) {
             layout: options.layout || 'composite-hero',
             theme: options.theme || 'orbit',
             format: options.format || 'portrait',
+            visualMood: visualMood || 'clean-void',
+            pexelsKey: pexelsKey || process.env.PEXELS_API_KEY || "",
             backgroundImage: options.backgroundImage
         };
         const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$cardRenderer$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["renderCard"])(renderOptions);
