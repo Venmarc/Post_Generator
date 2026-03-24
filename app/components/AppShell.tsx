@@ -92,13 +92,13 @@ export default function AppShell({
       {/* --- MOBILE DRAWER OVERLAY --- */}
       {isDrawerOpen && (
         <div 
-          className="fixed inset-0 bg-void/60 backdrop-blur-sm z-50 lg:hidden transition-all duration-300"
+          className="fixed inset-0 bg-void/60 backdrop-blur-sm z-[60] lg:hidden transition-all duration-300"
           onClick={() => setIsDrawerOpen(false)}
         />
       )}
 
       {/* --- MOBILE DRAWER --- */}
-      <aside className={`fixed top-0 left-0 bottom-0 w-[280px] bg-surface/95 backdrop-blur-2xl border-r border-white/10 z-50 transform transition-transform duration-500 ease-out lg:hidden flex flex-col
+      <aside className={`fixed top-0 left-0 bottom-0 w-[280px] bg-surface/95 backdrop-blur-2xl border-r border-white/10 z-[60] transform transition-transform duration-500 ease-out lg:hidden flex flex-col
         ${isDrawerOpen ? 'translate-x-0' : '-translate-x-full shadow-none'}
         shadow-[20px_0_60px_rgba(0,0,0,0.5)]
       `}>
@@ -163,7 +163,7 @@ export default function AppShell({
       <div className="flex-1 flex flex-col h-screen overflow-hidden relative">
         
         {/* Header - Stage level (full width) */}
-        <header className="h-[80px] w-full border-b border-white/5 flex items-center justify-center px-4 lg:px-10 bg-void/40 backdrop-blur-xl z-10 sticky top-0">
+        <header className="h-[80px] w-full border-b border-white/5 flex items-center justify-center px-4 lg:px-10 bg-void/40 backdrop-blur-xl z-50 sticky top-0">
           {/* Header Content - Container level */}
           <div className="w-full max-w-[1600px] flex items-center justify-between">
             <div className="flex items-center space-x-4">

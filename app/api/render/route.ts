@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
         style: style || 'professional',
         level: level || 'balanced',
         hook: hook || topic,
-        model: model || 'gemini-3-pro'
+        model: model || 'gemini-1.5-pro'
       });
     }
 

@@ -10,7 +10,7 @@ async function verify() {
     style: 'bold' as const,
     level: 'viral' as const,
     hook: "Small lies don't just deceive others; they rewire *you*.",
-    model: 'gemini-3-flash' as const
+    model: 'gemini-3-pro' as const
   };
 
   try {

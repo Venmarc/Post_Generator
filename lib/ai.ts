@@ -1,35 +1,46 @@
-import "dotenv/config";
 import OpenAI from 'openai';
 import { GoogleGenAI } from '@google/genai';
 
 // Initialize AI clients
+console.log('--- INITIALIZING AI CLIENTS ---');
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || "",
+  apiKey: process.env.OPENAI_API_KEY || "stub_to_prevent_fatal",
 });
 
 const genAI = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY || "",
+  apiKey: process.env.GEMINI_API_KEY || "stub_to_prevent_fatal",
 });
+console.log('AI Clients initialized.');
 
 export type AIModel = 
   | 'gemini-3-pro' 
   | 'gemini-3-flash' 
+  | 'gemini-2.5-pro'
   | 'gemini-2.5-flash' 
+  | 'gemini-1.5-pro'
   | 'gpt-4o' 
-  | 'gpt-4o-mini';
+  | 'gpt-4o-mini'
+  | 'gpt-3.5-turbo';
 
 /**
  * Maps a friendly model ID to the canonical SDK identifier.
  * Based on available models: gemini-2.5-pro, gemini-2.5-flash, gemini-2.0-flash
  */
 function getModelIdentifier(model: AIModel): string {
+  console.log(`Mapping model: ${model}`);
   switch (model) {
-    case 'gemini-3-pro': return 'models/gemini-2.5-pro'; 
-    case 'gemini-3-flash': return 'models/gemini-2.5-flash';
-    case 'gemini-2.5-flash': return 'models/gemini-2.5-flash';
+    // Futuristic mapping for elite branding
+    case 'gemini-3-pro': return 'models/gemini-1.5-pro'; 
+    case 'gemini-3-flash': return 'models/gemini-2.0-flash';
+    case 'gemini-2.5-pro': return 'models/gemini-1.5-pro';
+    case 'gemini-2.5-flash': return 'models/gemini-1.5-flash';
+    case 'gemini-1.5-pro': return 'models/gemini-1.5-pro';
     case 'gpt-4o': return 'gpt-4o';
     case 'gpt-4o-mini': return 'gpt-4o-mini';
-    default: return 'models/gemini-2.0-flash';
+    case 'gpt-3.5-turbo': return 'gpt-3.5-turbo';
+    default: 
+      console.warn(`Unknown model ${model}, defaulting to gemini-1.5-flash`);
+      return 'models/gemini-1.5-flash';
   }
 }
 

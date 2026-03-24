@@ -418,8 +418,11 @@ export default function CreatePipelineClient({ user }: { user: User }) {
                       options={[
                         { id: 'gemini-3-pro', label: 'Gemini 3 Pro', icon: <Cpu className="w-3 h-3" /> },
                         { id: 'gemini-3-flash', label: 'Gemini 3 Flash', icon: <Cpu className="w-3 h-3" /> },
+                        { id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', icon: <Cpu className="w-3 h-3" /> },
+                        { id: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro', icon: <Cpu className="w-3 h-3" /> },
                         { id: 'gpt-4o', label: 'GPT-4o', icon: <Cpu className="w-3 h-3" /> },
-                        { id: 'gpt-4o-mini', label: 'GPT-4o Mini', icon: <Cpu className="w-3 h-3" /> }
+                        { id: 'gpt-4o-mini', label: 'GPT-4o Mini', icon: <Cpu className="w-3 h-3" /> },
+                        { id: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo', icon: <Cpu className="w-3 h-3" /> }
                       ]}
                     />
                  </div>
@@ -560,7 +563,8 @@ export default function CreatePipelineClient({ user }: { user: User }) {
                    onChange={setImageModel}
                    options={[
                      { id: 'gemini-3-flash', label: 'Gemini 3 Flash', icon: <Cpu className="w-3 h-3" /> },
-                     { id: 'gemini-3-pro', label: 'Gemini 3 Pro', icon: <Cpu className="w-3 h-3" /> },
+                     { id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', icon: <Cpu className="w-3 h-3" /> },
+                     { id: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro', icon: <Cpu className="w-3 h-3" /> },
                      { id: 'gpt-4o-mini', label: 'GPT-4o Mini', icon: <Cpu className="w-3 h-3" /> }
                    ]}
                  />
