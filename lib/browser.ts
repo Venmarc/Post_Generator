@@ -13,9 +13,12 @@ export async function getBrowser() {
   }
 
   // Vercel / Production using the specialized @sparticuz/chromium binary
+  // We point to the remote pack to ensure it's always available regardless of Vercel bundling
+  const remoteURL = 'https://github.com/Sparticuz/chromium/releases/download/v143.0.4/chromium-v143.0.4-pack.x64.tar';
+  
   return await playwright.launch({
     args: chromium.args,
-    executablePath: await chromium.executablePath(),
+    executablePath: await chromium.executablePath(remoteURL),
     headless: true,
   });
 }

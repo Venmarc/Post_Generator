@@ -92,13 +92,13 @@ export default function AppShell({
       {/* --- MOBILE DRAWER OVERLAY --- */}
       {isDrawerOpen && (
         <div 
-          className="fixed inset-0 bg-void/60 backdrop-blur-sm z-[60] lg:hidden transition-all duration-300"
+          className="fixed inset-0 bg-void/60 backdrop-blur-sm z-60 lg:hidden transition-all duration-300"
           onClick={() => setIsDrawerOpen(false)}
         />
       )}
 
       {/* --- MOBILE DRAWER --- */}
-      <aside className={`fixed top-0 left-0 bottom-0 w-[280px] bg-surface/95 backdrop-blur-2xl border-r border-white/10 z-[60] transform transition-transform duration-500 ease-out lg:hidden flex flex-col
+      <aside className={`fixed top-0 left-0 bottom-0 w-[280px] bg-surface/95 backdrop-blur-2xl border-r border-white/10 z-60 transform transition-transform duration-500 ease-out lg:hidden flex flex-col
         ${isDrawerOpen ? 'translate-x-0' : '-translate-x-full shadow-none'}
         shadow-[20px_0_60px_rgba(0,0,0,0.5)]
       `}>
