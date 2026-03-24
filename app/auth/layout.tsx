@@ -237,13 +237,15 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   const colOffsets = ["mt-0", "mt-32", "mt-12", "mt-48", "mt-20"];
 
   return (
-    <div className="h-screen w-full flex items-center justify-center bg-void relative overflow-hidden">
+    <div className="fixed inset-0 w-full flex items-center justify-center bg-void z-100 overflow-hidden">
+      {/* Global Scroll Lock Force */}
+      <style dangerouslySetInnerHTML={{ __html: 'body { overflow: hidden !important; }' }} />
       {/* Absolute Background Stage */}
       <div className="absolute inset-0 z-0 bg-void" />
 
       {/* Authenticity Stage - 17 Images + 4 Strategic Figma Quotes */}
-      <div className="absolute inset-0 z-10 w-full h-full flex items-center justify-center select-none overflow-hidden scale-[0.75] sm:scale-85 lg:scale-100 transition-all duration-700 pointer-events-none">
-        <div className="relative w-full max-w-[1500px] h-full flex items-center justify-center pt-20 pb-40 px-12">
+      <div className="absolute inset-0 z-10 w-full h-full flex items-center justify-center select-none overflow-hidden transition-all duration-700 pointer-events-none">
+        <div className="relative w-full h-full flex items-center justify-center pt-10 pb-20">
           
           {/* Subtle Dynamic Glow */}
           <div className="absolute inset-0 bg-linear-to-br from-emerald-500/5 via-transparent to-purple-500/5 z-10" />
@@ -265,7 +267,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       {/* Auth Form - Translucent Focal Point */}
-      <div className="relative z-30 flex items-center justify-center p-4 scale-[0.75] sm:scale-85 lg:scale-100 transition-transform duration-700">
+      <div className="relative z-30 flex items-center justify-center p-4 transition-transform duration-700">
         <div className="drop-shadow-[0_25px_80px_rgba(0,0,0,1)]">
           <div className="flex justify-center mb-10">
             <div className="w-16 h-16 rounded-2xl bg-accent/20 flex items-center justify-center border border-accent/40 shadow-[0_0_40px_rgba(16,185,129,0.35)] backdrop-blur-2xl animate-pulse-slow">

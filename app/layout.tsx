@@ -5,6 +5,7 @@ import './globals.css';
 import AppShell from './components/AppShell';
 import { createClient } from '@/lib/supabase/server';
 import SessionProvider from '@/components/SessionProvider';
+import LayoutWrapper from '@/components/LayoutWrapper';
 
 export const dynamic = 'force-dynamic';
 
@@ -54,11 +55,9 @@ export default async function RootLayout({
         </div>
         
         <SessionProvider>
-          {user ? (
-            <AppShell user={user}>{children}</AppShell>
-          ) : (
-            children
-          )}
+          <LayoutWrapper user={user}>
+            {children}
+          </LayoutWrapper>
         </SessionProvider>
       </body>
     </html>
