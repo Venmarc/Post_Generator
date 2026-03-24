@@ -52,7 +52,7 @@ export default function SignUpPage() {
   }
 
   return (
-    <Card className="border-white/10 bg-surface/60 backdrop-blur-2xl shadow-[0_32px_64px_-15px_rgba(0,0,0,0.5)] border-t-white/20 relative overflow-hidden group">
+    <Card className="border-white/10 bg-slate-900/40 backdrop-blur-3xl shadow-[0_32px_80px_rgba(0,0,0,0.8)] border-t-white/20 relative overflow-hidden group transition-all duration-500 hover:bg-slate-900/50">
       <div className="absolute inset-0 bg-linear-to-b from-white/5 to-transparent pointer-events-none" />
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl text-center">Create an account</CardTitle>
@@ -117,7 +117,7 @@ export default function SignUpPage() {
                 <span className="w-full border-t border-border-subtle" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-surface px-2 text-text-secondary/40">
+                <span className="bg-transparent px-2 text-text-secondary/60">
                   Or sign up with
                 </span>
               </div>

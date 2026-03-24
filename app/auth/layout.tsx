@@ -21,83 +21,73 @@ interface PostData {
   rotationDeg: number;
 }
 
-// --- THE DEFINITIVE ELITE GALLERY (Exactly 21 User-Uploaded High-Fidelity Assets) ---
-const GALLERY_IMAGES = [
-  "https://images.pexels.com/photos/1402787/pexels-photo-1402787.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Red Car Sunset
-  "https://images.pexels.com/photos/4202926/pexels-photo-4202926.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Pro Camera B&W
-  "https://images.pexels.com/photos/3589903/pexels-photo-3589903.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Palm Tree Reflection
-  "https://images.pexels.com/photos/7563891/pexels-photo-7563891.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Night City Skyline
-  "https://images.pexels.com/photos/844297/pexels-photo-844297.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Yacht with Book/Fruit
-  "https://images.pexels.com/photos/289262/pexels-photo-289262.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Woman on Yacht
-  "https://images.pexels.com/photos/1616403/pexels-photo-1616403.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Man in Red Bar
-  "https://images.pexels.com/photos/4099388/pexels-photo-4099388.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // NYC Cityscape
-  "https://images.pexels.com/photos/206359/pexels-photo-206359.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Neon Street Blur
-  "https://images.pexels.com/photos/1036622/pexels-photo-1036622.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Scenic Backpack
-  "https://images.pexels.com/photos/733857/pexels-photo-733857.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Gaming Setup 1
-  "https://images.pexels.com/photos/1484437/pexels-photo-1484437.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Gaming Setup 2 (Anime)
-  "https://images.pexels.com/photos/812264/pexels-photo-812264.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Minimal Living Room
-  "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Outdoor Patio
-  "https://images.pexels.com/photos/267371/pexels-photo-267371.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Food Table Top
-  "https://images.pexels.com/photos/533446/pexels-photo-533446.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Dining Candles
-  "https://images.pexels.com/photos/270637/pexels-photo-270637.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Yellow Motorcycle
-  "https://images.pexels.com/photos/267367/pexels-photo-267367.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Smoke Motorcycle
-  "https://images.pexels.com/photos/8831808/pexels-photo-8831808.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Jellyfish
-  "https://images.pexels.com/photos/7563686/pexels-photo-7563686.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Badger Wildlife
-  "https://images.pexels.com/photos/360438/pexels-photo-360438.jpeg?auto=compress&cs=tinysrgb&h=650&w=940", // Elite Tech/Interface
-];
+// --- THE 100% AUTHENTIC USER GALLERY (Selected 17 Assets for the 21-item Cap) ---
+const GALLERY_IMAGES = Array.from({ length: 17 }, (_, i) => `/images/auth-collage/img${i + 1}.png`);
 
-const QUOTES: TextContent[] = [
+// --- Strategic Text Posts (Exactly Replicated from Figma Optimized Build) ---
+const STRATEGIC_QUOTES: PostData[] = [
   {
-    quote: "The art of generation is seeing the invisible.",
-    tag: "#VisualIntelligence",
-    bgStyle: { background: "linear-gradient(160deg, #1e1b4b 0%, #312e81 45%, #4338ca 100%)" },
-    accentColor: "#818cf8"
+    id: "quote-1",
+    platform: "twitter",
+    username: "CreativeHQ",
+    likes: "3.1k",
+    comments: "88",
+    rotationDeg: -2.0,
+    textContent: {
+      quote: "Create boldly. Live freely. Design your own story.",
+      author: "CreativeHQ",
+      tag: "#DesignLife",
+      bgStyle: { background: "linear-gradient(160deg, #4c1d95 0%, #6d28d9 45%, #7c3aed 100%)" },
+      accentColor: "#c4b5fd",
+    }
   },
   {
-    quote: "Innovation is the mastery of complexity.",
-    tag: "#CreativeSystems",
-    bgStyle: { background: "linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%)" },
-    accentColor: "#34d399"
+    id: "quote-2",
+    platform: "instagram",
+    username: "canva.templates",
+    likes: "2.2k",
+    comments: "61",
+    rotationDeg: 1.8,
+    textContent: {
+      quote: "The night hours are the most powerful for creation.",
+      tag: "#CreateAtNight",
+      bgStyle: { background: "linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #1d4ed8 100%)" },
+      accentColor: "#60a5fa",
+    }
   },
   {
-    quote: "Design is thinking made visual.",
-    author: "Saul Bass",
-    tag: "#DesignEthics",
-    bgStyle: { background: "linear-gradient(150deg, #4c1d95 0%, #5b21b6 50%, #6d28d9 100%)" },
-    accentColor: "#a78bfa"
+    id: "quote-3",
+    platform: "pinterest",
+    username: "QuoteBoard",
+    likes: "4.1k",
+    rotationDeg: -2.4,
+    textContent: {
+      quote: "Your only limit is your mind. Break the pattern, build the life.",
+      tag: "#MindsetShift",
+      bgStyle: { background: "linear-gradient(150deg, #0c0a1e 0%, #1a1040 50%, #2e1065 100%)" },
+      accentColor: "#e879f9",
+    }
   },
   {
-    quote: "Magic is just science we don't understand yet.",
-    tag: "#AIFuture",
-    bgStyle: { background: "linear-gradient(145deg, #7c2d12 0%, #9a3412 40%, #c2410c 100%)" },
-    accentColor: "#fb923c"
+    id: "quote-4",
+    platform: "instagram",
+    username: "mind.setdaily",
+    likes: "1.8k",
+    comments: "47",
+    rotationDeg: 1.5,
+    textContent: {
+      quote: "Design is not just what it looks like. Design is how it works.",
+      author: "Steve Jobs",
+      tag: "#Inspiration",
+      bgStyle: { background: "linear-gradient(145deg, #064e3b 0%, #065f46 40%, #047857 100%)" },
+      accentColor: "#6ee7b7",
+    }
   }
 ];
 
 const PLATFORMS: ('instagram' | 'twitter' | 'pinterest')[] = ['instagram', 'twitter', 'pinterest'];
 const USERnames = ['venmarc', 'creative_lab', 'tech_pioneer', 'design_vision', 'pixel_architect', 'social_guru'];
-const ROTATIONS = [2.2, -1.5, 1.8, -2.4, 2.8, -1.2, 2.5, -2.0, 1.6, -3.0, 2.2, -1.4, 1.0, 2.4, -2.2, 1.2, -3.0, 2.2, -1.6, 1.4, -2.0];
-
-const MOCK_POSTS: PostData[] = [
-  ...GALLERY_IMAGES.map((img, i) => ({
-    id: `img-${i}`,
-    image: img,
-    platform: PLATFORMS[i % 3],
-    username: USERnames[i % USERnames.length],
-    likes: (Math.random() * 5 + 1).toFixed(1) + "k",
-    comments: Math.floor(Math.random() * 100).toString(),
-    rotationDeg: ROTATIONS[i % ROTATIONS.length]
-  })),
-  ...QUOTES.map((q, i) => ({
-    id: `quote-${i}`,
-    textContent: q,
-    platform: PLATFORMS[i % 2],
-    username: USERnames[(i + 2) % USERnames.length],
-    likes: (Math.random() * 3 + 1).toFixed(1) + "k",
-    comments: Math.floor(Math.random() * 50).toString(),
-    rotationDeg: ROTATIONS[(i + 10) % ROTATIONS.length]
-  }))
-].sort((a, b) => a.id.localeCompare(b.id));
+const ROTATIONS = [2.2, -1.8, 1.5, -2.4, 2.8, -1.2, 2.5, -2.0, 1.6, -2.8, 2.2, -1.4, 1.2, 2.4, -2.2, 1.6, -3.0];
 
 function MockPost({ data }: { data: PostData }) {
   const { platform, username, likes, comments, image, textContent, rotationDeg } = data;
@@ -106,14 +96,28 @@ function MockPost({ data }: { data: PostData }) {
     if (textContent) {
       return (
         <div 
-          className="aspect-2/3 flex flex-col items-center justify-center px-6 py-8 relative overflow-hidden"
+          className="aspect-2/3 flex flex-col items-center justify-center px-6 py-8 relative overflow-hidden" 
           style={textContent.bgStyle}
         >
+          {/* Decorative circles (Figma Precise) */}
           <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-20 bg-white" />
-          <span className="text-5xl leading-none opacity-25 text-white absolute top-4 left-6 select-none font-serif">"</span>
-          <p className="text-white text-[10px] leading-snug text-center font-medium relative z-10">
+          <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full opacity-10 bg-white" />
+
+          {/* Big quotation mark */}
+          <span className="text-6xl leading-none opacity-25 text-white absolute top-4 left-6 select-none font-serif">"</span>
+          
+          {/* Quote with extra visual impact */}
+          <p 
+            className="text-white text-[11px] leading-snug text-center font-bold relative z-10 px-2"
+            style={{ textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}
+          >
             {textContent.quote}
           </p>
+          
+          {textContent.author && (
+            <p className="text-white/60 text-[8px] mt-3 italic relative z-10">— {textContent.author}</p>
+          )}
+          
           {textContent.tag && (
             <span className="mt-4 px-3 py-1 rounded-full text-[9px] z-10 bg-white/20 text-white/80 font-semibold backdrop-blur-sm">
               {textContent.tag}
@@ -124,7 +128,7 @@ function MockPost({ data }: { data: PostData }) {
     }
     return (
       <div className={`aspect-2/3 bg-slate-800 overflow-hidden relative`}>
-        <img src={image} alt="Post" className="w-full h-full object-cover object-center" loading="lazy" />
+        <img src={image} alt="Post" className="w-full h-full object-cover object-center" />
       </div>
     );
   };
@@ -175,7 +179,7 @@ function MockPost({ data }: { data: PostData }) {
         <div className="px-3 py-1.5 flex items-center justify-between border-t border-slate-800/50 text-slate-400">
           <div className="flex items-center gap-1"><MessageCircle className="w-3 h-3" /><span className="text-[8px]">{comments}</span></div>
           <div className="flex items-center gap-1"><Repeat2 className="w-3 h-3" /><span className="text-[8px]">42</span></div>
-          <div className="flex items-center gap-1"><Heart className="w-3 h-3" /><span className="text-[8px]">{likes}</span></div>
+          <div className="flex items-center gap-1"><Heart className="w-3.5 h-3.5" /><span className="text-[8px]">{likes}</span></div>
           <Bookmark className="w-3 h-3" />
         </div>
       </div>
@@ -200,48 +204,75 @@ function MockPost({ data }: { data: PostData }) {
 }
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  // Total 21 items: 17 images + 4 strategic quotes
+  const columns: PostData[][] = [[], [], [], [], []];
+  
+  const imagePosts: PostData[] = GALLERY_IMAGES.map((img, i) => ({
+    id: `img-${i}`,
+    image: img,
+    platform: PLATFORMS[i % 3],
+    username: USERnames[i % USERnames.length],
+    likes: (Math.random() * 5 + 1).toFixed(1) + "k",
+    comments: Math.floor(Math.random() * 100).toString(),
+    rotationDeg: ROTATIONS[i % ROTATIONS.length]
+  }));
+
+  // Column Distribution (Targeting 5 columns, total 21 items)
+  // Column 1: Far Left (4 items)
+  columns[0].push(imagePosts[0], imagePosts[1], imagePosts[2], imagePosts[3]);
+  
+  // Column 2: Left of card (4 items) - Contains quote 1 (Create Boldly) and quote 2 (Night Hours)
+  // Quote 2 is at the top, Quote 1 is below it (middle)
+  columns[1].push(STRATEGIC_QUOTES[1], STRATEGIC_QUOTES[0], imagePosts[4], imagePosts[5]);
+  
+  // Column 3: Center / Top of card (5 items) - Contains Quote 4 (Steve Jobs) at the top
+  columns[2].push(STRATEGIC_QUOTES[3], imagePosts[6], imagePosts[7], imagePosts[8], imagePosts[9]);
+  
+  // Column 4: Right of card (4 items) - Contains Quote 3 (Limit is Mind)
+  columns[3].push(imagePosts[10], STRATEGIC_QUOTES[2], imagePosts[11], imagePosts[12]);
+  
+  // Column 5: Far Right (4 items)
+  columns[4].push(imagePosts[13], imagePosts[14], imagePosts[15], imagePosts[16]);
+
+  const colOffsets = ["mt-0", "mt-32", "mt-12", "mt-48", "mt-20"];
+
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-void relative overflow-hidden">
-      {/* Background Stage - Full Void */}
+    <div className="h-screen w-full flex items-center justify-center bg-void relative overflow-hidden">
+      {/* Absolute Background Stage */}
       <div className="absolute inset-0 z-0 bg-void" />
 
-      {/* Borderless Auth Poster Stage - Full Height Vertical Stretch */}
-      <div className="relative z-10 w-full min-h-screen flex items-center justify-center select-none scale-[0.75] sm:scale-85 lg:scale-100 transition-all duration-700">
-        
-        {/* Contained Masonry Grid (Borderless at top/bottom) */}
-        <div className="relative w-full max-w-[1340px] h-full flex items-center justify-center">
+      {/* Authenticity Stage - 17 Images + 4 Strategic Figma Quotes */}
+      <div className="absolute inset-0 z-10 w-full h-full flex items-center justify-center select-none overflow-hidden scale-[0.75] sm:scale-85 lg:scale-100 transition-all duration-700 pointer-events-none">
+        <div className="relative w-full max-w-[1500px] h-full flex items-center justify-center pt-20 pb-40 px-12">
           
           {/* Subtle Dynamic Glow */}
-          <div className="absolute inset-0 bg-linear-to-br from-emerald-500/5 via-transparent to-purple-500/5 pointer-events-none z-10" />
+          <div className="absolute inset-0 bg-linear-to-br from-emerald-500/5 via-transparent to-purple-500/5 z-10" />
 
-          {/* Slanted Masonry Grid - Full Vertical Stretch, Sides Expanded slightly */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 px-10 py-24 opacity-40 hover:opacity-100 transition-opacity duration-1000 pointer-events-none">
-            {MOCK_POSTS.map((post, i) => (
-              <div 
-                key={post.id} 
-                className={`${i % 7 === 0 ? 'lg:row-span-2' : ''} h-fit flex items-center`}
-              >
-                <MockPost data={post} />
+          {/* Authentic Masonry Grid - 5 Independent Staggered Stacks */}
+          <div className="flex gap-10 opacity-40 transition-opacity duration-1000 w-full justify-center">
+            {columns.map((col, i) => (
+              <div key={i} className={`flex flex-col gap-10 w-full max-w-[280px] ${colOffsets[i]}`}>
+                {col.map(post => <MockPost key={post.id} data={post} />)}
               </div>
             ))}
           </div>
 
-          {/* Heavy Full-Bleed Atmospheric Vignettes (Gradient to Void) */}
-          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-void via-void/95 to-transparent z-20" />
-          <div className="absolute inset-x-0 top-0 h-1/4 bg-linear-to-b from-void via-void/90 to-transparent z-20" />
-          <div className="absolute inset-0 bg-void/30 backdrop-blur-[0.5px] z-20" />
+          {/* Fading Vignettes */}
+          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-void via-void/90 to-transparent z-20" />
+          <div className="absolute inset-x-0 top-0 h-1/4 bg-linear-to-b from-void via-void/80 to-transparent z-20" />
+          <div className="absolute inset-0 bg-void/25 backdrop-blur-[0.5px] z-20" />
         </div>
+      </div>
 
-        {/* Auth Form - Perfectly Anchored & Focal */}
-        <div className="absolute inset-0 z-30 flex items-center justify-center p-4">
-          <div className="scale-[0.80] sm:scale-[0.90] lg:scale-[0.95] drop-shadow-[0_25px_80px_rgba(0,0,0,1)]">
-            <div className="flex justify-center mb-10">
-              <div className="w-16 h-16 rounded-2xl bg-accent/20 flex items-center justify-center border border-accent/40 shadow-[0_0_40px_rgba(16,185,129,0.35)] backdrop-blur-2xl animate-pulse-slow">
-                <Layers className="text-accent w-8 h-8" />
-              </div>
+      {/* Auth Form - Translucent Focal Point */}
+      <div className="relative z-30 flex items-center justify-center p-4 scale-[0.75] sm:scale-85 lg:scale-100 transition-transform duration-700">
+        <div className="drop-shadow-[0_25px_80px_rgba(0,0,0,1)]">
+          <div className="flex justify-center mb-10">
+            <div className="w-16 h-16 rounded-2xl bg-accent/20 flex items-center justify-center border border-accent/40 shadow-[0_0_40px_rgba(16,185,129,0.35)] backdrop-blur-2xl animate-pulse-slow">
+              <Layers className="text-accent w-8 h-8" />
             </div>
-            {children}
           </div>
+          {children}
         </div>
       </div>
 

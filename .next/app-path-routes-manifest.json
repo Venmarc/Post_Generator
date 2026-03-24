@@ -1,0 +1,15 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/api/generate-composite/route": "/api/generate-composite",
+  "/api/generate-copy/route": "/api/generate-copy",
+  "/api/hooks/route": "/api/hooks",
+  "/api/pexels/route": "/api/pexels",
+  "/api/render/route": "/api/render",
+  "/auth/callback/route": "/auth/callback",
+  "/auth/login/page": "/auth/login",
+  "/auth/sign-up/page": "/auth/sign-up",
+  "/create-pipeline/page": "/create-pipeline",
+  "/dashboard/page": "/dashboard",
+  "/page": "/"
+}

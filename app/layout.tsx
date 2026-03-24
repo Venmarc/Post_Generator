@@ -6,6 +6,8 @@ import AppShell from './components/AppShell';
 import { createClient } from '@/lib/supabase/server';
 import SessionProvider from '@/components/SessionProvider';
 
+export const dynamic = 'force-dynamic';
+
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
