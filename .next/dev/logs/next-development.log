@@ -1,0 +1,8 @@
+{"timestamp":"00:00:19.988","source":"Server","level":"WARN","message":"⚠ Slow filesystem detected. The benchmark took 1166ms. If /home/redmane/Documents/Post_Generator/.next/dev is a network drive, consider moving it to a local folder.\nSee more: https://nextjs.org/docs/app/guides/local-development"}
+{"timestamp":"00:00:22.006","source":"Server","level":"LOG","message":"○ Compiling proxy ..."}
+{"timestamp":"00:00:22.582","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:22.583","source":"Server","level":"LOG","message":"  We detected TypeScript in your project and reconfigured your tsconfig.json file for you. Strict-mode is set to false by default."}
+{"timestamp":"00:00:22.583","source":"Server","level":"LOG","message":"  The following mandatory changes were made to your tsconfig.json:\n"}
+{"timestamp":"00:00:22.584","source":"Server","level":"LOG","message":"  \t- jsx was set to react-jsx (next.js uses the React automatic runtime)"}
+{"timestamp":"00:00:22.584","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:40.390","source":"Server","level":"LOG","message":""}
