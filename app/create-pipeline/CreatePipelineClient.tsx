@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { 
   Zap, 
   Lightbulb, 
@@ -618,11 +619,15 @@ export default function CreatePipelineClient({ user }: { user: User }) {
                  </div>
                  
                  <div className="relative group rounded-xl overflow-hidden shadow-2xl border border-white/5">
-                    <img 
-                      src={`data:image/png;base64,${generatedImage}`} 
-                      alt="Artistic Composite" 
-                      className="w-full h-auto cursor-zoom-in group-hover:scale-[1.02] transition-transform duration-700"
-                    />
+                      <div className="relative w-full h-[300px] overflow-hidden"> {/* Added a fixed height for Image fill to work */}
+                        <Image 
+                          src={`data:image/png;base64,${generatedImage}`} 
+                          alt="Composite Result" 
+                          fill
+                          className="object-contain group-hover:scale-[1.02] transition-transform duration-700"
+                          sizes="(max-width: 768px) 100vw, 80vw"
+                        />
+                      </div>
                     <div className="absolute inset-x-0 bottom-0 p-4 bg-linear-to-t from-black/80 to-transparent flex justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                        <button 
                          onClick={handleDownloadImage}

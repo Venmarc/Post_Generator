@@ -1,4 +1,5 @@
-import React from "react";
+import Link from 'next/link';
+import Image from 'next/image';
 import { Heart, MessageCircle, Send, Bookmark, Repeat2, MoreHorizontal, Layers } from 'lucide-react';
 
 // --- Types ---
@@ -128,7 +129,16 @@ function MockPost({ data }: { data: PostData }) {
     }
     return (
       <div className={`aspect-2/3 bg-slate-800 overflow-hidden relative`}>
-        <img src={image} alt="Post" className="w-full h-full object-cover object-center" />
+      <div className="relative w-full h-full">
+        <Image 
+          src={image} 
+          alt="Post" 
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
+          className="object-cover object-center"
+          priority={image.includes('img1') || image.includes('img2')}
+        />
+      </div>
       </div>
     );
   };

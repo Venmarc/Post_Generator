@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Layers, Activity, Users, ArrowUpRight, CheckCircle2, Clock, Loader2 } from "lucide-react";
 import { useTelemetry } from "@/lib/storage";
 import Link from "next/link";
@@ -102,7 +104,16 @@ export default function DashboardClient({ user }: { user: User }) {
                        <div className="flex items-center gap-4 min-w-0">
                           <div className="w-12 h-12 rounded-xl bg-accent/5 flex items-center justify-center text-accent/40 group-hover:text-accent transition-colors relative overflow-hidden">
                              {item.image_url ? (
-                               <img src={item.image_url} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 w-full h-full overflow-hidden">
+                  <Image 
+                    src={item.image_url} 
+                    alt="" 
+                    fill
+                    className="object-cover opacity-40 group-hover:opacity-100 transition-opacity"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </div>
+
                              ) : (
                                <CheckCircle2 className="w-5 h-5" />
                              )}
