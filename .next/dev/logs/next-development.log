@@ -1,8 +1,40 @@
-{"timestamp":"00:00:19.988","source":"Server","level":"WARN","message":"⚠ Slow filesystem detected. The benchmark took 1166ms. If /home/redmane/Documents/Post_Generator/.next/dev is a network drive, consider moving it to a local folder.\nSee more: https://nextjs.org/docs/app/guides/local-development"}
-{"timestamp":"00:00:22.006","source":"Server","level":"LOG","message":"○ Compiling proxy ..."}
-{"timestamp":"00:00:22.582","source":"Server","level":"LOG","message":""}
-{"timestamp":"00:00:22.583","source":"Server","level":"LOG","message":"  We detected TypeScript in your project and reconfigured your tsconfig.json file for you. Strict-mode is set to false by default."}
-{"timestamp":"00:00:22.583","source":"Server","level":"LOG","message":"  The following mandatory changes were made to your tsconfig.json:\n"}
-{"timestamp":"00:00:22.584","source":"Server","level":"LOG","message":"  \t- jsx was set to react-jsx (next.js uses the React automatic runtime)"}
-{"timestamp":"00:00:22.584","source":"Server","level":"LOG","message":""}
-{"timestamp":"00:00:40.390","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:05.695","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:43.421","source":"Server","level":"LOG","message":"○ Compiling /dashboard ..."}
+{"timestamp":"00:00:58.253","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:58.567","source":"Browser","level":"WARN","message":"GoTrueClient@sb-vdpmpfzushnpydywiiik-auth-token:1 (2.100.0) 2026-03-24T18:57:30.551Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key."}
+{"timestamp":"00:00:58.666","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mGoTrueClient@sb-vdpmpfzushnpydywiiik-auth-token:1 (2.100.0) 2026-03-24T18:57:30.551Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.\\u001b[39m\" \"\\u001b[2m(lib/supabase/client.ts:4:29)\\u001b[22m\""}
+{"timestamp":"00:00:58.666","source":"Browser","level":"WARN","message":"\u001b[33mGoTrueClient@sb-vdpmpfzushnpydywiiik-auth-token:1 (2.100.0) 2026-03-24T18:57:30.551Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.\u001b[39m"}
+{"timestamp":"00:01:06.087","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:01:06.391","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mGoTrueClient@sb-vdpmpfzushnpydywiiik-auth-token:1 (2.100.0) 2026-03-24T18:57:38.398Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.\\u001b[39m\" \"\\u001b[2m(lib/supabase/client.ts:4:29)\\u001b[22m\""}
+{"timestamp":"00:01:06.392","source":"Browser","level":"WARN","message":"\u001b[33mGoTrueClient@sb-vdpmpfzushnpydywiiik-auth-token:1 (2.100.0) 2026-03-24T18:57:38.398Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.\u001b[39m"}
+{"timestamp":"00:01:06.392","source":"Browser","level":"WARN","message":"GoTrueClient@sb-vdpmpfzushnpydywiiik-auth-token:1 (2.100.0) 2026-03-24T18:57:38.398Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key."}
+{"timestamp":"00:01:37.181","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:02:39.480","source":"Browser","level":"LOG","message":"Column 0: 4 items"}
+{"timestamp":"00:02:39.481","source":"Browser","level":"LOG","message":"Column 1: 3 items"}
+{"timestamp":"00:02:39.481","source":"Browser","level":"LOG","message":"Column 2: 3 items"}
+{"timestamp":"00:02:39.481","source":"Browser","level":"LOG","message":"Column 3: 2 items"}
+{"timestamp":"00:02:39.481","source":"Browser","level":"LOG","message":"Column 4: 3 items"}
+{"timestamp":"00:02:39.481","source":"Browser","level":"LOG","message":"Column 5: 4 items"}
+{"timestamp":"00:02:39.481","source":"Browser","level":"LOG","message":"Column 6: 3 items"}
+{"timestamp":"00:02:39.481","source":"Browser","level":"LOG","message":"Column 7: 3 items"}
+{"timestamp":"00:02:39.481","source":"Browser","level":"LOG","message":"Column 8: 3 items"}
+{"timestamp":"00:02:39.481","source":"Browser","level":"LOG","message":"Column 9: 2 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 10: 5 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 11: 3 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 12: 3 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 13: 3 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 14: 2 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 15: 3 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 16: 4 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 17: 3 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 18: 2 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 19: 2 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 20: 3 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 21: 4 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 22: 3 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 23: 2 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 24: 3 items"}
+{"timestamp":"00:02:39.482","source":"Browser","level":"LOG","message":"Column 25: 3 items"}
+{"timestamp":"00:05:02.168","source":"Browser","level":"WARN","message":"GoTrueClient@sb-vdpmpfzushnpydywiiik-auth-token:1 (2.100.0) 2026-03-24T19:01:34.267Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key."}
+{"timestamp":"00:05:02.651","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mGoTrueClient@sb-vdpmpfzushnpydywiiik-auth-token:1 (2.100.0) 2026-03-24T19:01:34.267Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.\\u001b[39m\" \"\\u001b[2m(lib/supabase.ts:9:37)\\u001b[22m\""}
+{"timestamp":"00:05:02.652","source":"Browser","level":"WARN","message":"\u001b[33mGoTrueClient@sb-vdpmpfzushnpydywiiik-auth-token:1 (2.100.0) 2026-03-24T19:01:34.267Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.\u001b[39m"}

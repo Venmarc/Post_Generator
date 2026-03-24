@@ -6,6 +6,7 @@ import AppShell from './components/AppShell';
 import { createClient } from '@/lib/supabase/server';
 import SessionProvider from '@/components/SessionProvider';
 import LayoutWrapper from '@/components/LayoutWrapper';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 export const dynamic = 'force-dynamic';
 
@@ -54,11 +55,13 @@ export default async function RootLayout({
           <div className="absolute inset-0 bg-linear-to-br from-purple-950/8 via-transparent to-accent/8 blur-3xl" />
         </div>
         
-        <SessionProvider>
-          <LayoutWrapper user={user}>
-            {children}
-          </LayoutWrapper>
-        </SessionProvider>
+        <ErrorBoundary>
+          <SessionProvider>
+            <LayoutWrapper user={user}>
+              {children}
+            </LayoutWrapper>
+          </SessionProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

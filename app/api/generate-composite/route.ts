@@ -3,6 +3,9 @@ import { getBrowser } from '@/lib/browser';
 import { generateGammaHTML } from '@/components/GammaRenderer';
 import { searchPexels, buildPexelsQuery } from '@/lib/pexels';
 
+export const maxDuration = 60; // Set memory limit and timeout for serverless
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -26,22 +29,22 @@ export async function POST(req: NextRequest) {
       photographer: photo?.photographer
     });
 
-    // 3. Take Screenshot
+    // 3. Take Screenshot using Playwright
     const browser = await getBrowser();
-    const page = await browser.newPage();
-    
-    await page.setViewport({ width: 1080, height: 1920, deviceScaleFactor: 2 });
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-    
-    // Add a small delay for any extra font/image settling if needed
-    // await new Promise(r => setTimeout(r, 500));
-
-    const screenshotsMs = Date.now();
-    const screenshot = await page.screenshot({ 
-      type: 'png',
-      fullPage: false,
-      encoding: 'base64'
+    const context = await browser.newContext({
+      viewport: { width: 1080, height: 1920 },
+      deviceScaleFactor: 2
     });
+    const page = await context.newPage();
+    
+    await page.setContent(html, { waitUntil: 'networkidle' });
+    
+    const screenshotsMs = Date.now();
+    const screenshotBuffer = await page.screenshot({ 
+      type: 'png',
+      fullPage: false
+    });
+    const screenshot = screenshotBuffer.toString('base64');
     const screenshotTook = Date.now() - screenshotsMs;
 
     await browser.close();
@@ -56,7 +59,7 @@ export async function POST(req: NextRequest) {
       milestones: [
         `Pexels: Found background for "${query}" (${photo ? 'Success' : 'Fallback'})`,
         `Gamma: HTML Template generated (${copy.length} chars)`,
-        `Puppeteer: Browser viewport 1080x1920 initialized`,
+        `Playwright: Browser viewport 1080x1920 initialized`,
         `Render: Screenshot captured in ${screenshotTook}ms`
       ]
     });

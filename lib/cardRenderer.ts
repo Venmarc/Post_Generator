@@ -51,7 +51,7 @@ export async function renderCard(options: RenderOptions): Promise<Buffer | Buffe
 
   try {
     const page = await browser.newPage();
-    await page.setViewport({ width, height });
+    await page.setViewportSize({ width, height });
 
     const htmlGenerator = (cardsData: CardObject[]) => 
       generateCompositeHTML(cardsData, activeTheme, activeMood, layout, height, finalBg);
@@ -60,16 +60,16 @@ export async function renderCard(options: RenderOptions): Promise<Buffer | Buffe
       const buffers: Buffer[] = [];
       for (const card of cards) {
         const html = htmlGenerator([card]);
-        await page.setContent(html, { waitUntil: 'domcontentloaded' });
-        await page.evaluateHandle('document.fonts.ready');
+        await page.setContent(html, { waitUntil: 'load' });
+        await page.evaluate('document.fonts.ready');
         const buffer = await page.screenshot({ type: 'png' });
         buffers.push(Buffer.from(buffer));
       }
       return buffers;
     } else {
       const html = htmlGenerator(cards);
-      await page.setContent(html, { waitUntil: 'domcontentloaded' });
-      await page.evaluateHandle('document.fonts.ready');
+      await page.setContent(html, { waitUntil: 'load' });
+      await page.evaluate('document.fonts.ready');
       const buffer = await page.screenshot({ type: 'png' });
       return Buffer.from(buffer);
     }
