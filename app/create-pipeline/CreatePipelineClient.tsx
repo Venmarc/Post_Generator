@@ -306,8 +306,8 @@ export default function CreatePipelineClient({ user }: { user: User }) {
       <div className="max-w-7xl mx-auto px-6 py-12 relative">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
-            <h1 className="text-4xl font-bold text-text-primary tracking-tight mb-2">Content Pipeline</h1>
-            <p className="text-text-secondary/60 text-lg">From raw concept to viral artistic output.</p>
+            <h1 className="text-4xl font-bold text-text-primary tracking-tight mb-2 uppercase tracking-[3px]">Artenova Pipeline</h1>
+            <p className="text-text-secondary/60 text-lg italic">From raw concept to viral artistic output.</p>
           </div>
           
           <div className="flex items-center gap-4">
@@ -340,7 +340,7 @@ export default function CreatePipelineClient({ user }: { user: User }) {
                     <div className="p-2 bg-accent/10 rounded-lg text-accent">
                        <Cpu className="w-5 h-5" />
                     </div>
-                    <h2 className="text-xl font-bold text-text-primary/90">Post Architect</h2>
+                    <h2 className="text-xl font-bold text-text-primary/90 uppercase tracking-widest">Artenova Architect</h2>
                  </div>
                  <button 
                    onClick={handleLoadTestData}
@@ -553,7 +553,7 @@ export default function CreatePipelineClient({ user }: { user: User }) {
                  <div className="p-2 bg-accent/10 rounded-lg text-accent">
                     <Palette className="w-5 h-5" />
                  </div>
-                 <h2 className="text-lg font-bold text-text-primary/80">Art Direction</h2>
+                 <h2 className="text-lg font-bold text-text-primary/80 uppercase tracking-widest">Artenova Direction</h2>
               </div>
 
               <div className="space-y-8">

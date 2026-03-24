@@ -13,8 +13,8 @@ export const dynamic = 'force-dynamic';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: 'Social Asset Lab',
-  description: 'AI-powered generation engine and asset dashboard',
+  title: 'ARTENOVA // Elite Content Engine',
+  description: 'Visceral AI hook generation and high-fidelity artistic composites.',
 };
 
 export default async function RootLayout({

@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 import { GoogleGenAI } from '@google/genai';
 
 // Initialize AI clients
-console.log('--- INITIALIZING AI CLIENTS ---');
+console.log('--- INITIALIZING ARTENOVA AI ENGINE ---');
 const apiKey = process.env.GEMINI_API_KEY;
 if (!apiKey) {
   console.error('CRITICAL: GEMINI_API_KEY is missing from environment variables!');
@@ -61,7 +61,7 @@ Rules:
   let content = "";
   const modelId = getModelIdentifier(model);
 
-  console.log('--- GENERATE HOOKS START ---');
+  console.log('--- ARTENOVA HOOK ARCHITECT INITIATED ---');
   console.log('Target Model ID:', modelId);
 
   // Check if it's a Gemini model
@@ -132,7 +132,7 @@ export async function generatePostContent(input: PostInput): Promise<string> {
   const userPrompt = `Topic: ${topic}`;
   const modelId = getModelIdentifier(model);
 
-  console.log('--- GENERATE POST START ---');
+  console.log('--- ARTENOVA POST ARCHITECT INITIATED ---');
   console.log('Target Model ID:', modelId);
 
   if (modelId.includes('gemini')) {

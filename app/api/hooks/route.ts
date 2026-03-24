@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { generateHooks } from '@/lib/ai';
 
 export async function POST(req: Request) {
-  console.log('--- HOOKS API INITIATED ---');
+  console.log('--- ARTENOVA HOOK ARCHITECT INITIATED ---');
   try {
     const body = await req.json().catch(() => ({}));
     const { topic, model } = body;

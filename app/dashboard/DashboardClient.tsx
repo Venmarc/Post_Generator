@@ -15,7 +15,7 @@ export default function DashboardClient({ user }: { user: User }) {
     <div className="animate-in fade-in duration-500">
       <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-2">System Overview</h1>
+          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-2 uppercase tracking-[2px]">Artenova System Overview</h1>
           <p className="text-foreground/50 text-sm">Real-time performance and asset telemetry</p>
         </div>
         {lastActivity && (
@@ -88,7 +88,7 @@ export default function DashboardClient({ user }: { user: User }) {
           <div className="bg-surface rounded-card border border-border-subtle/50 p-10 shadow-card">
              <div className="flex items-center justify-between mb-8">
                 <h3 className="text-xl font-semibold text-text-primary">
-                  {loading ? "Synchronizing Cloud Archive..." : "Export History (Last 10)"}
+                  {loading ? "Synchronizing Artenova Cloud Archive..." : "Artenova Archive (Last 10)"}
                 </h3>
                 <span className="text-[10px] text-accent font-bold uppercase tracking-widest border border-accent/20 px-3 py-1 rounded-full">Archive Active</span>
              </div>
