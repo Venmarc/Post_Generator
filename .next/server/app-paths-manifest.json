@@ -1,6 +1,6 @@
 {
+  "/api/hooks/route": "app/api/hooks/route.js",
   "/auth/login/page": "app/auth/login/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
   "/create-pipeline/page": "app/create-pipeline/page.js",
-  "/api/hooks/route": "app/api/hooks/route.js"
+  "/dashboard/page": "app/dashboard/page.js"
 }
