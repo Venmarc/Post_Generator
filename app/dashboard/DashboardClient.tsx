@@ -15,7 +15,7 @@ export default function DashboardClient({ user }: { user: User }) {
     <div className="animate-in fade-in duration-500">
       <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-2 uppercase tracking-[2px]">Artenova System Overview</h1>
+          <h1 className="text-3xl md:text-4xl font-semibold text-white mb-2 uppercase tracking-[2px]">Artenova System Overview</h1>
           <p className="text-foreground/50 text-sm">Real-time performance and asset telemetry</p>
         </div>
         {lastActivity && (

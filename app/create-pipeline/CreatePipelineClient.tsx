@@ -306,7 +306,7 @@ export default function CreatePipelineClient({ user }: { user: User }) {
       <div className="max-w-7xl mx-auto px-6 py-12 relative">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
-            <h1 className="text-4xl font-bold text-text-primary tracking-tight mb-2 uppercase tracking-[3px]">Artenova Pipeline</h1>
+            <h1 className="text-4xl font-bold text-text-primary mb-2 uppercase tracking-[3px]">Artenova Pipeline</h1>
             <p className="text-text-secondary/60 text-lg italic">From raw concept to viral artistic output.</p>
           </div>
           
