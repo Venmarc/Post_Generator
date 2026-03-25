@@ -17,15 +17,12 @@ import {
   CheckCircle2,
   Search,
   Flame,
-  Activity,
-  Minus,
   MessageSquare,
   ChevronDown,
   Beaker,
   Download,
   RotateCcw,
-  Star,
-  Info
+  Star
 } from 'lucide-react';
 import { useDraft } from '@/lib/drafts';
 import { useTelemetry } from '@/lib/storage';
@@ -64,18 +61,6 @@ export default function CreatePipelineClient({ user }: { user: User }) {
   const hooksRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const [showSuccess, setShowSuccess] = useState(false);
-  
-  // Phase 5: Generation Logging
-  const [renderLogs, setRenderLogs] = useState<{msg: string, type: 'info' | 'system' | 'network' | 'error', timestamp: string}[]>([]);
-  const [showLogs, setShowLogs] = useState(false);
-  
-  const addLog = (msg: string, type: 'info' | 'system' | 'network' | 'error' = 'info') => {
-    setRenderLogs(prev => [...prev, {
-      msg,
-      type,
-      timestamp: new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })
-    }]);
-  };
 
   useEffect(() => {
     if (hooks.length > 0 && hooksRef.current) {
@@ -99,9 +84,15 @@ export default function CreatePipelineClient({ user }: { user: User }) {
         body: JSON.stringify({ topic, model: textModel }),
       });
       const data = await response.json();
-      if (data.success) setHooks(data.hooks);
-    } catch (error) {
+      if (data.success) {
+        setHooks(data.hooks);
+      } else {
+        console.error("Hook generation error:", data.error);
+        alert("Artenova Architect Error: " + (data.error || "Quota exhausted or timeout."));
+      }
+    } catch (error: any) {
       console.error("Hook generation failed:", error);
+      alert("System Failure: " + (error.message || "Unknown error"));
     } finally {
       setIsGeneratingHooks(false);
     }
@@ -125,9 +116,15 @@ export default function CreatePipelineClient({ user }: { user: User }) {
         }),
       });
       const data = await response.json();
-      if (data.success) setGeneratedCopy(data.content);
-    } catch (error) {
+      if (data.success) {
+        setGeneratedCopy(data.content);
+      } else {
+        console.error("Copy generation error:", data.error);
+        alert("Artenova Synthesis Error: " + (data.error || "Provider failure."));
+      }
+    } catch (error: any) {
       console.error("Copy generation failed:", error);
+      alert("System Failure: " + (error.message || "Unknown error"));
     } finally {
       setIsGeneratingCopy(false);
     }
@@ -138,21 +135,12 @@ export default function CreatePipelineClient({ user }: { user: User }) {
     setIsRendering(true);
     setShowSuccess(false);
     
-    // Phase 5: Initialize logs
-    setRenderLogs([]);
-    setShowLogs(true);
-    addLog("Initializing composite pipeline...", "system");
-    addLog(`Target: ${platform.toUpperCase()} (${layout})`, "info");
-    addLog(`Visual Mood: ${visualMood} / Theme: ${theme}`, "info");
-    addLog(`Payload: ${generatedCopy.substring(0, 50)}...`, "network");
-    
     const startTime = Date.now();
-    addLog("POST /api/generate-composite [INITIATED]", "network");
 
     const heartbeat = setInterval(() => {
       const elapsed = Math.round((Date.now() - startTime) / 1000);
       if (elapsed % 5 === 0 && elapsed > 0) {
-        addLog(`Awaiting server response... (${elapsed}s elapsed)`, "system");
+        // Heartbeat kept for future monitoring if needed.
       }
     }, 1000);
     
@@ -172,10 +160,6 @@ export default function CreatePipelineClient({ user }: { user: User }) {
       clearInterval(heartbeat);
 
       if (data.success) {
-        if (data.milestones) {
-          data.milestones.forEach((m: string) => addLog(m, "system"));
-        }
-        addLog(`SUCCESS: Asset generated in ${Math.round((Date.now() - startTime)/1000)}s`, "info");
         setGeneratedImage(data.image);
         await trackGeneration(topic, platform, data.image);
         setShowSuccess(true);
@@ -184,12 +168,10 @@ export default function CreatePipelineClient({ user }: { user: User }) {
           previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 300);
       } else {
-        addLog(`ERROR: ${data.error}`, "error");
         alert("Rendering failed: " + data.error);
       }
     } catch (error: any) {
       clearInterval(heartbeat);
-      addLog(`FATAL ERROR: ${error.message}`, "error");
       console.error("Render failed:", error);
       alert("Render failed: " + error.message);
     } finally {
@@ -367,41 +349,7 @@ export default function CreatePipelineClient({ user }: { user: User }) {
                         </button>
                      ))}
                   </div>
-                  <button 
-                    onClick={() => setShowLogs(!showLogs)}
-                    className={`p-2 rounded-full transition-all ${showLogs ? 'bg-accent text-void shadow-glow' : 'bg-void/40 text-text-secondary hover:text-accent border border-border-subtle/20'}`}
-                    title="Generation Logs"
-                  >
-                    <Info className="w-4 h-4" />
-                  </button>
                </div>
-
-               {showLogs && (
-                 <div className="mb-8 rounded-2xl bg-[#0a0a0c] border border-border-subtle/30 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300">
-                    <div className="px-4 py-2 border-b border-border-subtle/20 bg-void/50 flex items-center justify-between">
-                       <span className="text-[9px] font-bold text-text-secondary uppercase tracking-[0.2em]">Diagnostic Console</span>
-                       <button onClick={() => setRenderLogs([])} className="text-[10px] text-text-secondary hover:text-white transition-colors">Clear</button>
-                    </div>
-                    <div className="p-4 max-h-[200px] overflow-y-auto space-y-1.5 font-mono text-[11px] leading-relaxed">
-                       {renderLogs.length === 0 ? (
-                         <div className="py-4 text-center text-text-secondary/30 italic">No logs yet. Initiate generation to see real-time diagnostics.</div>
-                       ) : (
-                         renderLogs.map((log, i) => (
-                           <div key={i} className="flex gap-3">
-                              <span className="text-text-secondary/40 shrink-0">[{log.timestamp}]</span>
-                              <span className={
-                                log.type === 'error' ? 'text-red-400' : 
-                                log.type === 'network' ? 'text-blue-400' : 
-                                log.type === 'system' ? 'text-accent/60' : 'text-text-primary/70'
-                              }>
-                                {log.msg}
-                              </span>
-                           </div>
-                         ))
-                       )}
-                    </div>
-                 </div>
-               )}
 
               <textarea 
                 value={topic}
@@ -464,8 +412,8 @@ export default function CreatePipelineClient({ user }: { user: User }) {
                      { id: 'story', label: 'Story', icon: <Layers className="w-3 h-3" /> },
                      { id: 'curiosity', label: 'Curiosity', icon: <Search className="w-3 h-3" /> },
                      { id: 'sarcastic', label: 'Sarcastic', icon: <Flame className="w-3 h-3" /> },
-                     { id: 'motivational', label: 'Hype / Motivation', icon: <Activity className="w-3 h-3" /> },
-                     { id: 'minimal', label: 'Minimal', icon: <Minus className="w-3 h-3" /> },
+                     { id: 'motivational', label: 'Hype / Motivation', icon: <Zap className="w-3 h-3" /> },
+                     { id: 'minimal', label: 'Minimal', icon: <Palette className="w-3 h-3" /> },
                      { id: 'conversational', label: 'Relatable', icon: <MessageSquare className="w-3 h-3" /> }
                    ]}
                  />
@@ -578,7 +526,7 @@ export default function CreatePipelineClient({ user }: { user: User }) {
                      { id: "cinematic", label: "Cinematic", icon: <Layers className="w-3 h-3" />, desc: "Dramatic lighting" },
                      { id: "glassmorphic", label: "Glossy Glass", icon: <Monitor className="w-3 h-3" />, desc: "Frosted glass overlay" },
                      { id: "cosmic", label: "Cosmic Nebula", icon: <Palette className="w-3 h-3" />, desc: "Deep space vibes" },
-                     { id: "minimal", label: "Pure Minimal", icon: <Minus className="w-3 h-3" />, desc: "Clean & high contrast" },
+                     { id: "minimal", label: "Pure Minimal", icon: <Monitor className="w-3 h-3" />, desc: "Clean & high contrast" },
                      { id: "neon", label: "Neon Cyber", icon: <Zap className="w-3 h-3" />, desc: "Vibrant electric glow" }
                    ]}
                  />
@@ -623,7 +571,7 @@ export default function CreatePipelineClient({ user }: { user: User }) {
                  </div>
                  
                  <div className="relative group rounded-xl overflow-hidden shadow-2xl border border-white/5">
-                      <div className="relative w-full h-[300px] overflow-hidden"> {/* Added a fixed height for Image fill to work */}
+                      <div className="relative w-full h-[300px] overflow-hidden">
                         <Image 
                           src={`data:image/png;base64,${generatedImage}`} 
                           alt="Composite Result" 
@@ -666,7 +614,6 @@ export default function CreatePipelineClient({ user }: { user: User }) {
           </div>
         )}
       </div>
-
     </div>
   );
 }

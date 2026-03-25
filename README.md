@@ -1,6 +1,6 @@
 # ARTENOVA // The Elite Content Engine
 
-![Artenova Terminal Output](file:///home/redmane/.gemini/antigravity/brain/04ab9f4e-d771-4764-9849-49a3cf887059/find_chromium_pack_1774383837582.webp)
+![Artenova Terminal Output](/home/redmane/.gemini/antigravity/brain/04ab9f4e-d771-4764-9849-49a3cf887059/find_chromium_pack_1774383837582.webp)
 
 ## Index
 1. [The Origin Story](#the-origin-story)

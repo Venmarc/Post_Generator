@@ -4,12 +4,17 @@ import { GoogleGenAI } from '@google/genai';
 // Initialize AI clients
 console.log('--- INITIALIZING ARTENOVA AI ENGINE ---');
 const apiKey = process.env.GEMINI_API_KEY;
+const openaiKey = process.env.OPENAI_API_KEY;
+
 if (!apiKey) {
-  console.error('CRITICAL: GEMINI_API_KEY is missing from environment variables!');
+  console.error('CRITICAL: GEMINI_API_KEY is missing!');
+}
+if (!openaiKey) {
+  console.warn('WARNING: OPENAI_API_KEY is missing! Fallback system will be inactive.');
 }
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || "stub_to_prevent_fatal",
+  apiKey: openaiKey || "stub_to_prevent_fatal",
 });
 
 const genAI = new GoogleGenAI({
@@ -48,6 +53,25 @@ function getModelIdentifier(model: AIModel): string {
 }
 
 /**
+ * Utility to wrap any promise in a timeout.
+ */
+async function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  let timeoutId: any;
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(() => {
+      reject(new Error(`[TIMEOUT] ${label} exceeded ${ms}ms limit.`));
+    }, ms);
+  });
+
+  try {
+    const result = await Promise.race([promise, timeoutPromise]);
+    return result;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+/**
  * Generates 5 distinct hooks for a given topic.
  */
 export async function generateHooks(topic: string, model: AIModel = 'gemini-3-flash'): Promise<string[]> {
@@ -66,27 +90,39 @@ Rules:
 
   // Check if it's a Gemini model
   if (modelId.includes('gemini')) {
+    if (!apiKey) {
+      console.warn('Gemini API key missing, jumping to OpenAI fallback.');
+      return generateWithOpenAI('gpt-4o-mini', systemPrompt, userPrompt).then(c => JSON.parse(c.replace(/```json/g, '').replace(/```/g, '').trim()));
+    }
+
     try {
-      console.log('Invoking @google/genai.models.generateContent (SIMPLIFIED STRINGS)...');
-      const response = await genAI.models.generateContent({
-        model: modelId,
-        contents: userPrompt,
-        config: {
-          systemInstruction: systemPrompt,
-          temperature: 0.8,
-        }
-      });
+      console.log('Invoking Gemini (with 15s absolute timeout)...');
+      const response = await withTimeout(
+        genAI.models.generateContent({
+          model: modelId,
+          contents: userPrompt,
+          config: {
+            systemInstruction: systemPrompt,
+            temperature: 0.8,
+          }
+        }),
+        15000,
+        `Gemini Hooks (${modelId})`
+      );
       
       console.log('Response received from Gemini.');
       content = response.text || '[]';
-      console.log('Extracted content (first 100 chars):', content.substring(0, 100));
     } catch (error: any) {
-      console.error(`Gemini API FAILURE (${modelId}):`, error);
-      console.log('Attempting OpenAI fallback...');
-      content = await generateWithOpenAI('gpt-4o-mini', systemPrompt, userPrompt);
+      console.error(`Gemini API FAILURE/TIMEOUT (${modelId}):`, error.message);
+      console.log('CRITICAL: Attempting OpenAI High-Reliability Fallback...');
+      try {
+        content = await generateWithOpenAI('gpt-4o-mini', systemPrompt, userPrompt);
+      } catch (fallbackError: any) {
+        throw new Error(`ARTENOVA ENGINE FAILURE: Primary Engine (Gemini) failed: [${error.message}] and Fallback (OpenAI) failed: [${fallbackError.message}]`);
+      }
     }
   } else {
-    console.log('Invoking OpenAI...');
+    console.log('Invoking OpenAI directly...');
     content = await generateWithOpenAI(modelId as any, systemPrompt, userPrompt);
   }
 
@@ -136,39 +172,66 @@ export async function generatePostContent(input: PostInput): Promise<string> {
   console.log('Target Model ID:', modelId);
 
   if (modelId.includes('gemini')) {
+    if (!apiKey) {
+      console.warn('Gemini API key missing, jumping to OpenAI fallback.');
+      return generateWithOpenAI('gpt-4o-mini', systemPrompt, userPrompt);
+    }
+
     try {
-      console.log('Invoking @google/genai.models.generateContent (SIMPLIFIED STRINGS)...');
-      const response = await genAI.models.generateContent({
-        model: modelId,
-        contents: userPrompt,
-        config: {
-          systemInstruction: systemPrompt,
-          temperature: 0.8,
-        }
-      });
+      console.log('Invoking Gemini (with 20s absolute timeout)...');
+      const response = await withTimeout(
+        genAI.models.generateContent({
+          model: modelId,
+          contents: userPrompt,
+          config: {
+            systemInstruction: systemPrompt,
+            temperature: 0.8,
+          }
+        }),
+        20000,
+        `Gemini Post (${modelId})`
+      );
       console.log('Response received from Gemini.');
       return response.text || '';
     } catch (error: any) {
-      console.error(`Gemini API FAILURE (${modelId}):`, error);
-      console.log('Attempting OpenAI fallback...');
-      return generateWithOpenAI('gpt-4o-mini', systemPrompt, userPrompt);
+      console.error(`Gemini API FAILURE/TIMEOUT (${modelId}):`, error.message);
+      console.log('CRITICAL: Attempting OpenAI High-Reliability Fallback...');
+      try {
+        return await generateWithOpenAI('gpt-4o-mini', systemPrompt, userPrompt);
+      } catch (fallbackError: any) {
+        throw new Error(`ARTENOVA ENGINE FAILURE: Primary Engine (Gemini) failed: [${error.message}] and Fallback (OpenAI) failed: [${fallbackError.message}]`);
+      }
     }
   } else {
-    console.log('Invoking OpenAI...');
+    console.log('Invoking OpenAI directly...');
     return generateWithOpenAI(modelId as any, systemPrompt, userPrompt);
   }
 }
 
 async function generateWithOpenAI(modelId: string, systemPrompt: string, userPrompt: string): Promise<string> {
-  const response = await openai.chat.completions.create({
-    model: modelId,
-    messages: [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: userPrompt },
-    ],
-    temperature: 0.8,
-  });
-  return (response.choices[0]?.message?.content || '').trim();
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('Fallback failed: OPENAI_API_KEY is not defined.');
+  }
+
+  try {
+    console.log(`Invoking OpenAI ${modelId} (with 15s absolute timeout)...`);
+    const response = await withTimeout(
+      openai.chat.completions.create({
+        model: modelId,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+        temperature: 0.8,
+      }),
+      15000,
+      `OpenAI (${modelId})`
+    );
+    return (response.choices[0]?.message?.content || '').trim();
+  } catch (error: any) {
+    console.error(`OpenAI API FAILURE/TIMEOUT (${modelId}):`, error.message);
+    throw error; // Re-throw to be caught by the route handler
+  }
 }
 
 function buildSystemPrompt(platform: Platform, style: Style, hook: string, level: Level): string {

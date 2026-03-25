@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     // Ensure we ALWAYS return JSON
     return new Response(JSON.stringify({ 
       success: false,
-      error: 'Failed to generate hooks', 
+      error: error.message || 'Failed to generate hooks', 
       details: error.message,
       stack: error.stack
     }), { 

@@ -88,7 +88,7 @@ export default function DashboardShell() {
             {/* Title Section */}
             <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-2">Social Asset Lab</h1>
+                <h1 className="text-3xl md:text-4xl font-semibold text-white mb-2 uppercase tracking-[2px]">Artenova Dashboard</h1>
                 <p className="text-foreground/50 text-sm">Engine status: Elite bounds active. Awaiting prompt.</p>
               </div>
               <button className="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-full text-sm font-medium transition-all shadow-[0_0_15px_rgba(124,58,237,0.3)] hover:shadow-hover-glow hover:scale-[1.02] active:scale-95">
