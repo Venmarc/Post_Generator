@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import Script from 'next/script';
 import { 
   Zap, 
   Lightbulb, 
@@ -80,6 +81,28 @@ export default function CreatePipelineClient({ user }: { user: User }) {
     setGeneratedCopy("");
 
     try {
+      if (activeEngine === 'puter') {
+        const puter = (window as any).puter;
+        if (!puter) throw new Error("Puter.js not loaded. Please wait or refresh.");
+        
+        const systemPrompt = `You are an elite copywriter. For the given topic, write exactly 5 distinct, scroll-stopping hooks.
+Rules:
+1. Each hook must use a different angle: Contrarian, Curiosity gap, Bold claim, Pain point, Unexpected insight.
+2. Maximum 12 words per hook. Keep them punchy.
+3. NO CLICHÉS. Output MUST be ONLY a raw JSON array of 5 strings. Just the array.`;
+
+        console.log('--- CLIENT-SIDE PUTER HOOK ARCHITECT INITIATED ---');
+        const response = await puter.ai.chat(`${systemPrompt}\n\nTopic: ${topic}`, { 
+          model: puterModel.replace('puter-', '') 
+        });
+        
+        const content = typeof response === 'string' ? response : (response.message?.content || '[]');
+        const cleaned = content.replace(/```json/g, '').replace(/```/g, '').trim();
+        const parsedHooks = JSON.parse(cleaned);
+        setHooks(parsedHooks);
+        return;
+      }
+
       const response = await fetch("/api/hooks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -108,6 +131,35 @@ export default function CreatePipelineClient({ user }: { user: User }) {
     setIsGeneratingCopy(true);
     
     try {
+      if (activeEngine === 'puter') {
+        const puter = (window as any).puter;
+        if (!puter) throw new Error("Puter.js not loaded. Please wait or refresh.");
+
+        const systemPrompt = `You are a brutal, elite social media copywriter. You will write a single post about the user's provided topic.
+CRITICAL: You MUST use this hook as the first line: "${selectedHook}"
+PRECISION LEVEL: ${level.toUpperCase()}
+STYLE: ${style.toUpperCase()}
+PLATFORM: ${platform.toUpperCase()}
+
+RULES:
+- visceral real-world examples
+- behavioral observations
+- heavy whitespace
+- absolute hammer closing statements
+- NO CLICHÉS
+
+Output ONLY the raw post text. No hashtags, no quotes.`;
+
+        console.log('--- CLIENT-SIDE PUTER POST ARCHITECT INITIATED ---');
+        const response = await puter.ai.chat(`${systemPrompt}\n\nTopic: ${topic}`, { 
+          model: puterModel.replace('puter-', '') 
+        });
+        
+        const content = typeof response === 'string' ? response : (response.message?.content || '');
+        setGeneratedCopy(content);
+        return;
+      }
+
       const response = await fetch("/api/generate-copy", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -643,6 +695,7 @@ export default function CreatePipelineClient({ user }: { user: User }) {
           </div>
         )}
       </div>
+      <Script src="https://js.puter.com/v2/" strategy="lazyOnload" />
     </div>
   );
 }

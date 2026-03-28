@@ -1,7 +1,5 @@
 import OpenAI from 'openai';
 import { GoogleGenAI } from '@google/genai';
-// @ts-ignore - Puter.js typing might not be available
-import { init as initPuter } from '@heyputer/puter.js/src/init.cjs';
 
 // Initialize AI clients
 console.log('--- INITIALIZING ARTENOVA AI ENGINE ---');
@@ -23,10 +21,7 @@ const genAI = new GoogleGenAI({
   apiKey: apiKey || "stub_to_prevent_fatal",
 });
 
-const puterToken = process.env.PUTER_AUTH_TOKEN;
-const puter = initPuter(puterToken);
-
-console.log('AI Clients initialized (Gemini, OpenAI, Puter).');
+console.log('AI Clients initialized (Gemini, OpenAI).');
 
 export type AIModel = 
   | 'gemini-3-pro' 
@@ -128,21 +123,16 @@ Rules:
       content = response.text || '[]';
     } catch (error: any) {
       console.error(`Gemini API FAILURE/TIMEOUT (${modelId}):`, error.message);
-      console.log('CRITICAL: Attempting Puter.js High-Reliability Fallback...');
+      console.log('CRITICAL: Attempting OpenAI High-Reliability Fallback...');
       try {
-        content = await generateWithPuter('gpt-4o-mini', systemPrompt, userPrompt);
+        content = await generateWithOpenAI('gpt-4o-mini', systemPrompt, userPrompt);
       } catch (fallbackError: any) {
-        console.log('Puter fallback failed, attempting OpenAI direct...');
-        try {
-          content = await generateWithOpenAI('gpt-4o-mini', systemPrompt, userPrompt);
-        } catch (openaiError: any) {
-          throw new Error(`ARTENOVA ENGINE FAILURE: Primary Engine (Gemini) failed: [${error.message}] and Fallbacks (Puter + OpenAI) failed.`);
-        }
+        throw new Error(`ARTENOVA ENGINE FAILURE: Primary Engine (Gemini) failed: [${error.message}] and Fallback (OpenAI) failed.`);
       }
     }
   } else if (model.startsWith('puter-')) {
-    console.log('Invoking Puter.js directly...');
-    content = await generateWithPuter(modelId, systemPrompt, userPrompt);
+    // Client-side handled, but for safety:
+    throw new Error(`Puter models (${model}) must be generated client-side.`);
   } else {
     console.log('Invoking OpenAI directly...');
     content = await generateWithOpenAI(modelId as any, systemPrompt, userPrompt);
@@ -212,61 +202,25 @@ export async function generatePostContent(input: PostInput): Promise<string> {
         }),
         20000,
         `Gemini Post (${modelId})`
-      );
-      console.log('Response received from Gemini.');
+      );      console.log('Response received from Gemini.');
       return response.text || '';
     } catch (error: any) {
       console.error(`Gemini API FAILURE/TIMEOUT (${modelId}):`, error.message);
-      console.log('CRITICAL: Attempting Puter.js High-Reliability Fallback...');
+      console.log('CRITICAL: Attempting OpenAI High-Reliability Fallback...');
       try {
-        return await generateWithPuter('gpt-4o-mini', systemPrompt, userPrompt);
+        return await generateWithOpenAI('gpt-4o-mini', systemPrompt, userPrompt);
       } catch (fallbackError: any) {
-        console.log('Puter fallback failed, attempting OpenAI direct...');
-        try {
-          return await generateWithOpenAI('gpt-4o-mini', systemPrompt, userPrompt);
-        } catch (openaiError: any) {
-          throw new Error(`ARTENOVA ENGINE FAILURE: Primary Engine (Gemini) failed: [${error.message}] and Fallbacks (Puter + OpenAI) failed.`);
-        }
+        throw new Error(`ARTENOVA ENGINE FAILURE: Primary Engine (Gemini) failed: [${error.message}] and Fallback (OpenAI) failed.`);
       }
     }
   } else if (model.startsWith('puter-')) {
-    console.log('Invoking Puter.js directly...');
-    return await generateWithPuter(modelId, systemPrompt, userPrompt);
+    throw new Error(`Puter models (${model}) must be generated client-side.`);
   } else {
     console.log('Invoking OpenAI directly...');
     return generateWithOpenAI(modelId as any, systemPrompt, userPrompt);
   }
 }
 
-async function generateWithPuter(modelId: string, systemPrompt: string, userPrompt: string): Promise<string> {
-  console.log(`Invoking Puter.js ${modelId} (with 20s absolute timeout)...`);
-  try {
-    const fullPrompt = `${systemPrompt}\n\nUSER INPUT: ${userPrompt}`;
-    const response = await withTimeout(
-      puter.ai.chat(fullPrompt, { model: modelId }),
-      20000,
-      `Puter (${modelId})`
-    );
-    
-    // Handle string response
-    if (typeof response === 'string') return response;
-    
-    // Handle complex response objects
-    const content = response.message?.content;
-    if (typeof content === 'string') return content;
-    
-    if (Array.isArray(content)) {
-      return content
-        .map((part: any) => (typeof part === 'string' ? part : (part.text || '')))
-        .join('');
-    }
-    
-    return '';
-  } catch (error: any) {
-    console.error(`Puter API FAILURE/TIMEOUT (${modelId}):`, error.message);
-    throw error;
-  }
-}
 
 async function generateWithOpenAI(modelId: string, systemPrompt: string, userPrompt: string): Promise<string> {
   if (!process.env.OPENAI_API_KEY) {
