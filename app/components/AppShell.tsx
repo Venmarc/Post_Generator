@@ -57,17 +57,17 @@ export default function AppShell({
     <div className="min-h-screen w-full flex bg-transparent text-text-primary overflow-hidden font-sans selection:bg-accent/30 selection:text-white">
       
       {/* --- DESKTOP SIDEBAR --- */}
-      <aside className="hidden lg:flex flex-col w-[110px] h-screen border-r border-white/5 bg-void/50 backdrop-blur-xl py-10 items-center justify-between z-40">
-        <div className="flex flex-col items-center space-y-12 w-full">
-          <Link href="/dashboard" className="w-14 h-14 rounded-2xl bg-linear-to-br from-accent/30 to-accent/10 flex items-center justify-center border border-accent/30 overflow-hidden shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:scale-110 group">
-            <Layers className="text-accent w-7 h-7 group-hover:rotate-12 transition-transform" />
+      <aside className="hidden lg:flex flex-col w-[84px] h-screen border-r border-white/5 bg-void/50 backdrop-blur-xl py-10 items-center justify-between z-40">
+        <div className="flex flex-col items-center space-y-10 w-full">
+          <Link href="/dashboard" className="w-11 h-11 rounded-xl bg-linear-to-br from-accent/30 to-accent/10 flex items-center justify-center border border-accent/30 overflow-hidden shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:scale-110 group">
+            <Layers className="text-accent w-5 h-5 group-hover:rotate-12 transition-transform" />
           </Link>
  
           <nav className="flex flex-col space-y-8">
             {navItems.map((item) => (
               <SidebarIcon 
                 key={item.href}
-                icon={<item.icon className="w-7 h-7" />} 
+                icon={<item.icon className="w-5 h-5" />} 
                 href={item.href} 
                 active={pathname === item.href} 
                 label={item.label}
@@ -80,7 +80,7 @@ export default function AppShell({
           {bottomItems.map((item) => (
             <SidebarIcon 
               key={item.href}
-              icon={<item.icon className="w-7 h-7" />} 
+              icon={<item.icon className="w-5 h-5" />} 
               href={item.href} 
               active={pathname === item.href} 
               label={item.label}
@@ -163,9 +163,9 @@ export default function AppShell({
       <div className="flex-1 flex flex-col h-screen overflow-hidden relative">
         
         {/* Header - Stage level (full width) */}
-        <header className="h-[80px] w-full border-b border-white/5 flex items-center justify-center px-4 lg:px-10 bg-void/40 backdrop-blur-xl z-50 sticky top-0">
+        <header className="h-[64px] w-full border-b border-white/5 flex items-center justify-center px-4 lg:px-10 bg-void/40 backdrop-blur-xl z-50 sticky top-0">
           {/* Header Content - Container level */}
-          <div className="w-full max-w-[1600px] flex items-center justify-between">
+          <div className="w-full max-w-[1300px] flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button 
                 className="lg:hidden p-2.5 rounded-xl bg-white/5 border border-white/10 text-text-secondary hover:text-accent hover:border-accent/30 transition-all active:scale-95"
@@ -200,7 +200,7 @@ export default function AppShell({
 
         {/* --- CONTAINER (Main Content) --- */}
         <main className="flex-1 overflow-y-auto custom-scrollbar">
-          <div className="max-w-[1600px] mx-auto p-6 lg:p-12 xl:p-16 min-h-full flex flex-col">
+          <div className="max-w-[1300px] mx-auto p-4 lg:p-6 xl:p-8 min-h-full flex flex-col">
             <div className="flex-1 animate-in fade-in slide-in-from-bottom-4 duration-1000">
               {children}
             </div>
@@ -224,10 +224,10 @@ export default function AppShell({
 function SidebarIcon({ icon, href, active = false, label }: { icon: React.ReactNode, href: string, active?: boolean, label: string }) {
   return (
     <Link href={href} title={label}>
-      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center cursor-pointer transition-all duration-300 group relative
+      <div className={`w-11 h-11 rounded-xl flex items-center justify-center cursor-pointer transition-all duration-300 group relative
         ${active ? 'bg-accent/15 text-accent shadow-[inset_0_0_20px_rgba(16,185,129,0.1)] border border-accent/20' : 'text-text-secondary/30 hover:text-text-primary hover:bg-white/5'}
       `}>
-        {active && <div className="absolute left-[-15px] w-1.5 h-8 bg-accent rounded-r-full shadow-[0_0_15px_rgba(16,185,129,0.8)]"></div>}
+        {active && <div className="absolute left-[-15px] w-1.5 h-6 bg-accent rounded-r-full shadow-[0_0_15px_rgba(16,185,129,0.8)]"></div>}
         <div className={`transform transition-transform ${active ? 'scale-110' : 'group-hover:scale-110 group-hover:rotate-3'}`}>
           {icon}
         </div>
@@ -263,7 +263,7 @@ function Tab({ label, href, isActive }: { label: string, href: string, isActive:
     `}>
       {label}
       {isActive && (
-        <div className="absolute bottom-[-28px] left-0 w-full h-[3px] bg-accent shadow-[0_0_15px_rgba(16,185,129,0.8)] rounded-full"></div>
+        <div className="absolute bottom-[-22px] left-0 w-full h-[3px] bg-accent shadow-[0_0_15px_rgba(16,185,129,0.8)] rounded-full"></div>
       )}
     </Link>
   );

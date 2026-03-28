@@ -46,6 +46,8 @@ export default function CreatePipelineClient({ user }: { user: User }) {
   const [generatedCopy, setGeneratedCopy] = useState<string>("");
   
   const [textModel, setTextModel] = useState<AIModel>('gemini-3-pro');
+  const [puterModel, setPuterModel] = useState<AIModel>('puter-gpt-4o');
+  const [activeEngine, setActiveEngine] = useState<'standard' | 'puter'>('standard');
   const [imageModel, setImageModel] = useState<AIModel>('gemini-3-flash');
   const [level, setLevel] = useState<Level>('balanced');
   const [style, setStyle] = useState<Style>('professional');
@@ -81,7 +83,10 @@ export default function CreatePipelineClient({ user }: { user: User }) {
       const response = await fetch("/api/hooks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, model: textModel }),
+        body: JSON.stringify({ 
+          topic, 
+          model: activeEngine === 'standard' ? textModel : puterModel 
+        }),
       });
       const data = await response.json();
       if (data.success) {
@@ -112,7 +117,7 @@ export default function CreatePipelineClient({ user }: { user: User }) {
           platform, 
           style, 
           level, 
-          model: textModel 
+          model: activeEngine === 'standard' ? textModel : puterModel 
         }),
       });
       const data = await response.json();
@@ -285,11 +290,11 @@ export default function CreatePipelineClient({ user }: { user: User }) {
 
   return (
     <div className="min-h-screen bg-void text-foreground selection:bg-accent/30">
-      <div className="max-w-7xl mx-auto px-6 py-12 relative">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+      <div className="max-w-full mx-auto px-6 py-6 relative">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
-            <h1 className="text-4xl font-bold text-text-primary mb-2 uppercase tracking-[3px]">Artenova Pipeline</h1>
-            <p className="text-text-secondary/60 text-lg italic">From raw concept to viral artistic output.</p>
+            <h1 className="text-2xl font-bold text-text-primary mb-1 uppercase tracking-[3px]">Artenova Pipeline</h1>
+            <p className="text-text-secondary/60 text-sm italic">From raw concept to viral artistic output.</p>
           </div>
           
           <div className="flex items-center gap-4">
@@ -312,17 +317,17 @@ export default function CreatePipelineClient({ user }: { user: User }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
           {/* LEFT: POST ARCHITECT */}
-          <div className="lg:col-span-8 space-y-8">
-            <div className="bg-surface rounded-card border border-border-subtle/50 p-8 shadow-card relative group z-20">
-              <div className="flex items-center justify-between mb-8">
+          <div className="lg:col-span-8 space-y-4">
+            <div className="bg-surface rounded-card border border-border-subtle/50 p-5 shadow-card relative group z-20">
+              <div className="flex items-center justify-between mb-6">
                  <div className="flex items-center gap-3">
                     <div className="p-2 bg-accent/10 rounded-lg text-accent">
-                       <Cpu className="w-5 h-5" />
+                       <Cpu className="w-4 h-4" />
                     </div>
-                    <h2 className="text-xl font-bold text-text-primary/90 uppercase tracking-widest">Artenova Architect</h2>
+                    <h2 className="text-base font-bold text-text-primary/90 uppercase tracking-widest">Artenova Architect</h2>
                  </div>
                  <button 
                    onClick={handleLoadTestData}
@@ -333,7 +338,7 @@ export default function CreatePipelineClient({ user }: { user: User }) {
                  </button>
               </div>
 
-              <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center justify-between mb-6">
                   <div className="flex gap-2">
                      {['linkedin', 'instagram', 'x', 'tiktok'].map((p) => (
                         <button 
@@ -355,31 +360,55 @@ export default function CreatePipelineClient({ user }: { user: User }) {
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 placeholder={`What's on your mind for ${platform}?`}
-                className="w-full bg-void/50 border border-border-subtle/50 rounded-2xl p-6 text-text-primary text-xl focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/10 transition-all min-h-[160px] resize-none placeholder:text-text-secondary/20 mb-6"
+                className="w-full bg-void/50 border border-border-subtle/50 rounded-2xl p-6 text-text-primary text-lg focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/10 transition-all min-h-[140px] resize-none placeholder:text-text-secondary/20 mb-6"
               />
 
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pb-4 border-b border-border-subtle/20 mb-8">
-                 <div className="w-full sm:w-auto min-w-[200px]">
-                    <CustomSelect 
-                      value={textModel}
-                      onChange={setTextModel}
-                      options={[
-                        { id: 'gemini-3-pro', label: 'Gemini 3 Pro', icon: <Cpu className="w-3 h-3" /> },
-                        { id: 'gemini-3-flash', label: 'Gemini 3 Flash', icon: <Cpu className="w-3 h-3" /> },
-                        { id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', icon: <Cpu className="w-3 h-3" /> },
-                        { id: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro', icon: <Cpu className="w-3 h-3" /> },
-                        { id: 'gpt-4o', label: 'GPT-4o', icon: <Cpu className="w-3 h-3" /> },
-                        { id: 'gpt-4o-mini', label: 'GPT-4o Mini', icon: <Cpu className="w-3 h-3" /> },
-                        { id: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo', icon: <Cpu className="w-3 h-3" /> }
-                      ]}
-                    />
+               <div className="flex flex-col md:flex-row items-end justify-between gap-4 pb-4 border-b border-border-subtle/20 mb-6">
+                 <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                    <div className={`transition-all duration-300 ${activeEngine === 'standard' ? 'opacity-100' : 'opacity-40 grayscale-[0.5]'}`}>
+                      <CustomSelect 
+                        label="Elite Engine"
+                        value={textModel}
+                        onChange={(val) => {
+                          setTextModel(val);
+                          setActiveEngine('standard');
+                        }}
+                        options={[
+                          { id: 'gemini-3-pro', label: 'Gemini 3 Pro', icon: <Cpu className="w-3 h-3" /> },
+                          { id: 'gemini-3-flash', label: 'Gemini 3 Flash', icon: <Cpu className="w-3 h-3" /> },
+                          { id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', icon: <Cpu className="w-3 h-3" /> },
+                          { id: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro', icon: <Cpu className="w-3 h-3" /> },
+                          { id: 'gpt-4o', label: 'GPT-4o', icon: <Cpu className="w-3 h-3" /> },
+                          { id: 'gpt-4o-mini', label: 'GPT-4o Mini', icon: <Cpu className="w-3 h-3" /> }
+                        ]}
+                      />
+                    </div>
+
+                    <div className={`transition-all duration-300 ${activeEngine === 'puter' ? 'opacity-100' : 'opacity-40 grayscale-[0.5]'}`}>
+                      <CustomSelect 
+                        label="Puter High-Rel"
+                        value={puterModel}
+                        onChange={(val) => {
+                          setPuterModel(val);
+                          setActiveEngine('puter');
+                        }}
+                        options={[
+                          { id: 'puter-gpt-4o', label: 'Puter GPT-4o', icon: <Monitor className="w-3 h-3" /> },
+                          { id: 'puter-claude-3-5-sonnet', label: 'Puter Claude 3.5', icon: <Zap className="w-3 h-3" /> },
+                          { id: 'puter-gemini-1.5-pro', label: 'Puter Gemini Pro', icon: <Sparkles className="w-3 h-3" /> },
+                          { id: 'puter-llama-3-1-405b', label: 'Puter Llama 405b', icon: <Flame className="w-3 h-3" /> }
+                        ]}
+                      />
+                    </div>
                  </div>
                  
                  <div className="flex items-center gap-2 w-full sm:w-auto">
-                   <button 
-                      onClick={handleGenerateHooks}
-                      disabled={isGeneratingHooks || !topic}
-                      className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-8 py-3 bg-accent text-void rounded-xl text-[10px] font-black uppercase tracking-widest shadow-glow hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-30"
+                    <button 
+                       onClick={handleGenerateHooks}
+                       disabled={isGeneratingHooks || !topic}
+                       className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-glow hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-30 ${
+                         activeEngine === 'puter' ? 'bg-indigo-500 text-white shadow-indigo-500/30' : 'bg-accent text-void'
+                       }`}
                     >
                       {isGeneratingHooks ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
                       GENERATE HOOKS
@@ -387,7 +416,7 @@ export default function CreatePipelineClient({ user }: { user: User }) {
                  </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                  <CustomSelect 
                    label="Precision Level"
                    value={level}
@@ -421,14 +450,14 @@ export default function CreatePipelineClient({ user }: { user: User }) {
             </div>
 
             {hooks.length > 0 && (
-              <div ref={hooksRef} className="bg-surface rounded-card border border-border-subtle/50 p-8 shadow-card animate-in fade-in slide-in-from-bottom-4 duration-500">
-                 <div className="flex items-center justify-between mb-6">
+              <div ref={hooksRef} className="bg-surface rounded-card border border-border-subtle/50 p-5 shadow-card animate-in fade-in slide-in-from-bottom-4 duration-500">
+                 <div className="flex items-center justify-between mb-5">
                     <h3 className="text-sm font-bold text-text-secondary uppercase tracking-widest flex items-center gap-2">
                       <Zap className="w-4 h-4" /> Pick Your Hook
                     </h3>
                  </div>
                  
-                 <div className="grid grid-cols-1 gap-3 mb-8">
+                 <div className="grid grid-cols-1 gap-2 mb-6">
                     {hooks.map((hook, idx) => (
                       <button 
                          key={idx}
@@ -469,8 +498,8 @@ export default function CreatePipelineClient({ user }: { user: User }) {
             )}
 
             {generatedCopy && (
-               <div className="bg-surface rounded-card border border-border-subtle/50 p-8 shadow-card animate-in fade-in zoom-in-95 duration-500">
-                  <div className="flex items-center justify-between mb-6">
+               <div className="bg-surface rounded-card border border-border-subtle/50 p-5 shadow-card animate-in fade-in zoom-in-95 duration-500">
+                  <div className="flex items-center justify-between mb-5">
                     <h3 className="text-sm font-bold text-text-secondary uppercase tracking-widest flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-accent" /> Generated Copy
                     </h3>
@@ -485,8 +514,8 @@ export default function CreatePipelineClient({ user }: { user: User }) {
                     </div>
                   </div>
                   
-                  <div className="bg-void/60 rounded-2xl p-8 border border-border-subtle/40">
-                    <pre className="text-text-primary/90 text-base leading-loose whitespace-pre-wrap font-sans italic opacity-90">
+                  <div className="bg-void/60 rounded-2xl p-6 border border-border-subtle/40">
+                    <pre className="text-text-primary/90 text-sm leading-loose whitespace-pre-wrap font-sans italic opacity-90">
                       {generatedCopy}
                     </pre>
                   </div>
@@ -495,16 +524,16 @@ export default function CreatePipelineClient({ user }: { user: User }) {
           </div>
 
           {/* RIGHT: ARTISTIC DIRECTION */}
-          <div className="lg:col-span-4 space-y-8 relative z-10">
-            <div className="bg-surface rounded-card border border-border-subtle/50 p-8 shadow-card relative z-30">
-              <div className="flex items-center gap-3 mb-10">
+          <div className="lg:col-span-4 space-y-4 relative z-10">
+            <div className="bg-surface rounded-card border border-border-subtle/50 p-5 shadow-card relative z-30">
+              <div className="flex items-center gap-3 mb-8">
                  <div className="p-2 bg-accent/10 rounded-lg text-accent">
-                    <Palette className="w-5 h-5" />
+                    <Palette className="w-4 h-4" />
                  </div>
-                 <h2 className="text-lg font-bold text-text-primary/80 uppercase tracking-widest">Artenova Direction</h2>
+                 <h2 className="text-base font-bold text-text-primary/80 uppercase tracking-widest">Artenova Direction</h2>
               </div>
 
-              <div className="space-y-8">
+              <div className="space-y-6">
                  <CustomSelect 
                    label="Engine Settings"
                    value={imageModel}
@@ -558,8 +587,8 @@ export default function CreatePipelineClient({ user }: { user: User }) {
 
             {/* Preview and Downloads */}
             {generatedImage && (
-              <div ref={previewRef} className="bg-surface rounded-card border border-border-subtle/50 p-6 shadow-card animate-in fade-in slide-in-from-right-4">
-                 <div className="flex items-center justify-between mb-6">
+              <div ref={previewRef} className="bg-surface rounded-card border border-border-subtle/50 p-5 shadow-card animate-in fade-in slide-in-from-right-4">
+                 <div className="flex items-center justify-between mb-5">
                     <h3 className="text-xs font-bold text-text-primary uppercase tracking-widest">Composite Output</h3>
                     <button 
                       onClick={handleDownloadImage}
